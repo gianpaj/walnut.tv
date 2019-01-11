@@ -189,6 +189,59 @@ function RedditVideoService() {
 
 const redditVideoService = new RedditVideoService();
 
+const channels = [
+  {
+    title: "general",
+    subreddit: "videos",
+    textColor: "white",
+    minNumOfVotes: 50
+  },
+  {
+    title: "curious",
+    subreddit: "curiousvideos;mealtimevideos;educativevideos;watchandlearn",
+    textColor: "",
+    bgColor: "#ff496b",
+    minNumOfVotes: 3
+  },
+  {
+    title: "educational",
+    subreddit: "physics;math;psychology;space;biology",
+    textColor: "",
+    bgColor: "#2b80ff",
+    minNumOfVotes: 0
+  },
+  {
+    title: "documentaries",
+    subreddit: "documentaries",
+    textColor: "",
+    bgColor: "#ff7200",
+    minNumOfVotes: 0
+  },
+  {
+    title: "lectures",
+    subreddit: "lectures",
+    textColor: "",
+    bgColor: "#9d00ff",
+    minNumOfVotes: 0
+  },
+  {
+    title: "how to",
+    subreddit:
+      "maker;howto;artisanvideos;TechDIY;specializedtools;upcycling;DIY;easyfix;woodworking;FastWorkers;lifehacks;tinyhouses",
+    textColor: "",
+    bgColor: "#00ffe9",
+    minNumOfVotes: 0
+  },
+  {
+    title: "music",
+    subreddit: "listentothis",
+    textColor: "",
+    bgColor: "#FFFF00",
+    minNumOfVotes: 5
+  }
+];
+
+
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player("player",{
@@ -13663,6 +13716,7 @@ var appVideo = new Vue({
   el: "#appVideo",
   data: {
     channel: window.location.pathname.split("/")[2],
+    channels: channels,
     videoList: [],
     videosWatched: [],
     playingVideo: [],
@@ -13699,15 +13753,17 @@ var appVideo = new Vue({
       return "object" == typeof t ? !0 : !1
     },
     getSubReddits: function(channel) {
-      return '';
+      return channels.find(function(c) {
+        return c.title == channel;
+      }).subreddit;
     },
     fetchVideos: function() {
       var self = this;
-      this.channel || (this.channel = "videos");
-      // var subreddits = this.getSubReddits(this.channel);
+      this.channel || (this.channel = "general");
+      var subreddits = this.getSubReddits(this.channel);
       this.getStorage();
       redditVideoService.loadHot(
-        this.channel, // or more
+        subreddits,
         // item.minNumOfVotes
       ).then(function(t) {
         self.videoList = t,
@@ -13814,7 +13870,6 @@ var appVideo = new Vue({
       return "t1" == t ? !0 : !1
     },
     changeChannel: function(channel) {
-      console.log(channel)
       if (this.channel !== channel) {
         this.channel = channel;
         this.fetchVideos()

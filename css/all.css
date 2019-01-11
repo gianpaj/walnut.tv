@@ -89,6 +89,10 @@ h2 {
   margin: 0 20px 0 0;
 }
 
+.walnut-logo {
+  width: 20px;
+}
+
 .navbar-right {
   margin-right: 0;
   text-align: right;
@@ -117,6 +121,10 @@ h2 {
 .navbar-left .dropdown-menu {
   left: 115px;
   top: 80%;
+}
+
+.navbar-nav li {
+  cursor: pointer;
 }
 
 .header-container {

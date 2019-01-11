@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
-    <title>Walnut TV - Always Interesting Videos</title>
+    <title>Walnut - Always Interesting Videos</title>
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -20,6 +20,18 @@
       rel="stylesheet"
       type="text/css"
     />
+    <meta
+      property="og:image"
+      content="https://walnut.tv/icons/walnut-logo-white-background.png"
+    />
+    <meta property="og:image:width" content="2273" />
+    <meta property="og:image:height" content="2273" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -29,40 +41,38 @@
     <div class="navbar navbar-inverse">
       <div class="header-container">
         <div class="navbar-header">
-          <div class="">
-            <h1 class="navbar-brand">
-              <a href="/">
-                <img
-                  src="/img/rake-logo.svg"
-                  class="walnut-logo"
-                  alt="Walnut.tv Logo"
-                />
-              </a>
-            </h1>
-            <div class="collapse navbar-collapse" id="navbar-channels">
-              <ul class="nav navbar-nav">
-                <!-- <li v-for="item in items">{{ item.message }}</li> -->
-                <li v-bind:class="{ 'active': channel == 'videos' }">
-                  <a v-on:click="changeChannel('videos')" data-href="/general"
-                    >general</a
-                  >
-                </li>
-                <li v-bind:class="{ 'active': channel == 'curiousvideos' }">
-                  <a
-                    v-on:click="changeChannel('curiousvideos')"
-                    data-href="/curious"
-                    >curious</a
-                  >
-                </li>
-                <li><a data-href="/how_to">how to</a></li>
-                <li><a data-href="/educational">educational</a></li>
-                <li><a data-href="/documentaries">documentaries</a></li>
-                <li><a data-href="/lectures">lectures</a></li>
-                <li><a data-href="/food">food</a></li>
-                <li><a data-href="/outdoors">outdoors</a></li>
-              </ul>
-            </div>
-            <!-- <div class="dropdown">
+          <div>
+            <button
+              type="button"
+              class="navbar-toggle collapsed"
+              data-toggle="collapse"
+              data-target="#navbar-channels"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span> <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"
+              ><img
+                src="/img/walnut-logo.svg"
+                class="walnut-logo"
+                alt="Walnut.tv Logo"
+            /></a>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar-channels">
+            <ul class="nav navbar-nav">
+              <li
+                v-for="item in channels"
+                v-bind:class="{ 'active': item.title == channel }"
+              >
+                <a v-on:click="changeChannel(item.title)" data-href="/general">
+                  {{ item.title }}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- <div class="dropdown">
               <a
                 id="dLabel"
                 class="nav-link"
@@ -90,7 +100,6 @@
                 <li><a data-href="/outdoors">outdoors</a></li>
               </ul>
             </div> -->
-          </div>
           <!-- <div class="navbar-right">
             <a href="" class="nav-link" data-toggle="modal" data-target="#about"
               >About</a
