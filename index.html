@@ -25,11 +25,11 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body id="appVideo">
     <div class="navbar navbar-inverse">
       <div class="header-container">
         <div class="navbar-header">
-          <div class="navbar-left">
+          <div class="">
             <h1 class="navbar-brand">
               <a href="/">
                 <img
@@ -39,7 +39,30 @@
                 />
               </a>
             </h1>
-            <div class="dropdown">
+            <div class="collapse navbar-collapse" id="navbar-channels">
+              <ul class="nav navbar-nav">
+                <!-- <li v-for="item in items">{{ item.message }}</li> -->
+                <li v-bind:class="{ 'active': channel == 'videos' }">
+                  <a v-on:click="changeChannel('videos')" data-href="/general"
+                    >general</a
+                  >
+                </li>
+                <li v-bind:class="{ 'active': channel == 'curiousvideos' }">
+                  <a
+                    v-on:click="changeChannel('curiousvideos')"
+                    data-href="/curious"
+                    >curious</a
+                  >
+                </li>
+                <li><a data-href="/how_to">how to</a></li>
+                <li><a data-href="/educational">educational</a></li>
+                <li><a data-href="/documentaries">documentaries</a></li>
+                <li><a data-href="/lectures">lectures</a></li>
+                <li><a data-href="/food">food</a></li>
+                <li><a data-href="/outdoors">outdoors</a></li>
+              </ul>
+            </div>
+            <!-- <div class="dropdown">
               <a
                 id="dLabel"
                 class="nav-link"
@@ -53,24 +76,20 @@
                 Channels <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="dLabel">
-                <li><a href="/r/AccidentalComedy">Accidental Comedy</a></li>
-                <li><a href="/r/cringe">Cringe</a></li>
-                <li><a href="/r/curiousvideos">Curious Videos</a></li>
-                <li><a href="/r/contagiouslaughter">Contagious Laughter</a></li>
-                <li><a href="/r/documentaries">Documentaries</a></li>
-                <li><a href="/r/educativevideos">Educative Videos</a></li>
-                <li><a href="/r/funnyvideos">Funny Videos</a></li>
-                <li><a href="/r/happycrowds">Happy Crowds</a></li>
-                <li><a href="/r/lectures">Lectures</a></li>
-                <li><a href="/r/listentothis">Listen To This</a></li>
-                <li><a href="/r/mealtimevideos">Meal Time Videos</a></li>
-                <li><a href="/r/politicalvideo">Political Videos</a></li>
-                <li><a href="/r/trailers">Trailers</a></li>
-                <li><a href="/r/videos">Videos</a></li>
-                <li><a href="/r/woahtube">Woahtube</a></li>
-                <li><a href="/r/youtubehaiku">Youtube Haiku</a></li>
+                <li>
+                  <a data-href="/general">general</a>
+                </li>
+                <li><a data-href="/curious">curious</a></li>
+                <li><a data-href="/how_to">how to</a></li>
+                <li>
+                  <a data-href="/educational">educational</a>
+                </li>
+                <li><a data-href="/documentaries">documentaries</a></li>
+                <li><a data-href="/lectures">lectures</a></li>
+                <li><a data-href="/food">food</a></li>
+                <li><a data-href="/outdoors">outdoors</a></li>
               </ul>
-            </div>
+            </div> -->
           </div>
           <!-- <div class="navbar-right">
             <a href="" class="nav-link" data-toggle="modal" data-target="#about"
@@ -81,88 +100,84 @@
       </div>
     </div>
     <div class="container">
-      <div id="appVideo">
-        <div v-show="loadingVideos">
-          <div class="videoDiv container">
-            <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
-              <ul class="video-list list-unstyled pre-scrollable" id="toolbox">
-                <li
-                  class="video"
-                  v-for="video in videoList"
-                  track-by="$index"
-                  data-video-id="{{ $index }}"
-                  v-cloak
+      <div v-show="loadingVideos">
+        <div class="videoDiv container">
+          <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
+            <ul class="video-list list-unstyled pre-scrollable" id="toolbox">
+              <li
+                class="video"
+                v-for="video in videoList"
+                track-by="$index"
+                data-video-id="{{ $index }}"
+                v-cloak
+              >
+                <a
+                  v-on:click="play($index)"
+                  :class="{ active: videoPlaying == $index}"
+                  class="active"
                 >
-                  <a
-                    v-on:click="play($index)"
-                    :class="{ active: videoPlaying == $index}"
-                    class="active"
-                  >
-                    <div class="video-thumbnail-image hidden-xs">
-                      <span
-                        class="video-watched"
-                        v-if="hasBeenWatched(video.youtubeId)"
-                        >WATCHED</span
-                      >
-                      <span class="video-duration">{{
-                        video.duration | convertTime
-                      }}</span>
-                      <img
-                        class="video-image"
-                        v-bind:src="video.youtubeId | toUrl"
-                        alt="{!! video.title !!}"
-                      />
-                    </div>
-                    <div
-                      class="video-title"
-                      :class="{  watched: hasBeenWatched(video.youtubeId)}"
+                  <div class="video-thumbnail-image hidden-xs">
+                    <span
+                      class="video-watched"
+                      v-if="hasBeenWatched(video.youtubeId)"
+                      >WATCHED</span
                     >
-                      <h4>{!! video.title | maxChar !!}</h4>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="main-content">
-              <div id="video-container" class="video-container pre-scrollable">
-                <div class="embed-container">
-                  <div class="videoPlayer"><div id="player"></div></div>
-                </div>
-                <div class="video-details">
-                  <a
-                    href="https://www.reddit.com/{{
-                      playingVideo['permalink']
-                    }}"
-                    target="_Blank"
-                    ><h2 class="modal-title" id="myModalLabel" v-cloak>
-                      {!! playingVideo['title'] !!}
-                    </h2></a
+                    <span class="video-duration">{{
+                      video.duration | convertTime
+                    }}</span>
+                    <img
+                      class="video-image"
+                      v-bind:src="video.youtubeId | toUrl"
+                      alt="{!! video.title !!}"
+                    />
+                  </div>
+                  <div
+                    class="video-title"
+                    :class="{  watched: hasBeenWatched(video.youtubeId)}"
                   >
-                </div>
+                    <h4>{!! video.title | maxChar !!}</h4>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
 
-                <script type="text/x-template" id="comment-template">
-                  <ul class="list-group" v-if="hasReplies(model.data.replies)">
-                    <li v-for="model in model.data.replies.data.children" :model="model" class="comment-item" v-if="isT1(model.kind)">
-                      <span @click="slide(model.data.id)" class="toggle-icon comment-name id-{{ model.data.id }}"> − </span>
-                      <span><a href="https://www.reddit.com/u/{{ model.data.author }}" target="_Blank">{{ model.data.author }}</a> • {{ model.data.score | points }} • {{ model['data']['created_utc'] | relativeTime }}</span>
-                      <div class="{{ model.data.id }}">
-                        <div class="comment-body" v-html="model.data.body_html | markdown | targetBlank">
-                        </div>
-                        <comment :model="model" ></comment>
-                      </div>
-                    </li>
-                  </ul>
-                </script>
+          <div class="main-content">
+            <div id="video-container" class="video-container pre-scrollable">
+              <div class="embed-container">
+                <div class="videoPlayer"><div id="player"></div></div>
               </div>
+              <div class="video-details">
+                <a
+                  href="https://www.reddit.com/{{ playingVideo['permalink'] }}"
+                  target="_Blank"
+                  ><h2 class="modal-title" id="myModalLabel" v-cloak>
+                    {!! playingVideo['title'] !!}
+                  </h2></a
+                >
+              </div>
+
+              <script type="text/x-template" id="comment-template">
+                <ul class="list-group" v-if="hasReplies(model.data.replies)">
+                  <li v-for="model in model.data.replies.data.children" :model="model" class="comment-item" v-if="isT1(model.kind)">
+                    <span @click="slide(model.data.id)" class="toggle-icon comment-name id-{{ model.data.id }}"> − </span>
+                    <span><a href="https://www.reddit.com/u/{{ model.data.author }}" target="_Blank">{{ model.data.author }}</a> • {{ model.data.score | points }} • {{ model['data']['created_utc'] | relativeTime }}</span>
+                    <div class="{{ model.data.id }}">
+                      <div class="comment-body" v-html="model.data.body_html | markdown | targetBlank">
+                      </div>
+                      <comment :model="model" ></comment>
+                    </div>
+                  </li>
+                </ul>
+              </script>
             </div>
           </div>
         </div>
+      </div>
 
-        <div v-else>
-          <div class="container" v-cloak>
-            <h2 class="loadingMessage">{!! videoMessage !!}</h2>
-          </div>
+      <div v-else>
+        <div class="container" v-cloak>
+          <h2 class="loadingMessage">{!! videoMessage !!}</h2>
         </div>
       </div>
 

@@ -91,7 +91,7 @@ function RedditVideoService() {
           new Error("Bad channel argument value. Channel should be a string")
         );
       }
-      let query = reddit.hot(channel).limit(100);
+      let query = reddit.hot(channel).limit(50);
       if (after) query = query.after(after);
 
       query.fetch(
@@ -13662,7 +13662,7 @@ Vue.component("comment", {
 var appVideo = new Vue({
   el: "#appVideo",
   data: {
-    subreddit: window.location.pathname.split("/")[2],
+    channel: window.location.pathname.split("/")[2],
     videoList: [],
     videosWatched: [],
     playingVideo: [],
@@ -13698,13 +13698,16 @@ var appVideo = new Vue({
     hasReplies: function(t) {
       return "object" == typeof t ? !0 : !1
     },
+    getSubReddits: function(channel) {
+      return '';
+    },
     fetchVideos: function() {
       var self = this;
-      this.subreddit || (this.subreddit = "videos"),
-      this.getStorage(),
-      // this.$http.get("https://www.reddit.com/r/" + this.subreddit+ "/hot", function(t) {
+      this.channel || (this.channel = "videos");
+      // var subreddits = this.getSubReddits(this.channel);
+      this.getStorage();
       redditVideoService.loadHot(
-        'videos', // or more
+        this.channel, // or more
         // item.minNumOfVotes
       ).then(function(t) {
         self.videoList = t,
@@ -13713,7 +13716,7 @@ var appVideo = new Vue({
         self.playingVideo = t[0],
         self.playVideo(self.playingVideo)
       })
-      .catch(error => console.error(error))
+      .catch(error => console.error(error));
     },
     converter: function(t) {
       return t = marked(t)
@@ -13747,7 +13750,7 @@ var appVideo = new Vue({
       "37" == t.keyCode ? this.prevVideo() : "39" == t.keyCode && this.nextVideo()
     },
     playVideo: function(t) {
-      player && (player.loadVideoById(t.youtubeId, 0, "large"))
+      if(player && player.loadVideoById) player.loadVideoById(t.youtubeId, 0, "large");
       // this.fetchComments())
     },
     play: function(t) {
@@ -13809,6 +13812,13 @@ var appVideo = new Vue({
     },
     isT1: function(t) {
       return "t1" == t ? !0 : !1
+    },
+    changeChannel: function(channel) {
+      console.log(channel)
+      if (this.channel !== channel) {
+        this.channel = channel;
+        this.fetchVideos()
+      }
     }
   },
   beforeDestroy: function() {
