@@ -4,7 +4,11 @@
   "description": "Always Interesting Videos (webapp)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "uglifyjs js/all.js -o js/all.min.js"
+  },
+  "dependencies": {
+    "uglify-es": "^3.3.9"
   },
   "repository": {
     "type": "git",
@@ -15,5 +19,5 @@
   "bugs": {
     "url": "https://github.com/gianpaj/walnut.tv/issues"
   },
-  "homepage": "https://github.com/gianpaj/walnut.tv#readme"
+  "homepage": "https://walnut.tv"
 }
