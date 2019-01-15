@@ -11,7 +11,7 @@ body {
 
 .background-dark,
 body {
-  background-color: #2e3436;
+  background-color: #000;
 }
 
 a {
@@ -65,7 +65,7 @@ h2 {
   border: 2px solid transparent;
   border-radius: 10px;
   background-clip: content-box;
-  background-color: #6b7d82;
+  background-color: #797979;
 }
 
 .navbar {
@@ -77,15 +77,33 @@ h2 {
   width: 100%;
 }
 
+@media only screen and (min-width: 992px) {
+  .navbar-header {
+    display: inline-flex;
+    align-items: center;
+    flex-direction: column;
+  }
+}
+
 .navbar-inverse {
-  background-color: #3d494c;
+  background-color: #191919;
   border: none;
   border-radius: 0;
-  border-bottom: 1px solid #2e3436;
+  border-bottom: 1px solid #353535;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  color: #909090;
+}
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:focus,
+.navbar-inverse .navbar-nav > .active > a:hover {
+  background-color: transparent;
 }
 
 .navbar-brand {
-  padding: 10px 0;
+  padding: 8.7px 0;
   margin: 0 20px 0 0;
 }
 
@@ -125,6 +143,7 @@ h2 {
 
 .navbar-nav li {
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 .header-container {
@@ -143,7 +162,6 @@ h2 {
   width: 360px;
   display: table-cell;
   border-bottom: 4px solid #3d4248;
-  background-color: #3d494c;
 }
 
 .main-content {
@@ -219,6 +237,7 @@ h2 {
 
 .video-container .video-details a {
   float: left;
+  text-decoration: none;
 }
 
 .pre-scrollable {
@@ -236,7 +255,7 @@ h2 {
 }
 
 .video-list li.video {
-  border-bottom: 1px solid #4c5e63;
+  border-bottom: 1px solid #464646;
 }
 
 .video-list li.video:last-child {
@@ -245,25 +264,25 @@ h2 {
 
 .video-list .video a {
   padding: 12px 10px;
-  background-color: #3d494c;
+  background-color: #191919;
   color: #dbdce5;
   display: block;
-  border-left: 4px solid #3d494c;
+  border-left: 4px solid transparent;
 }
 
 .video-list .video a:hover {
-  background-color: #2e3436;
+  background-color: #000;
   cursor: pointer;
-  border-color: #2e3436;
+  border-color: #000;
 }
 
 .video-list .video .active {
-  background-color: #2e3436;
-  border-left: 4px solid #4e8dff;
+  background-color: #000;
+  border-left: 4px solid #ff00c1;
 }
 
 .video-list .video .active:hover {
-  border-color: #4e8dff;
+  border-color: #ff00c1;
 }
 
 .video-list .video a:after {
