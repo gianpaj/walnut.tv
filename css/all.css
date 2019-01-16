@@ -65,7 +65,7 @@ h2 {
   border: 2px solid transparent;
   border-radius: 10px;
   background-clip: content-box;
-  background-color: #797979;
+  background-color: #0e0e0e;
 }
 
 .navbar {
@@ -91,13 +91,15 @@ h2 {
 }
 
 .navbar-inverse .navbar-nav > li > a {
-  color: #909090;
+  color: #696969;
+  font-weight: 600;
 }
 
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:focus,
 .navbar-inverse .navbar-nav > .active > a:hover {
   background-color: transparent;
+  font-weight: 400;
 }
 
 .navbar-brand {
@@ -336,7 +338,7 @@ h2 {
 }
 
 .video-list .video .video-title.watched h4 {
-  color: #828282;
+  color: #616161;
 }
 
 .videoPlayer.sticky {
