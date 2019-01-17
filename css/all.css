@@ -91,15 +91,16 @@ h2 {
 }
 
 .navbar-inverse .navbar-nav > li > a {
-  color: #696969;
-  font-weight: 600;
+  color: #5a5a5a;
+  font-weight: 700;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:focus,
 .navbar-inverse .navbar-nav > .active > a:hover {
   background-color: transparent;
-  font-weight: 400;
 }
 
 .navbar-brand {
@@ -325,7 +326,11 @@ h2 {
   line-height: 16px;
   padding: 0;
   margin: 0;
+  color: white;
 }
+
+/* .video-list .video .active .video-title h4 {
+} */
 
 .video-list .video .video-thumbnail-image .video-watched {
   position: absolute;
@@ -338,7 +343,7 @@ h2 {
 }
 
 .video-list .video .video-title.watched h4 {
-  color: #616161;
+  color: #5a5a5a;
 }
 
 .videoPlayer.sticky {
