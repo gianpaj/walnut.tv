@@ -104,7 +104,7 @@ h2 {
 }
 
 .navbar-brand {
-  padding: 14px 0;
+  padding: 0;
   margin: 0 20px 0 0;
 }
 
@@ -556,5 +556,11 @@ h2 {
 @media (max-width: 576px) {
   body {
     background-color: #fff;
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .navbar-brand {
+    display: flex;
   }
 }
