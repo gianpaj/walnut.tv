@@ -204,6 +204,13 @@ const channels = [
     minNumOfVotes: 3
   },
   {
+    title: "shorts",
+    subreddit: "filmmakers;shortfilms;shortfilm;shorthorror",
+    textColor: "",
+    bgColor: "#ff294b",
+    minNumOfVotes: 3
+  },
+  {
     title: "educational",
     subreddit: "physics;math;psychology;space;biology",
     textColor: "",
