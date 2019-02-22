@@ -197,13 +197,6 @@ const channels = [
     minNumOfVotes: 50
   },
   {
-    title: "curious",
-    subreddit: "curiousvideos;mealtimevideos;educativevideos;watchandlearn",
-    textColor: "",
-    bgColor: "#ff496b",
-    minNumOfVotes: 3
-  },
-  {
     title: "shorts",
     subreddit: "filmmakers;shortfilms;shortfilm;shorthorror",
     textColor: "",
@@ -238,6 +231,13 @@ const channels = [
     textColor: "",
     bgColor: "#00ffe9",
     minNumOfVotes: 0
+  },
+  {
+    title: "curious",
+    subreddit: "curiousvideos;mealtimevideos;educativevideos;watchandlearn",
+    textColor: "",
+    bgColor: "#ff496b",
+    minNumOfVotes: 3
   },
   {
     title: "music",
