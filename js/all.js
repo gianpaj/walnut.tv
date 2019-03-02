@@ -13766,8 +13766,13 @@ var appVideo = new Vue({
     },
     fetchVideos: function() {
       var self = this;
+      var subreddits;
       this.channel || (this.channel = "general");
-      var subreddits = this.getSubReddits(this.channel);
+      if (window.location.pathname.split("/r/").length > 1) {
+        subreddits = this.channel;
+      } else {
+        subreddits = this.getSubReddits(this.channel);
+      }
       this.getStorage();
       redditVideoService.loadHot(
         subreddits,
