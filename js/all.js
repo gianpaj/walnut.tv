@@ -13892,6 +13892,7 @@ var appVideo = new Vue({
       if (this.channel !== channel) {
         this.channel = channel;
         this.fetchVideos()
+        window.history.replaceState(null, null, '/channel/' + channel);
       }
     }
   },
