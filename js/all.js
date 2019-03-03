@@ -240,6 +240,13 @@ const channels = [
     minNumOfVotes: 3
   },
   {
+    title: "gaming",
+    subreddit: "PromoteGamingVideos;gamingvids;YouTubeGamers;PromoteYoutubeGaming",
+    textColor: "",
+    bgColor: "#FFFF00",
+    minNumOfVotes: 5
+  },
+  {
     title: "music",
     subreddit: "listentothis",
     textColor: "",
