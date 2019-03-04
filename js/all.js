@@ -13726,10 +13726,14 @@ Vue.component("comment", {
     }
   }
 });
+
+var paths = window.location.pathname.split("/").filter(a=> a);
+
 var appVideo = new Vue({
   el: "#appVideo",
   data: {
-    channel: window.location.pathname.split("/")[2],
+    // get the channel after the first slash
+    channel: paths.length === 1 && paths[1],
     channels: channels,
     videoList: [],
     videosWatched: [],
@@ -13892,7 +13896,7 @@ var appVideo = new Vue({
       if (this.channel !== channel) {
         this.channel = channel;
         this.fetchVideos()
-        window.history.replaceState(null, null, '/channel/' + channel);
+        window.history.replaceState(null, null, channel);
       }
     }
   },
