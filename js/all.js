@@ -13733,7 +13733,7 @@ var appVideo = new Vue({
   el: "#appVideo",
   data: {
     // get the channel after the first slash
-    channel: paths.length === 1 && paths[1],
+    channel: paths.length === 1 && paths[0],
     channels: channels,
     videoList: [],
     videosWatched: [],
