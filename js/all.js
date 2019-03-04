@@ -225,7 +225,7 @@ const channels = [
     minNumOfVotes: 0
   },
   {
-    title: "how to",
+    title: "howto",
     subreddit:
       "maker;howto;artisanvideos;TechDIY;specializedtools;upcycling;DIY;easyfix;woodworking;FastWorkers;lifehacks;tinyhouses",
     textColor: "",
