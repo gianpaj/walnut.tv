@@ -502,7 +502,7 @@ h2 {
   width: 150px;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 813px) {
   .card-img-top {
     width: 100px;
   }
@@ -534,7 +534,7 @@ h2 {
   width: 150px;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 813px) {
   .card-img-top {
     width: 100px;
   }
@@ -547,20 +547,24 @@ h2 {
   text-align: center;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 813px) {
   .hide-mobile {
     display: none;
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 813px) {
   body {
     background-color: #fff;
   }
 }
 
-@media screen and (min-width: 576px) {
+@media screen and (min-width: 813px) {
   .navbar-brand {
     display: flex;
   }
+}
+
+.card {
+  height: 100vh;
 }
