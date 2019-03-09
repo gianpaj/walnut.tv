@@ -203,20 +203,6 @@
                   </h2></a
                 >
               </div>
-
-              <script type="text/x-template" id="comment-template">
-                <ul class="list-group" v-if="hasReplies(model.data.replies)">
-                  <li v-for="model in model.data.replies.data.children" :model="model" class="comment-item" v-if="isT1(model.kind)">
-                    <span @click="slide(model.data.id)" class="toggle-icon comment-name id-{{ model.data.id }}"> − </span>
-                    <span><a href="https://www.reddit.com/u/{{ model.data.author }}" target="_Blank">{{ model.data.author }}</a> • {{ model.data.score | points }} • {{ model['data']['created_utc'] | relativeTime }}</span>
-                    <div class="{{ model.data.id }}">
-                      <div class="comment-body" v-html="model.data.body_html | markdown | targetBlank">
-                      </div>
-                      <comment :model="model" ></comment>
-                    </div>
-                  </li>
-                </ul>
-              </script>
             </div>
           </div>
         </div>
@@ -307,9 +293,8 @@
     </div>
     <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/reddit.js@0.1.4/reddit.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.10.6/moment.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/combine/npm/jquery@1.12.4,npm/reddit.js@0.1.4,npm/vue@1.0.10/dist/vue.min.js,npm/moment@2.10.6"></script>
+    <script src="https://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/combine/npm/jquery@1.12.4,npm/reddit.js@0.1.4,npm/vue@1.0.10/dist/vue.min.js"></script>
     <script
       src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
       integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
