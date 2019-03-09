@@ -320,7 +320,7 @@ function onYouTubeIframeAPIReady() {
       showinfo: 0,
       rel: 0,
       iv_load_policy: 3,
-      origin: "https://rake.tv"
+      origin: "https://walnut.tv"
     }
   });
 }
