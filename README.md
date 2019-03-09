@@ -27,7 +27,7 @@ Automatically via Netlify
 
 - [reddit.js](https://github.com/sahilm/reddit.js)
 - [Vue.JS](http://vuejs.org/) v1.0.10
-- jQuery v1.11
+- jQuery v1.12.4
 - Moment.Js v2.10.6
 
 <!-- ## License
