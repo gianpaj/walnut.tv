@@ -459,7 +459,7 @@ h2 {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 992px) {
   .video-container {
     padding: 0;
   }
@@ -502,7 +502,7 @@ h2 {
   width: 150px;
 }
 
-@media (max-width: 813px) {
+@media (max-width: 992px) {
   .card-img-top {
     width: 100px;
   }
@@ -534,7 +534,7 @@ h2 {
   width: 150px;
 }
 
-@media (max-width: 813px) {
+@media (max-width: 992px) {
   .card-img-top {
     width: 100px;
   }
@@ -547,19 +547,19 @@ h2 {
   text-align: center;
 }
 
-@media (max-width: 813px) {
+@media (max-width: 992px) {
   .hide-mobile {
     display: none;
   }
 }
 
-@media (max-width: 813px) {
+@media (max-width: 992px) {
   body {
     background-color: #fff;
   }
 }
 
-@media screen and (min-width: 813px) {
+@media screen and (min-width: 992px) {
   .navbar-brand {
     display: flex;
   }
