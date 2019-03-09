@@ -29,6 +29,85 @@ function exit() {
 
 if (isMobile) exit();
 
+const channels = [
+  {
+    title: "general",
+    subreddit: "videos",
+    minNumOfVotes: 50
+  },
+  {
+    title: "curious",
+    subreddit:
+      "curiousvideos;interview;mealtimevideos;futurology;educativevideos;watchandlearn;sciencevideos",
+    minNumOfVotes: 3
+  },
+  {
+    title: "educational",
+    subreddit: "lectures;physics;biology;psychology;space;philosophy;math",
+    minNumOfVotes: 0
+  },
+  {
+    title: "movies",
+    subreddit:
+      "television;documentaries;fullmoviesonyoutube;trailers;themakingof;filmmakers;movies;shortfilms;shortfilm;horror;shorthorror;animation;Truefilm",
+    minNumOfVotes: 0
+  },
+  {
+    title: "music",
+    subreddit: "listentothis",
+    minNumOfVotes: 5
+  },
+  {
+    title: "comedy",
+    subreddit:
+      "nottimanderic;StandUpComedy;humor;contagiouslaughter;accidentalcomedy;aww",
+    minNumOfVotes: 5
+  },
+  {
+    title: "active",
+    subreddit: "adrenalin;climbing;kayaking;theocho;surfing;MMA",
+    minNumOfVotes: 5
+  },
+  {
+    title: "crafts",
+    subreddit: "artisanvideos;maker;howto;TechDIY;woodworking;FastWorkers",
+    minNumOfVotes: 5
+  },
+  {
+    title: "gaming",
+    subreddit:
+      "gamernew;Games;themakingofgames;AndroidGaming;indiegames;gamingvids;YouTubeGamers",
+    textColor: "",
+    minNumOfVotes: 5
+  },
+  {
+    title: "food",
+    subreddit: "veganrecipes;permaculture;FoodVideos",
+    textColor: "",
+    minNumOfVotes: 5
+  },
+  {
+    title: "news",
+    subreddit: "politicalvideos",
+    minNumOfVotes: 0
+  },
+  {
+    title: "past",
+    subreddit: "obsuremedia",
+    minNumOfVotes: 0
+  },
+  {
+    title: "documentaries",
+    subreddit: "kidsafevideos",
+    minNumOfVotes: 0
+  },
+  {
+    title: "kids",
+    subreddit: "kidsafevideos",
+    minNumOfVotes: 0
+  }
+];
+
 const youtubeURL = "http://www.youtube.com/watch?v=";
 const youtubeURLLength = youtubeURL.length;
 const embedLength = "/embed/".length;
@@ -219,85 +298,6 @@ function RedditVideoService() {
 }
 
 const redditVideoService = new RedditVideoService();
-
-const channels = [
-  {
-    title: "general",
-    subreddit: "videos",
-    minNumOfVotes: 50
-  },
-  {
-    title: "curious",
-    subreddit:
-      "curiousvideos;interview;mealtimevideos;futurology;educativevideos;watchandlearn;sciencevideos",
-    minNumOfVotes: 3
-  },
-  {
-    title: "educational",
-    subreddit: "lectures;physics;biology;psychology;space;philosophy;math",
-    minNumOfVotes: 0
-  },
-  {
-    title: "movies",
-    subreddit:
-      "television;documentaries;fullmoviesonyoutube;trailers;themakingof;filmmakers;movies;shortfilms;shortfilm;horror;shorthorror;animation",
-    minNumOfVotes: 0
-  },
-  {
-    title: "music",
-    subreddit: "listentothis",
-    minNumOfVotes: 5
-  },
-  {
-    title: "comedy",
-    subreddit:
-      "nottimanderic;StandUpComedy;humor;contagiouslaughter;accidentalcomedy;aww",
-    minNumOfVotes: 5
-  },
-  {
-    title: "active",
-    subreddit: "adrenalin;climbing;kayaking;theocho;surfing;MMA",
-    minNumOfVotes: 5
-  },
-  {
-    title: "crafts",
-    subreddit: "artisanvideos;maker;howto;TechDIY;woodworking;FastWorkers",
-    minNumOfVotes: 5
-  },
-  {
-    title: "gaming",
-    subreddit:
-      "gamernew;Games;themakingofgames;AndroidGaming;indiegames;gamingvids;YouTubeGamers",
-    textColor: "",
-    minNumOfVotes: 5
-  },
-  {
-    title: "food",
-    subreddit: "veganrecipes;permaculture;FoodVideos",
-    textColor: "",
-    minNumOfVotes: 5
-  },
-  {
-    title: "news",
-    subreddit: "politicalvideos",
-    minNumOfVotes: 0
-  },
-  {
-    title: "past",
-    subreddit: "obsuremedia",
-    minNumOfVotes: 0
-  },
-  {
-    title: "documentaries",
-    subreddit: "kidsafevideos",
-    minNumOfVotes: 0
-  },
-  {
-    title: "kids",
-    subreddit: "kidsafevideos",
-    minNumOfVotes: 0
-  }
-];
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player("player", {
