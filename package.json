@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/gianpaj/walnut.tv/issues"
   },
-  "homepage": "https://walnut.tv"
+  "homepage": "https://walnut.tv",
+  "devDependencies": {
+    "stylelint": "^9.10.1",
+    "stylelint-config-standard": "^18.2.0"
+  }
 }
