@@ -93,8 +93,8 @@ h2 {
 .navbar-inverse .navbar-nav > li > a {
   color: #4e4e4e;
   font-weight: 600;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 14px;
+  padding-right: 14px;
 }
 
 .navbar-inverse .navbar-nav > .active > a,

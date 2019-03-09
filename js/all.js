@@ -193,65 +193,74 @@ const channels = [
   {
     title: "general",
     subreddit: "videos",
-    textColor: "white",
     minNumOfVotes: 50
   },
   {
     title: "curious",
-    subreddit: "curiousvideos;mealtimevideos;educativevideos;watchandlearn",
-    textColor: "",
-    bgColor: "#ff496b",
+    subreddit: "curiousvideos;interview;mealtimevideos;futurology;educativevideos;watchandlearn;sciencevideos",
     minNumOfVotes: 3
   },
   {
     title: "educational",
-    subreddit: "physics;math;psychology;space;biology",
-    textColor: "",
-    bgColor: "#2b80ff",
+    subreddit: "lectures;physics;biology;psychology;space;philosophy;math",
     minNumOfVotes: 0
   },
   {
-    title: "documentaries",
-    subreddit: "documentaries",
-    textColor: "",
-    bgColor: "#ff7200",
+    title: "movies",
+    subreddit: "television;documentaries;fullmoviesonyoutube;trailers;themakingof;filmmakers;movies;shortfilms;shortfilm;horror;shorthorror;animation",
     minNumOfVotes: 0
-  },
-  {
-    title: "lectures",
-    subreddit: "lectures",
-    textColor: "",
-    bgColor: "#9d00ff",
-    minNumOfVotes: 0
-  },
-  {
-    title: "howto",
-    subreddit:
-      "maker;howto;artisanvideos;TechDIY;specializedtools;upcycling;DIY;easyfix;woodworking;FastWorkers;lifehacks;tinyhouses",
-    textColor: "",
-    bgColor: "#00ffe9",
-    minNumOfVotes: 0
-  },
-  {
-    title: "shorts",
-    subreddit: "filmmakers;shortfilms;shortfilm;shorthorror",
-    textColor: "",
-    bgColor: "#ff294b",
-    minNumOfVotes: 3
-  },
-  {
-    title: "gaming",
-    subreddit: "PromoteGamingVideos;gamingvids;YouTubeGamers;PromoteYoutubeGaming",
-    textColor: "",
-    bgColor: "#FFFF00",
-    minNumOfVotes: 5
   },
   {
     title: "music",
     subreddit: "listentothis",
-    textColor: "",
-    bgColor: "#FFFF00",
     minNumOfVotes: 5
+  },
+  {
+    title: "comedy",
+    subreddit: "nottimanderic;StandUpComedy;humor;contagiouslaughter;accidentalcomedy;aww",
+    minNumOfVotes: 5
+  },
+  {
+    title: "active",
+    subreddit: "adrenalin;climbing;kayaking;theocho;surfing;MMA",
+    minNumOfVotes: 5
+  },
+  {
+    title: "crafts",
+    subreddit: "artisanvideos;maker;howto;TechDIY;woodworking;FastWorkers",
+    minNumOfVotes: 5
+  },
+  {
+    title: "gaming",
+    subreddit: "gamernew;Games;themakingofgames;AndroidGaming;indiegames;gamingvids;YouTubeGamers",
+    textColor: "",
+    minNumOfVotes: 5
+  },
+  {
+    title: "food",
+    subreddit: "veganrecipes;permaculture;FoodVideos",
+    textColor: "",
+    minNumOfVotes: 5
+  },
+  {
+    title: "news",
+    subreddit: "politicalvideos",
+    minNumOfVotes: 0
+  },
+  {
+    title: "past",
+    subreddit: "obsuremedia",
+    minNumOfVotes: 0
+  },
+  {
+    title: "documentaries",
+    subreddit: "kidsafevideos",
+    minNumOfVotes: 0
+  },
+  {
+    title: "kids",
+    subreddit: "kidsafevideos",
+    minNumOfVotes: 0
   }
 ];
 
