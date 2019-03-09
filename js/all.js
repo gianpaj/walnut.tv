@@ -97,11 +97,6 @@ const channels = [
     minNumOfVotes: 0
   },
   {
-    title: "documentaries",
-    subreddit: "kidsafevideos",
-    minNumOfVotes: 0
-  },
-  {
     title: "kids",
     subreddit: "kidsafevideos",
     minNumOfVotes: 0
