@@ -178,6 +178,7 @@ function RedditVideoService() {
     return result;
   }
 
+  // eslint-disable-next-line no-unused-vars
   function dynamicSort(property) {
     let sortOrder = 1;
     if (property[0] === "-") {
@@ -323,7 +324,7 @@ function onYouTubeIframeAPIReady() {
     }
   });
 }
-function onPlayerReady(t) {
+function onPlayerReady() {
   appVideo.videoList[0] && appVideo.play(0);
 }
 function onPlayerError() {
@@ -339,7 +340,8 @@ $(".video-container").on("scroll", function() {
     var t = document.getElementById("video-container").scrollTop,
       e = topOfComments,
       n;
-    (n = t > e ? !0 : !1), $(".videoPlayer").toggleClass("sticky", n);
+    n = t > e ? !0 : !1;
+    $(".videoPlayer").toggleClass("sticky", n);
   }
 });
 Vue.config.unsafeDelimiters = ["{!!", "!!}"];
@@ -394,10 +396,10 @@ var appVideo = new Vue({
   },
   methods: {
     slide: function(t) {
-      $("." + t).toggle(),
-        "+" == $("span.id-" + t).text()
-          ? $("span.id-" + t).html("−")
-          : $("span.id-" + t).html("+");
+      $("." + t).toggle();
+      "+" == $("span.id-" + t).text()
+        ? $("span.id-" + t).html("−")
+        : $("span.id-" + t).html("+");
     },
     getSubReddits: function(channel) {
       return channels.find(function(c) {
@@ -431,6 +433,7 @@ var appVideo = new Vue({
           self.playingVideo = t[0];
           self.playVideo(self.playingVideo);
         })
+        // eslint-disable-next-line no-console
         .catch(error => console.error(error));
     },
     hasBeenWatched: function(t) {
