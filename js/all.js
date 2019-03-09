@@ -108,7 +108,8 @@ const youtubeURLLength = youtubeURL.length;
 const embedLength = "/embed/".length;
 
 function RedditVideoService() {
-  function isVideoObject({ data }) {
+  function isVideoObject(obj) {
+    var data = obj.data;
     // reddit videos
     if (data.is_video === true) return true;
 
@@ -128,7 +129,8 @@ function RedditVideoService() {
     return video.data.ups >= upsMin;
   }
 
-  function childObjectToDomainVideoModel({ data }) {
+  function childObjectToDomainVideoModel(video) {
+    const data = video.data;
     const result = {};
     result.title = data.title;
     result.id = data.id;
@@ -238,7 +240,6 @@ function RedditVideoService() {
     );
 
     if (arrayOfArrays.length === 1) {
-      // if (__DEV__) console.warn("skipping", arrayOfArrays[0]);
       return arrayOfArrays;
     }
 
@@ -264,10 +265,10 @@ function RedditVideoService() {
    *
    * @param {string} channel_s one or more channels - e.g. 'funny' or' 'funny;cool'
    * @param {number} upsMin minimum amount of up votes per video
-   * @param {*} after reddit id to load more videos
+   * @param {*} after reddit id to load more videos (TODO:)
    */
-  async function loadHot(channel_s, upsMin, after) {
-    // TODO: implement "after" for multiple channels
+  async function loadHot(channel_s, upsMin) {
+    // TODO: implement "after" param for multiple channels
     channel_s = channel_s.split(";");
     // console.warn("fetching", channel_s.length, "channels");
     const promises = channel_s.map(channel => _loadHot(channel, upsMin));
@@ -294,6 +295,15 @@ function RedditVideoService() {
 
 const redditVideoService = new RedditVideoService();
 
+var youtubeId,
+  player,
+  tag = document.createElement("script");
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName("script")[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+// The onYouTubeIframeAPIReady function will execute as soon as the player API code downloads
+// eslint-disable-next-line no-unused-vars
 function onYouTubeIframeAPIReady() {
   player = new YT.Player("player", {
     height: "390",
@@ -323,24 +333,6 @@ function onPlayerStateChange(t) {
   0 === t.data && appVideo.autoplay && appVideo.nextVideo();
 }
 
-var youtubeId,
-  player,
-  tag = document.createElement("script");
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName("script")[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag),
-  $(window).resize(function() {
-    var t = $(window).height() - 55;
-    $(".pre-scrollable ").css("height", t);
-  }),
-  $(document).ready(function() {
-    var t = $(window).height() - 55;
-    $(".pre-scrollable ").css("height", t);
-  }),
-  (String.prototype.replaceAll = function(t, e) {
-    var n = this;
-    return n.replace(new RegExp(t, "g"), e);
-  });
 var topOfComments = $("div.video-details").offset().top;
 $(".video-container").on("scroll", function() {
   if (0 == appVideo.mobile) {
@@ -349,27 +341,27 @@ $(".video-container").on("scroll", function() {
       n;
     (n = t > e ? !0 : !1), $(".videoPlayer").toggleClass("sticky", n);
   }
-}),
-  (Vue.config.unsafeDelimiters = ["{!!", "!!}"]),
-  (Vue.config.debug = !0),
-  Vue.filter("maxChar", function(t) {
-    var e = t;
-    return (
-      void 0 != e &&
-        e.length > 90 &&
-        (e =
-          jQuery
-            .trim(e)
-            .substring(0, 80)
-            .split(" ")
-            .slice(0, -1)
-            .join(" ") + "..."),
-      e
-    );
-  }),
-  Vue.filter("toUrl", function(t) {
-    return "https://img.youtube.com/vi/" + t + "/mqdefault.jpg";
-  });
+});
+Vue.config.unsafeDelimiters = ["{!!", "!!}"];
+Vue.config.debug = !0;
+Vue.filter("maxChar", function(t) {
+  var e = t;
+  return (
+    void 0 != e &&
+      e.length > 90 &&
+      (e =
+        jQuery
+          .trim(e)
+          .substring(0, 80)
+          .split(" ")
+          .slice(0, -1)
+          .join(" ") + "..."),
+    e
+  );
+});
+Vue.filter("toUrl", function(t) {
+  return "https://img.youtube.com/vi/" + t + "/mqdefault.jpg";
+});
 
 var paths = window.location.pathname.split("/").filter(a => a);
 
