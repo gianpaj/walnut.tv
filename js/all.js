@@ -42,7 +42,7 @@ const channels = [
     minNumOfVotes: 3
   },
   {
-    title: "educational",
+    title: "academic",
     subreddit: "lectures;physics;biology;psychology;space;philosophy;math",
     minNumOfVotes: 0
   },
