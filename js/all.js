@@ -1,4 +1,34 @@
 // @ts-nocheck
+
+var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  navigator.userAgent
+);
+
+function exit() {
+  // http://kevin.vanzonneveld.net
+  // +   original by: Brett Zamir (http://brettz9.blogspot.com)
+  // +      input by: Paul
+  // +   bugfixed by: Hyam Singer (http://www.impact-computing.com/)
+  // +   improved by: Philip Peterson
+  // +   bugfixed by: Brett Zamir (http://brettz9.blogspot.com)
+  // %        note 1: Should be considered expirimental. Please comment on this function.
+  // *     example 1: exit();
+  // *     returns 1: null
+
+  window.addEventListener(
+    "error",
+    function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    false
+  );
+
+  throw "";
+}
+
+if (isMobile) exit();
+
 const youtubeURL = "http://www.youtube.com/watch?v=";
 const youtubeURLLength = youtubeURL.length;
 const embedLength = "/embed/".length;
@@ -321,61 +351,12 @@ $(".video-container").on("scroll", function() {
   if (0 == appVideo.mobile) {
     var t = document.getElementById("video-container").scrollTop,
       e = topOfComments,
-      n = !1;
+      n;
     (n = t > e ? !0 : !1), $(".videoPlayer").toggleClass("sticky", n);
   }
 }),
-  Vue.filter("convertTime", function(t) {
-    var e,
-      n = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/,
-      i = 0,
-      r = 0,
-      o = 0;
-    if (n.test(t)) {
-      var s = n.exec(t);
-      s[1] && (i = Number(s[1])),
-        s[2] && (r = Number(s[2])),
-        s[3] && (o = Number(s[3])),
-        (e = 3600 * i + 60 * r + o);
-    }
-    return (
-      (time = moment.duration(1e3 * e - 1e3).format("h:mm:ss")),
-      time < 10 ? (time = "0:0" + time) : time < 60 && (time = "0:" + time),
-      time
-    );
-  }),
-  Vue.filter("points", function(t) {
-    return 1 == t ? t + " point" : t + " points";
-  }),
-  Vue.filter("relativeTime", function(t) {
-    var e = moment(1e3 * t).fromNow(!0);
-    return e.indexOf("hours") > -1
-      ? ((e = e.replace("hours", "h")), e.replace(" ", ""))
-      : e.indexOf("hour") > -1
-      ? ((e = e.replace("hour", "h")),
-        (e = e.replace(" ", "")),
-        e.replace("an", "1"))
-      : e.indexOf("minutes") > -1
-      ? ((e = e.replace("minutes", "m")), e.replace(" ", ""))
-      : e.indexOf("seconds") > -1
-      ? ((e = e.replace("seconds", "s")), e.replace(" ", ""))
-      : e;
-  }),
-  Vue.filter("targetBlank", function(t) {
-    var e = t;
-    return (e = e.replaceAll("<a", '<a target="_Blank" '));
-  }),
-  Vue.filter("markdown", function(t) {
-    var e = document.createElement("textarea");
-    return (e.innerHTML = t), e.value;
-  }),
   (Vue.config.unsafeDelimiters = ["{!!", "!!}"]),
   (Vue.config.debug = !0),
-  Vue.filter("numeral", function(t) {
-    if (t > 999) var e = numeral(t).format("0.0a");
-    else var e = t;
-    return e;
-  }),
   Vue.filter("maxChar", function(t) {
     var e = t;
     return (
@@ -391,31 +372,8 @@ $(".video-container").on("scroll", function() {
       e
     );
   }),
-  Vue.filter("count", function(t) {
-    return t.length;
-  }),
   Vue.filter("toUrl", function(t) {
     return "https://img.youtube.com/vi/" + t + "/mqdefault.jpg";
-  }),
-  Vue.component("comment", {
-    template: "#comment-template",
-    props: {
-      model: Object
-    },
-    methods: {
-      slide: function(t) {
-        $("." + t).toggle(),
-          "+" == $("span.id-" + t).text()
-            ? $("span.id-" + t).html("−")
-            : $("span.id-" + t).html("+");
-      },
-      hasReplies: function(t) {
-        return "object" == typeof t ? !0 : !1;
-      },
-      isT1: function(t) {
-        return "t1" == t ? !0 : !1;
-      }
-    }
   });
 
 var paths = window.location.pathname.split("/").filter(a => a);
@@ -443,28 +401,16 @@ var appVideo = new Vue({
   created: function() {
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
-    ) && (this.mobile = !0),
-      this.fetchVideos(),
-      window.addEventListener("keyup", this.keys);
+    ) && (this.mobile = !0);
+    this.fetchVideos();
+    window.addEventListener("keyup", this.keys);
   },
   methods: {
-    firstVideo: function(t) {
-      return 0 === t ? !0 : !1;
-    },
-    lastVideo: function(t) {
-      return t === this.videoList.length - 1 ? !0 : !1;
-    },
     slide: function(t) {
       $("." + t).toggle(),
         "+" == $("span.id-" + t).text()
           ? $("span.id-" + t).html("−")
           : $("span.id-" + t).html("+");
-    },
-    hasChildren: function(t) {
-      return this.hasReplies(t) ? ("undefinded" === t ? !1 : !0) : !1;
-    },
-    hasReplies: function(t) {
-      return "object" == typeof t ? !0 : !1;
     },
     getSubReddits: function(channel) {
       return channels.find(function(c) {
@@ -487,39 +433,18 @@ var appVideo = new Vue({
           // item.minNumOfVotes
         )
         .then(function(t) {
-          (self.videoList = t),
-            t.length > 0
-              ? ((self.loadingVideos = !0),
-                self.watched(self.videoList[0].youtubeId))
-              : (self.videoMessage =
-                  "Sorry, we couldn't find any videos in /r/" +
-                  self.subreddit +
-                  "."),
-            (self.playingVideo = t[0]),
-            self.playVideo(self.playingVideo);
+          self.videoList = t;
+          t.length > 0
+            ? ((self.loadingVideos = !0),
+              self.watched(self.videoList[0].youtubeId))
+            : (self.videoMessage =
+                "Sorry, we couldn't find any videos in /r/" +
+                self.subreddit +
+                ".");
+          self.playingVideo = t[0];
+          self.playVideo(self.playingVideo);
         })
         .catch(error => console.error(error));
-    },
-    converter: function(t) {
-      return (t = marked(t));
-    },
-    fetchComments: function() {
-      (this.loadingComments = !0), (this.commentList = []);
-      var t = this.videoList[this.videoPlaying].id;
-      this.$http.get(
-        "https://rake.tv/api/fetchComments/" + this.subreddit + "/" + t,
-        function(t) {
-          (this.commentList = t),
-            (this.loadingComments = !1),
-            (this.commentsLoaded = !0);
-        }
-      );
-    },
-    hideComments: function() {
-      $(".comment-group").toggle();
-    },
-    removeComments: function() {
-      (this.commentsLoaded = !1), (this.commentList = []);
     },
     hasBeenWatched: function(t) {
       return -1 != this.videosWatched.indexOf(t) &&
@@ -532,59 +457,46 @@ var appVideo = new Vue({
         (this.videosWatched.push(t), this.setStorage());
     },
     keys: function(t) {
-      (t = t || window.event),
-        "37" == t.keyCode
-          ? this.prevVideo()
-          : "39" == t.keyCode && this.nextVideo();
+      t = t || window.event;
+      "37" == t.keyCode
+        ? this.prevVideo()
+        : "39" == t.keyCode && this.nextVideo();
     },
     playVideo: function(t) {
       if (player && player.loadVideoById)
         player.loadVideoById(t.youtubeId, 0, "large");
-      // this.fetchComments())
     },
     play: function(t) {
-      this.removeComments(),
-        (this.playingVideo = this.videoList[t]),
-        (this.videoPlaying = t),
-        (this.loaded = !1),
-        (this.loading = !1),
-        this.watched(this.videoList[t].youtubeId),
-        this.mobile
-          ? player.cueVideoById(this.videoList[t].youtubeId, 0, "large")
-          : player.loadVideoById(this.videoList[t].youtubeId, 0, "large");
-      // this.fetchComments()
+      this.playingVideo = this.videoList[t];
+      this.videoPlaying = t;
+      this.loaded = !1;
+      this.loading = !1;
+      this.watched(this.videoList[t].youtubeId);
+      this.mobile
+        ? player.cueVideoById(this.videoList[t].youtubeId, 0, "large")
+        : player.loadVideoById(this.videoList[t].youtubeId, 0, "large");
     },
     nextVideo: function() {
       if (this.videoPlaying < this.videoList.length - 1) {
-        this.removeComments(),
-          this.videoPlaying++,
-          this.play(this.videoPlaying);
+        this.videoPlaying++;
+        this.play(this.videoPlaying);
         var t = $("#toolbox"),
           e = t.scrollTop(),
           n = $(".active")
             .parent()
             .height();
-        $(".active")
-          .parent()
-          .next()
-          .height();
         t.scrollTop(e + (n + 1));
       }
     },
     prevVideo: function() {
       if (this.videoPlaying > 0) {
-        this.removeComments(),
-          this.videoPlaying--,
-          this.play(this.videoPlaying);
+        this.videoPlaying--;
+        this.play(this.videoPlaying);
         var t = $("#toolbox"),
           e = t.scrollTop(),
           n = $(".active")
             .parent()
             .height();
-        $(".active")
-          .parent()
-          .next()
-          .height();
         t.scrollTop(e - (n + 1));
       }
     },
