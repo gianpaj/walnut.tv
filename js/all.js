@@ -335,7 +335,7 @@ function onPlayerStateChange(t) {
 }
 
 Vue.config.unsafeDelimiters = ["{!!", "!!}"];
-Vue.config.debug = !0;
+Vue.config.debug = true;
 Vue.filter("maxChar", function(t) {
   var e = t;
   return (
@@ -367,16 +367,19 @@ var appVideo = new Vue({
     videosWatched: [],
     playingVideo: [],
     videoPlaying: 0,
-    loadingVideos: !1,
+    loadingVideos: false,
     videoMessage:
       'Loading Videos <img src="/img/spin.svg" class="loading" alt="Loading Videos">',
-    autoplay: !0,
-    mobile: !1
+    autoplay: true,
+    mobile: false
   },
   created: function() {
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    ) && (this.mobile = !0);
+    if (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    )
+      this.mobile = true;
     this.fetchVideos();
     window.addEventListener("keyup", this.keys);
   },
@@ -410,12 +413,10 @@ var appVideo = new Vue({
         .then(function(t) {
           self.videoList = t;
           t.length > 0
-            ? ((self.loadingVideos = !0),
+            ? ((self.loadingVideos = true),
               self.watched(self.videoList[0].youtubeId))
             : (self.videoMessage =
-                "Sorry, we couldn't find any videos in /r/" +
-                self.subreddit +
-                ".");
+                "Sorry, we couldn't find any videos in /" + self.channel);
           self.playingVideo = t[0];
           self.playVideo(self.playingVideo);
         })
@@ -423,10 +424,10 @@ var appVideo = new Vue({
         .catch(error => console.error(error));
     },
     hasBeenWatched: function(t) {
-      return -1 != this.videosWatched.indexOf(t) &&
+      return (
+        -1 != this.videosWatched.indexOf(t) &&
         t != this.videoList[this.videoPlaying].youtubeId
-        ? !0
-        : !1;
+      );
     },
     watched: function(t) {
       -1 == this.videosWatched.indexOf(t) &&
@@ -445,8 +446,8 @@ var appVideo = new Vue({
     play: function(t) {
       this.playingVideo = this.videoList[t];
       this.videoPlaying = t;
-      this.loaded = !1;
-      this.loading = !1;
+      this.loaded = false;
+      this.loading = false;
       this.watched(this.videoList[t].youtubeId);
       this.mobile
         ? player.cueVideoById(this.videoList[t].youtubeId, 0, "large")
@@ -477,31 +478,29 @@ var appVideo = new Vue({
       }
     },
     getStorage: function() {
-      if (
-        this.storageAvailable("localStorage") &&
-        localStorage.getItem("videosWatched")
-      ) {
+      if (this.storageAvailable() && localStorage.getItem("videosWatched")) {
         var t = localStorage.getItem("videosWatched");
         this.videosWatched = JSON.parse(t);
       }
     },
     setStorage: function() {
-      if (this.storageAvailable("localStorage")) {
+      if (this.storageAvailable()) {
         var t = JSON.stringify(this.videosWatched);
         localStorage.setItem("videosWatched", t);
       }
     },
-    storageAvailable: function(t) {
+    storageAvailable: function() {
       try {
-        var e = window[t],
-          n = "__storage_test__";
-        return e.setItem(n, n), e.removeItem(n), !0;
-      } catch (i) {
-        return !1;
+        var n = "__storage_test__";
+        window.localStorage.setItem(n, n);
+        window.localStorage.removeItem(n);
+        return true;
+      } catch (_) {
+        return false;
       }
     },
     isT1: function(t) {
-      return "t1" == t ? !0 : !1;
+      return "t1" == t;
     },
     changeChannel: function(channel) {
       if (this.channel !== channel) {
