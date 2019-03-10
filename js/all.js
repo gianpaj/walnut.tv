@@ -49,7 +49,7 @@ const channels = [
   {
     title: "movies",
     subreddit:
-      "television;documentaries;fullmoviesonyoutube;trailers;themakingof;filmmakers;movies;shortfilms;shortfilm;horror;shorthorror;animation;Truefilm",
+      "television;documentaries;fullmoviesonyoutube;Truefilm;trailers;themakingof;filmmakers;movies;shortfilms;shortfilm;horror;shorthorror;animation",
     minNumOfVotes: 0
   },
   {
