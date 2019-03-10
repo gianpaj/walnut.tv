@@ -334,16 +334,6 @@ function onPlayerStateChange(t) {
   0 === t.data && appVideo.autoplay && appVideo.nextVideo();
 }
 
-var topOfComments = $("div.video-details").offset().top;
-$(".video-container").on("scroll", function() {
-  if (0 == appVideo.mobile) {
-    var t = document.getElementById("video-container").scrollTop,
-      e = topOfComments,
-      n;
-    n = t > e ? !0 : !1;
-    $(".videoPlayer").toggleClass("sticky", n);
-  }
-});
 Vue.config.unsafeDelimiters = ["{!!", "!!}"];
 Vue.config.debug = !0;
 Vue.filter("maxChar", function(t) {
@@ -377,14 +367,10 @@ var appVideo = new Vue({
     videosWatched: [],
     playingVideo: [],
     videoPlaying: 0,
-    commentList: [],
-    loadingComments: !0,
     loadingVideos: !1,
     videoMessage:
       'Loading Videos <img src="/img/spin.svg" class="loading" alt="Loading Videos">',
-    commentsLoaded: !1,
     autoplay: !0,
-    viewingComments: !1,
     mobile: !1
   },
   created: function() {
