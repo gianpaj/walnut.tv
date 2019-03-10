@@ -406,6 +406,17 @@ var appVideo = new Vue({
           // item.minNumOfVotes
         )
         .then(function(t) {
+          if (window.location.search == "?debug") {
+            // eslint-disable-next-line no-console
+            console.log(
+              t.map(v => ({
+                subreddit: v.permalink.split("/r/")[1].split("/")[0],
+                title: v.title,
+                link: v.permalink,
+                youtubeId: v.youtubeId
+              }))
+            );
+          }
           self.videoList = t;
           t.length > 0
             ? ((self.loadingVideos = true),
