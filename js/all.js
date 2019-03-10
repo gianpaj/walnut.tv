@@ -76,7 +76,7 @@ const channels = [
   {
     title: "gaming",
     subreddit:
-      "gamernew;Games;themakingofgames;AndroidGaming;indiegames;gamingvids;YouTubeGamers",
+      "gamernews;Games;themakingofgames;AndroidGaming;indiegames;gamingvids;YouTubeGamers",
     textColor: "",
     minNumOfVotes: 5
   },
