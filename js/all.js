@@ -237,13 +237,14 @@ function RedditVideoService() {
     // find the smallest amount of videos for every channel
     const leastAmountOfVids = Math.min.apply(
       null,
-      arrayOfArrays.map(arr => arr.length)
+      arrayOfArrays.map(arr => arr.length).filter(arr => arr)
     );
 
     if (arrayOfArrays.length === 1) {
       return arrayOfArrays;
     }
 
+    arrayOfArrays = arrayOfArrays.filter(a => a.length);
     let videos = [];
     // get one video of each channel in rotation
     for (let i = 0; i < leastAmountOfVids; i++) {
