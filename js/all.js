@@ -358,6 +358,9 @@ Vue.filter("toUrl", function(t) {
 
 var paths = window.location.pathname.split("/").filter(a => a);
 
+var loadingVideosMessage =
+  'Loading Videos <img src="/img/spin.svg" class="loading" alt="Loading Videos">';
+
 var appVideo = new Vue({
   el: "#appVideo",
   data: {
@@ -368,9 +371,8 @@ var appVideo = new Vue({
     videosWatched: [],
     playingVideo: [],
     videoPlaying: 0,
-    loadingVideos: false,
-    videoMessage:
-      'Loading Videos <img src="/img/spin.svg" class="loading" alt="Loading Videos">',
+    loadingVideos: true,
+    videoMessage: loadingVideosMessage,
     autoplay: true,
     mobile: false
   },
@@ -390,21 +392,22 @@ var appVideo = new Vue({
         return c.title == channel;
       }).subreddit;
     },
-    fetchVideos: function() {
+    fetchVideos: function(searchText) {
       var self = this;
-      var subreddits;
-      this.channel || (this.channel = "general");
-      if (window.location.pathname.split("/r/").length > 1) {
-        subreddits = this.channel;
-      } else {
-        subreddits = this.getSubReddits(this.channel);
+      self.loadingVideos = true;
+      self.videoMessage = loadingVideosMessage;
+      var subreddits = searchText;
+      if (!searchText) {
+        this.channel || (this.channel = "general");
+        if (window.location.pathname.split("/r/").length > 1) {
+          subreddits = this.channel;
+        } else {
+          subreddits = this.getSubReddits(this.channel);
+        }
       }
       this.getStorage();
       redditVideoService
-        .loadHot(
-          subreddits
-          // item.minNumOfVotes
-        )
+        .loadHot(subreddits)
         .then(function(t) {
           if (window.location.search == "?debug") {
             // eslint-disable-next-line no-console
@@ -419,15 +422,29 @@ var appVideo = new Vue({
           }
           self.videoList = t;
           t.length > 0
-            ? ((self.loadingVideos = true),
+            ? ((self.loadingVideos = false),
               self.watched(self.videoList[0].youtubeId))
             : (self.videoMessage =
                 "Sorry, we couldn't find any videos in /" + self.channel);
           self.playingVideo = t[0];
           self.playVideo(self.playingVideo);
         })
-        // eslint-disable-next-line no-console
-        .catch(error => console.error(error));
+        .catch(error => {
+          self.videoMessage =
+            "Sorry, there was an error retrieving videos in /" + self.channel;
+          if (this.searchInput) {
+            self.videoMessage = `Sorry, we couldn't find any videos in /r/${
+              this.searchInput
+            }`;
+          }
+          // eslint-disable-next-line no-console
+          console.error(error);
+        });
+    },
+    search: function(event) {
+      // now we have access to the native event
+      event.preventDefault();
+      this.fetchVideos(this.searchInput);
     },
     hasBeenWatched: function(t) {
       return (

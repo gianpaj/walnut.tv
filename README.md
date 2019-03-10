@@ -25,8 +25,8 @@ Automatically via Netlify
 
 ## Built With
 
-- [reddit.js](https://github.com/sahilm/reddit.js)
 - [Vue.JS](http://vuejs.org/) v1.0.10
+- [reddit.js](https://github.com/sahilm/reddit.js)
 - jQuery v1.12.4
 - Moment.Js v2.10.6
 
