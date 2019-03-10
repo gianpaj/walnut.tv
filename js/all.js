@@ -444,7 +444,8 @@ var appVideo = new Vue({
     search: function(event) {
       // now we have access to the native event
       event.preventDefault();
-      this.fetchVideos(this.searchInput);
+      if (this.searchInput) this.fetchVideos(this.searchInput);
+      else this.fetchVideos();
     },
     hasBeenWatched: function(t) {
       return (

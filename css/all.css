@@ -76,6 +76,7 @@ h2 {
 .navbar-header {
   align-items: center;
   display: inline-flex;
+  justify-content: center;
   width: 100%;
 }
 
@@ -101,13 +102,14 @@ h2 {
 .navbar-form {
   margin-top: 10px;
   margin-bottom: 10px;
+  padding-right: 0;
 }
 
 .navbar-form .form-control {
   background-color: transparent;
   border: 0;
   color: #ccc;
-  padding-right: 12px;
+  padding-right: 0;
   padding-left: 34px;
 }
 
@@ -120,7 +122,7 @@ h2 {
 }
 
 .form-control-feedback {
-  color: #ccc;
+  color: #565656;
   right: initial;
   top: 9px;
 }
