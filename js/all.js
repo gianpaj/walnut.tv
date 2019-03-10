@@ -65,7 +65,7 @@ const channels = [
   },
   {
     title: "active",
-    subreddit: "adrenalin;climbing;kayaking;theocho;surfing;MMA",
+    subreddit: "adrenaline;climbing;kayaking;theocho;surfing;MMA",
     minNumOfVotes: 5
   },
   {
@@ -93,7 +93,7 @@ const channels = [
   },
   {
     title: "past",
-    subreddit: "obsuremedia",
+    subreddit: "obscuremedia",
     minNumOfVotes: 0
   },
   {
