@@ -385,12 +385,6 @@ var appVideo = new Vue({
     window.addEventListener("keyup", this.keys);
   },
   methods: {
-    slide: function(t) {
-      $("." + t).toggle();
-      "+" == $("span.id-" + t).text()
-        ? $("span.id-" + t).html("−")
-        : $("span.id-" + t).html("+");
-    },
     getSubReddits: function(channel) {
       return channels.find(function(c) {
         return c.title == channel;
