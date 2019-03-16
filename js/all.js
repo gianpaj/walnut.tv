@@ -68,6 +68,12 @@ const channels = [
     minNumOfVotes: 5
   },
   {
+    title: "food",
+    subreddit: "veganrecipes;permaculture;FoodVideos",
+    textColor: "",
+    minNumOfVotes: 5
+  },
+  {
     title: "crafts",
     subreddit: "artisanvideos;maker;howto;TechDIY;woodworking;FastWorkers",
     minNumOfVotes: 5
@@ -80,12 +86,6 @@ const channels = [
     minNumOfVotes: 5
   },
   {
-    title: "food",
-    subreddit: "veganrecipes;permaculture;FoodVideos",
-    textColor: "",
-    minNumOfVotes: 5
-  },
-  {
     title: "news",
     subreddit: "PoliticalVideo",
     minNumOfVotes: 0
@@ -93,11 +93,6 @@ const channels = [
   {
     title: "past",
     subreddit: "obscuremedia",
-    minNumOfVotes: 0
-  },
-  {
-    title: "kids",
-    subreddit: "kidsafevideos",
     minNumOfVotes: 0
   }
 ];
