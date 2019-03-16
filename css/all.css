@@ -568,3 +568,7 @@ h2 {
 .v-select > .dropdown-menu > li.highlight {
   background-color: #4e4e4e;
 }
+
+.v-select .selected-tag {
+  position: absolute;
+}

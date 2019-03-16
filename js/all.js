@@ -59,8 +59,7 @@ const channels = [
   },
   {
     title: "comedy",
-    subreddit:
-      "humor;StandUpComedy;contagiouslaughter;nottimanderic",
+    subreddit: "humor;StandUpComedy;contagiouslaughter;nottimanderic",
     minNumOfVotes: 5
   },
   {
@@ -429,7 +428,7 @@ var appVideo = new Vue({
             : (self.videoMessage =
                 "Sorry, we couldn't find any videos in /" + self.channel);
           self.playingVideo = t[0];
-          self.playVideo(self.playingVideo);
+          if (self.playingVideo) self.playVideo(self.playingVideo);
         })
         .catch(error => {
           self.videoMessage =
@@ -443,9 +442,9 @@ var appVideo = new Vue({
           console.error(error);
         });
     },
-    search: function(event) {
+    search: function(value) {
       // now we have access to the native event
-      event.preventDefault();
+      this.searchInput = value;
       if (this.searchInput) this.fetchVideos(this.searchInput);
       else this.fetchVideos();
     },
