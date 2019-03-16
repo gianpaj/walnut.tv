@@ -38,18 +38,18 @@ const channels = [
   {
     title: "curious",
     subreddit:
-      "curiousvideos;interview;mealtimevideos;futurology;educativevideos;watchandlearn;sciencevideos",
+      "curiousvideos;mealtimevideos;futurology;educativevideos;watchandlearn;sciencevideos",
     minNumOfVotes: 3
   },
   {
-    title: "academic",
+    title: "science",
     subreddit: "lectures;physics;biology;psychology;space;philosophy;math",
     minNumOfVotes: 0
   },
   {
     title: "movies",
     subreddit:
-      "television;documentaries;fullmoviesonyoutube;Truefilm;trailers;themakingof;filmmakers;movies;shortfilms;shortfilm;horror;shorthorror;animation",
+      "documentaries;movies;television;fullmoviesonyoutube;trailers;filmmakers;shortfilms;shortfilm;horror;shorthorror;Truefilm;themakingof;animation",
     minNumOfVotes: 0
   },
   {
@@ -60,12 +60,12 @@ const channels = [
   {
     title: "comedy",
     subreddit:
-      "nottimanderic;StandUpComedy;humor;contagiouslaughter;accidentalcomedy;aww",
+      "humor;StandUpComedy;contagiouslaughter;nottimanderic",
     minNumOfVotes: 5
   },
   {
     title: "active",
-    subreddit: "adrenaline;climbing;kayaking;theocho;surfing;MMA",
+    subreddit: "adrenaline;climbing;kayaking;theocho;surfing",
     minNumOfVotes: 5
   },
   {
@@ -88,7 +88,7 @@ const channels = [
   },
   {
     title: "news",
-    subreddit: "politicalvideos",
+    subreddit: "PoliticalVideo",
     minNumOfVotes: 0
   },
   {
