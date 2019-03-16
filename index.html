@@ -101,6 +101,7 @@
           </ul>
           <form class="navbar-form" v-on:submit="search($event)">
             <div class="form-group">
+              <span class="glyphicon glyphicon-search form-control-feedback"></span>
               <v-select placeholder="subreddit" :on-change="search" :value.sync="searchInput" :options="subreddits"></v-select>
             </div>
           </form>

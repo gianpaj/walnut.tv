@@ -110,11 +110,9 @@ h2 {
 }
 
 .navbar-form .form-control {
-  background-color: transparent;
   border: 0;
   color: #ccc;
-  padding-right: 0;
-  padding-left: 34px;
+  padding-left: 34px !important;
 }
 
 .form-control:focus {
@@ -574,6 +572,7 @@ h2 {
   background-color: transparent !important;
   border: 0 !important;
   color: white !important;
+  padding-left: 34px !important;
 }
 
 .v-select .dropdown-toggle {
