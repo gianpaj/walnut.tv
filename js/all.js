@@ -430,8 +430,8 @@ var appVideo = new Vue({
               }`;
             }
           }
-          self.playingVideo = t[0];
-          if (self.playingVideo) self.playVideo(self.playingVideo);
+          self.playingVideo = t;
+          if (t[0]) self.play(0);
         })
         .catch(error => {
           self.videoMessage =
@@ -447,7 +447,7 @@ var appVideo = new Vue({
     },
     search: function(value) {
       this.$emit("input", value);
-      // now we have access to the native event
+      player.stopVideo();
       this.searchInput = value;
       if (this.searchInput) this.fetchVideos(this.searchInput);
       else this.fetchVideos();
@@ -534,6 +534,7 @@ var appVideo = new Vue({
     changeChannel: function(channel) {
       this.searchInput = "";
       if (this.channel !== channel) {
+        player.stopVideo();
         this.channel = channel;
         this.fetchVideos();
         window.history.replaceState(null, null, channel);

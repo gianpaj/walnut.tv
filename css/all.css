@@ -577,5 +577,5 @@ h2 {
 }
 
 .v-select .dropdown-toggle {
-  border: 0;
+  border: 0 !important;
 }
