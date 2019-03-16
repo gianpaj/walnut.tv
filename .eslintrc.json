@@ -6,9 +6,11 @@
   },
   "extends": "eslint:recommended",
   "globals": {
+    "subreddits": "readonly",
     "reddit": "readonly",
     "YT": "readonly",
-    "Vue": "readonly"
+    "Vue": "readonly",
+    "VueSelect": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2018,

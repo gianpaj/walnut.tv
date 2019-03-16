@@ -26,6 +26,7 @@ Automatically via Netlify
 ## Built With
 
 - [Vue.JS](http://vuejs.org/) v1.0.10
+- [vue-select](https://github.com/sagalbot/vue-select) v1.3
 - [reddit.js](https://github.com/sahilm/reddit.js)
 - jQuery v1.12.4
 - Moment.Js v2.10.6

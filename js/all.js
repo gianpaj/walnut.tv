@@ -337,6 +337,7 @@ function onPlayerStateChange(t) {
 
 Vue.config.unsafeDelimiters = ["{!!", "!!}"];
 Vue.config.debug = true;
+Vue.component("v-select", VueSelect.VueSelect);
 Vue.filter("maxChar", function(t) {
   var e = t;
   return (
@@ -374,7 +375,8 @@ var appVideo = new Vue({
     loadingVideos: true,
     videoMessage: loadingVideosMessage,
     autoplay: true,
-    mobile: false
+    mobile: false,
+    subreddits
   },
   created: function() {
     if (
