@@ -101,7 +101,7 @@
           </ul>
           <form class="navbar-form" v-on:submit="search($event)">
             <div class="form-group">
-              <v-select placeholder="Type a subreddit" :on-change="search" :value.sync="searchInput" :options="subreddits"></v-select>
+              <v-select placeholder="subreddit" :on-change="search" :value.sync="searchInput" :options="subreddits"></v-select>
             </div>
           </form>
           <!-- <div class="dropdown">
