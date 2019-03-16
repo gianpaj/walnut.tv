@@ -571,4 +571,11 @@ h2 {
 
 .v-select .selected-tag {
   position: absolute;
+  background-color: transparent !important;
+  border: 0 !important;
+  color: white !important;
+}
+
+.v-select .dropdown-toggle {
+  border: 0;
 }

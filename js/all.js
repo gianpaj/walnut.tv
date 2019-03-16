@@ -417,11 +417,19 @@ var appVideo = new Vue({
             );
           }
           self.videoList = t;
-          t.length > 0
-            ? ((self.loadingVideos = false),
-              self.watched(self.videoList[0].youtubeId))
-            : (self.videoMessage =
-                "Sorry, we couldn't find any videos in /" + self.channel);
+          if (t.length > 0) {
+            self.loadingVideos = false;
+            self.watched(self.videoList[0].youtubeId);
+          } else {
+            self.videoMessage =
+              "Sorry, we couldn't find any videos in /" + self.channel;
+            console.log(this.searchInput);
+            if (this.searchInput) {
+              self.videoMessage = `Sorry, we couldn't find any videos in /r/${
+                this.searchInput
+              }`;
+            }
+          }
           self.playingVideo = t[0];
           if (self.playingVideo) self.playVideo(self.playingVideo);
         })
@@ -429,7 +437,7 @@ var appVideo = new Vue({
           self.videoMessage =
             "Sorry, there was an error retrieving videos in /" + self.channel;
           if (this.searchInput) {
-            self.videoMessage = `Sorry, we couldn't find any videos in /r/${
+            self.videoMessage = `Sorry, there was an error retrieving videos /r/${
               this.searchInput
             }`;
           }
@@ -438,6 +446,7 @@ var appVideo = new Vue({
         });
     },
     search: function(value) {
+      this.$emit("input", value);
       // now we have access to the native event
       this.searchInput = value;
       if (this.searchInput) this.fetchVideos(this.searchInput);
@@ -523,6 +532,7 @@ var appVideo = new Vue({
       return "t1" == t;
     },
     changeChannel: function(channel) {
+      this.searchInput = "";
       if (this.channel !== channel) {
         this.channel = channel;
         this.fetchVideos();
