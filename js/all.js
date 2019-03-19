@@ -64,7 +64,7 @@ const channels = [
   },
   {
     title: "active",
-    subreddit: "climbing;kayaking;theocho;surfing;adrenaline",
+    subreddit: "climbing;kayaking;theocho;surfing;sports;adrenaline",
     minNumOfVotes: 1
   },
   {
