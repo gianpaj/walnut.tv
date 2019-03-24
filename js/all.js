@@ -49,7 +49,7 @@ const channels = [
   {
     title: "movies",
     subreddit:
-      "movies;documentaries;television;fullmoviesonyoutube;trailers;filmmakers;shortfilms;shortfilm;horror;shorthorror;Truefilm;themakingof;animation",
+      "movies;documentaries;television;filmmakers;fullmoviesonyoutube;trailers;moviecritic;shortfilms;shortfilm;Truefilm;themakingof;animation",
     minNumOfVotes: 0
   },
   {
@@ -59,7 +59,7 @@ const channels = [
   },
   {
     title: "comedy",
-    subreddit: "humor;contagiouslaughter;nottimanderic",
+    subreddit: "humor;contagiouslaughter;youtubehaiku;nottimanderic",
     minNumOfVotes: 5
   },
   {
@@ -69,7 +69,7 @@ const channels = [
   },
   {
     title: "food",
-    subreddit: "veganrecipes;permaculture;FoodVideos",
+    subreddit: "veganrecipes;permaculture;FoodVideos;cookingvideos",
     textColor: "",
     minNumOfVotes: 5
   },
