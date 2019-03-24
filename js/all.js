@@ -59,7 +59,7 @@ const channels = [
   },
   {
     title: "comedy",
-    subreddit: "humor;StandUpComedy;contagiouslaughter;nottimanderic",
+    subreddit: "humor;contagiouslaughter;nottimanderic",
     minNumOfVotes: 5
   },
   {
