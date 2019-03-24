@@ -58,7 +58,7 @@ const channels = [
     minNumOfVotes: 5
   },
   {
-    title: "comedy",
+    title: "fun",
     subreddit: "humor;contagiouslaughter;youtubehaiku;nottimanderic",
     minNumOfVotes: 5
   },
