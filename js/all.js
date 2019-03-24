@@ -43,13 +43,13 @@ const channels = [
   },
   {
     title: "science",
-    subreddit: "lectures;physics;biology;psychology;space;philosophy;math",
+    subreddit: "physics;biology;psychology;lectures;space;philosophy;math",
     minNumOfVotes: 0
   },
   {
     title: "movies",
     subreddit:
-      "documentaries;movies;television;fullmoviesonyoutube;trailers;filmmakers;shortfilms;shortfilm;horror;shorthorror;Truefilm;themakingof;animation",
+      "movies;documentaries;television;filmmakers;fullmoviesonyoutube;trailers;moviecritic;shortfilms;shortfilm;Truefilm;themakingof;animation",
     minNumOfVotes: 0
   },
   {
@@ -58,18 +58,18 @@ const channels = [
     minNumOfVotes: 5
   },
   {
-    title: "comedy",
-    subreddit: "humor;StandUpComedy;contagiouslaughter;nottimanderic",
+    title: "fun",
+    subreddit: "humor;contagiouslaughter;youtubehaiku;nottimanderic",
     minNumOfVotes: 5
   },
   {
     title: "active",
-    subreddit: "adrenaline;climbing;kayaking;theocho;surfing",
-    minNumOfVotes: 5
+    subreddit: "climbing;kayaking;theocho;surfing;sports;adrenaline",
+    minNumOfVotes: 1
   },
   {
     title: "food",
-    subreddit: "veganrecipes;permaculture;FoodVideos",
+    subreddit: "veganrecipes;permaculture;FoodVideos;cookingvideos",
     textColor: "",
     minNumOfVotes: 5
   },
@@ -88,11 +88,6 @@ const channels = [
   {
     title: "news",
     subreddit: "PoliticalVideo",
-    minNumOfVotes: 0
-  },
-  {
-    title: "past",
-    subreddit: "obscuremedia",
     minNumOfVotes: 0
   }
 ];
