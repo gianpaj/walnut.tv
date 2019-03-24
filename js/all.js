@@ -370,6 +370,7 @@ var appVideo = new Vue({
     videoMessage: loadingVideosMessage,
     autoplay: true,
     mobile: false,
+    searchInput: null,
     subreddits
   },
   created: function() {
@@ -423,10 +424,10 @@ var appVideo = new Vue({
           } else {
             self.videoMessage =
               "Sorry, we couldn't find any videos in /" + self.channel;
-            console.log(this.searchInput);
-            if (this.searchInput) {
+
+            if (self.searchInput) {
               self.videoMessage = `Sorry, we couldn't find any videos in /r/${
-                this.searchInput
+                self.searchInput
               }`;
             }
           }
@@ -448,8 +449,13 @@ var appVideo = new Vue({
     search: function(value) {
       this.$emit("input", value);
       player.stopVideo();
+      if (value.type == "submit") {
+        value.preventDefault();
+        this.fetchVideos(document.querySelector("input").value);
+        return;
+      }
       this.searchInput = value;
-      if (this.searchInput) this.fetchVideos(this.searchInput);
+      if (value) this.fetchVideos(value);
       else this.fetchVideos();
     },
     hasBeenWatched: function(t) {
@@ -478,6 +484,7 @@ var appVideo = new Vue({
       this.loaded = false;
       this.loading = false;
       this.watched(this.videoList[t].youtubeId);
+      if (!player || !player.loadVideoById) return;
       this.mobile
         ? player.cueVideoById(this.videoList[t].youtubeId, 0, "large")
         : player.loadVideoById(this.videoList[t].youtubeId, 0, "large");
