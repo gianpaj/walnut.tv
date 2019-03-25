@@ -325,7 +325,7 @@ function onPlayerStateChange(t) {
 }
 
 Vue.config.unsafeDelimiters = ["{!!", "!!}"];
-Vue.config.debug = true;
+Vue.config.debug = false;
 Vue.component("v-select", VueSelect.VueSelect);
 Vue.filter("maxChar", function(t) {
   var e = t;
@@ -529,9 +529,6 @@ var appVideo = new Vue({
       } catch (_) {
         return false;
       }
-    },
-    isT1: function(t) {
-      return "t1" == t;
     },
     changeChannel: function(channel) {
       this.searchInput = "";
