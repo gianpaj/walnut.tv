@@ -33,7 +33,7 @@ const channels = [
   {
     title: "general",
     subreddit: "videos",
-    minNumOfVotes: 50
+    minNumOfVotes: 100
   },
   {
     title: "curious",
@@ -44,13 +44,13 @@ const channels = [
   {
     title: "science",
     subreddit: "physics;biology;psychology;lectures;space;philosophy;math",
-    minNumOfVotes: 0
+    minNumOfVotes: 3
   },
   {
     title: "movies",
     subreddit:
-      "movies;documentaries;television;filmmakers;fullmoviesonyoutube;trailers;moviecritic;shortfilms;shortfilm;Truefilm;themakingof;animation",
-    minNumOfVotes: 0
+      "movies;documentaries;television;filmmakers;trailers;shortfilms;Truefilm;themakingof;animation",
+    minNumOfVotes: 10
   },
   {
     title: "music",
@@ -59,8 +59,8 @@ const channels = [
   },
   {
     title: "fun",
-    subreddit: "humor;contagiouslaughter;youtubehaiku;nottimanderic",
-    minNumOfVotes: 5
+    subreddit: "humor;contagiouslaughter;youtubehaiku",
+    minNumOfVotes: 50
   },
   {
     title: "active",
@@ -83,7 +83,7 @@ const channels = [
     subreddit:
       "gamernews;Games;themakingofgames;AndroidGaming;indiegames;gamingvids;YouTubeGamers",
     textColor: "",
-    minNumOfVotes: 5
+    minNumOfVotes: 50
   },
   {
     title: "news",
