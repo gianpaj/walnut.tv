@@ -119,21 +119,12 @@ function RedditVideoService() {
     result.permalink = 'https://www.reddit.com/' + data.permalink;
     result.created_utc = data.created_utc;
 
-    // if (data.preview && data.preview.images) {
-    //   const images = data.preview.images[0].resolutions;
-    //   result.posterSource = images[images.length - 1].url;
-    // }
-
     // reddit video
     if (data.is_video) {
       result.videoUrl = data.media.reddit_video.fallback_url;
       result.type = 'reddit';
       return result;
     }
-
-    // if (data.media === undefined) {
-    //   return {};
-    // }
 
     // youtube video
     if (data.media.type === 'youtube.com') {
@@ -380,7 +371,7 @@ var appVideo = new Vue({
   },
   created: function() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
-    // this.fetchVideosFromReddit();
+    this.fetchVideosFromReddit();
     window.addEventListener('keyup', this.keys);
   },
   methods: {
