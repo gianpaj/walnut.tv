@@ -386,7 +386,6 @@ var appVideo = new Vue({
   methods: {
     getSubReddits: channel => channels.find(c => c.title == channel).subreddit,
     fetchVideosFromReddit: function(searchText) {
-      var self = this;
       self.loadingVideos = true;
       self.videoMessage = loadingVideosMessage;
       var subreddits = searchText;
@@ -401,7 +400,7 @@ var appVideo = new Vue({
       this.getStorage();
       redditVideoService
         .loadHot(subreddits)
-        .then(function(t) {
+        .then(t => {
           if (window.location.search == '?debug') {
             // eslint-disable-next-line no-console
             console.log(
@@ -413,19 +412,20 @@ var appVideo = new Vue({
               }))
             );
           }
-          self.videoList = t;
-          if (t.length > 0) {
-            self.loadingVideos = false;
-            self.watched(self.videoList[0].youtubeId);
-          } else {
-            self.videoMessage = "Sorry, we couldn't find any videos in /" + self.channel;
+          this.videoList = t;
+          if (t.length < 1) {
+            this.videoMessage = "Sorry, we couldn't find any videos in /" + this.channel;
 
-            if (self.searchInput) {
-              self.videoMessage = `Sorry, we couldn't find any videos in /r/${self.searchInput}`;
+            if (this.searchInput) {
+              this.videoMessage = `Sorry, we couldn't find any videos in /r/${this.searchInput}`;
             }
+            return;
           }
-          self.playingVideo = t;
-          if (t[0]) self.play(0);
+          this.loadingVideos = false;
+          this.watched(this.videoList[0].youtubeId);
+
+          this.playingVideo = t;
+          this.play(0);
         })
         .catch(error => {
           self.videoMessage = 'Sorry, there was an error retrieving videos in /' + self.channel;
