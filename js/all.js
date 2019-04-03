@@ -87,6 +87,7 @@ const channels = [
   },
 ];
 
+const YouTubeApiKey = 'AIzaSyD342vuWxFeyEMKANx58qKyECeNsxlv0f8';
 const youtubeURL = 'http://www.youtube.com/watch?v=';
 const youtubeURLLength = youtubeURL.length;
 const embedLength = '/embed/'.length;
@@ -115,7 +116,7 @@ function RedditVideoService() {
     const result = {};
     result.title = data.title;
     result.id = data.id;
-    result.permalink = data.permalink;
+    result.permalink = 'https://www.reddit.com/' + data.permalink;
     result.created_utc = data.created_utc;
 
     // if (data.preview && data.preview.images) {
@@ -268,6 +269,34 @@ function RedditVideoService() {
 
 const redditVideoService = new RedditVideoService();
 
+function YouTubeSearchService() {
+  function search(query) {
+    // eslint-disable-next-line no-undef
+    return searchYoutube(YouTubeApiKey, {
+      part: 'snippet',
+      type: 'video',
+      maxResults: '25',
+      // videoEmbeddable: 'true',
+      q: query,
+    }).then(formatResults);
+  }
+  function formatResults(results) {
+    if (!results.items) return null;
+    return results.items.map(res => ({
+      id: res.id.videoId, // reddit id
+      // created_utc: res.snippet.publishedAt,
+      permalink: 'https://www.youtube.com/watch?v=' + res.id.videoId,
+      title: res.snippet.description,
+      youtubeId: res.id.videoId,
+    }));
+  }
+  return {
+    search,
+  };
+}
+
+const youTubeSearchService = new YouTubeSearchService();
+
 var youtubeId,
   player,
   tag = document.createElement('script');
@@ -347,19 +376,16 @@ var appVideo = new Vue({
     autoplay: true,
     mobile: false,
     searchInput: null,
+    options: [],
   },
   created: function() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
-    this.fetchVideos();
+    // this.fetchVideosFromReddit();
     window.addEventListener('keyup', this.keys);
   },
   methods: {
-    getSubReddits: function(channel) {
-      return channels.find(function(c) {
-        return c.title == channel;
-      }).subreddit;
-    },
-    fetchVideos: function(searchText) {
+    getSubReddits: channel => channels.find(c => c.title == channel).subreddit,
+    fetchVideosFromReddit: function(searchText) {
       var self = this;
       self.loadingVideos = true;
       self.videoMessage = loadingVideosMessage;
@@ -410,32 +436,49 @@ var appVideo = new Vue({
           console.error(error);
         });
     },
-    getOptions: function(value) {
+    onSearch: function(value) {
       this.options = [value + ' (YouTube)', value + ' (Subreddit)'];
     },
-    search: function(value, e) {
-      this.$emit('input', value);
+    onChange: function(value) {
+      if (value) this.search(value);
+    },
+    onSubmit: function(event) {
+      event.preventDefault();
+    },
+    search: function(value) {
+      // this.$emit('input', event);
       player.stopVideo();
-      if (value && value.type == 'submit') {
-        console.log(e);
-        console.log(value);
-        value.preventDefault();
-        this.fetchVideos(document.querySelector('input').value);
-        return;
-      }
-      if (value.includes('(on YouTube)')) {
+      if (value && value.includes('YouTube')) {
         value = value.split(' (')[0];
 
-        this.YouTubeSearch(value);
+        this.fetchVideosFromYoutube(value);
         return;
       }
       this.searchInput = value;
-      if (value) this.fetchVideos(value);
-      else this.fetchVideos();
+      if (value) {
+        value = value.split(' (')[0];
+        this.fetchVideosFromReddit(value);
+      } else this.fetchVideosFromReddit();
     },
-    YouTubeSearch: function(query) {
-      // TODO:
-      console.log(query);
+    fetchVideosFromYoutube: function(query) {
+      // eslint-disable-next-line no-undef
+      this.loadingVideos = true;
+      this.getStorage();
+      youTubeSearchService
+        .search(query)
+        .then(videos => {
+          if (videos.length < 1) {
+            this.videoMessage = 'Sorry, we couldn\'t find any YouTube videos for "' + query + '"';
+            return;
+          }
+          this.loadingVideos = false;
+          this.videoList = videos;
+          this.play(0);
+        })
+        .catch(error => {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        });
     },
     hasBeenWatched: function(t) {
       return -1 != this.videosWatched.indexOf(t) && t != this.videoList[this.videoPlaying].youtubeId;
@@ -512,7 +555,7 @@ var appVideo = new Vue({
       if (this.channel !== channel) {
         player.stopVideo();
         this.channel = channel;
-        this.fetchVideos();
+        this.fetchVideosFromReddit();
         window.history.replaceState(null, null, channel);
       }
     },

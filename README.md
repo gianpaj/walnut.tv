@@ -12,6 +12,7 @@ browser-sync start --server --files="*.html, js/*.js, css/*.css"
 
 - Node.JS
 - a browser
+- YouTube API key to search videos there
 
 ### Installing
 
@@ -25,11 +26,11 @@ Automatically via Netlify
 
 ## Built With
 
-- [Vue.JS](http://vuejs.org/) v1.0.10
+- [Vue.JS](http://vuejs.org/) v1.0
 - [vue-select](https://github.com/sagalbot/vue-select) v1.3
 - [reddit.js](https://github.com/sahilm/reddit.js)
-- jQuery v1.12.4
-- Moment.Js v2.10.6
+- [youtube-api-v3-search](https://github.com/LionRoar/youtube-api-v3-search)
+- jQuery v1.12
 
 <!-- ## License
 
