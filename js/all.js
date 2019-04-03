@@ -385,21 +385,24 @@ var appVideo = new Vue({
   },
   methods: {
     getSubReddits: channel => channels.find(c => c.title == channel).subreddit,
+    getChannelMinVotes: channel => channels.find(c => c.title == channel).minNumOfVotes,
     fetchVideosFromReddit: function(searchText) {
       self.loadingVideos = true;
       self.videoMessage = loadingVideosMessage;
       var subreddits = searchText;
+      var minNumOfVotes;
       if (!searchText) {
         this.channel || (this.channel = 'general');
         if (window.location.pathname.split('/r/').length > 1) {
           subreddits = this.channel;
         } else {
           subreddits = this.getSubReddits(this.channel);
+          minNumOfVotes = this.getChannelMinVotes(this.channel);
         }
       }
       this.getStorage();
       redditVideoService
-        .loadHot(subreddits)
+        .loadHot(subreddits, minNumOfVotes)
         .then(t => {
           if (window.location.search == '?debug') {
             // eslint-disable-next-line no-console
