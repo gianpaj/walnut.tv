@@ -531,6 +531,7 @@ var appVideo = new Vue({
     play: function(i) {
       this.playingVideo = this.videoList[i];
       this.videoPlaying = i;
+      this.voted = 0;
       this.watched(this.playingVideo.youtubeId);
       this.playVideo(this.playingVideo);
       if (this.contentType == 'reddit' && this.channel) {
