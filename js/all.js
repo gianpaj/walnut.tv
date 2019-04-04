@@ -378,8 +378,8 @@ var appVideo = new Vue({
     getSubReddits: channel => channels.find(c => c.title == channel).subreddit,
     getChannelMinVotes: channel => channels.find(c => c.title == channel).minNumOfVotes,
     fetchVideosFromReddit: function(searchText) {
-      self.loadingVideos = true;
-      self.videoMessage = loadingVideosMessage;
+      this.loadingVideos = true;
+      this.videoMessage = loadingVideosMessage;
       var subreddits = searchText;
       var minNumOfVotes;
       if (!searchText) {
@@ -422,9 +422,9 @@ var appVideo = new Vue({
           this.play(0);
         })
         .catch(error => {
-          self.videoMessage = 'Sorry, there was an error retrieving videos in /' + self.channel;
+          this.videoMessage = 'Sorry, there was an error retrieving videos in /' + this.channel;
           if (this.searchInput) {
-            self.videoMessage = `Sorry, there was an error retrieving videos /r/${this.searchInput}`;
+            this.videoMessage = `Sorry, there was an error retrieving videos /r/${this.searchInput}`;
           }
           // eslint-disable-next-line no-console
           console.error(error);
