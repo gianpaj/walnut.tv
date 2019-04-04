@@ -381,3 +381,18 @@ h2 {
 .v-select .open-indicator {
   display: none !important;
 }
+
+.modal-dialog {
+  width: 400px;
+}
+
+.modal-content {
+  background-color: #272727;
+  border: 1px solid rgba(115, 115, 115, 0.2);
+}
+
+.modal-body textarea {
+  overflow: hidden;
+  resize: none;
+  width: 300px !important;
+}

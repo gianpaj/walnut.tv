@@ -561,6 +561,15 @@ var appVideo = new Vue({
         localStorage.setItem('videosWatched', t);
       }
     },
+    share: function(video) {
+      var url;
+      if (this.channel) {
+        url = `https://walnut.tv/${this.channel}/${video.youtubeId}`;
+      }
+      $('#shareModal').modal('show');
+      // put text into #url-text
+      $('#url-text')[0].value = url;
+    },
     storageAvailable: function() {
       try {
         var n = '__storage_test__';
@@ -587,3 +596,13 @@ var appVideo = new Vue({
 });
 
 var cssText = 'position:fixed;pointer-events:none;z-index:-9999;opacity:0;';
+
+$('#shareModal button').click(function() {
+  $('#url-text')[0].select();
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.error(err);
+  }
+  console.log('copied to clipboard');
+});
