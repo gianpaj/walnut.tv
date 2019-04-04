@@ -276,7 +276,7 @@ function YouTubeSearchService() {
       id: res.id.videoId, // reddit id
       // created_utc: res.snippet.publishedAt,
       permalink: 'https://www.youtube.com/watch?v=' + res.id.videoId,
-      title: res.snippet.description,
+      title: res.snippet.title,
       youtubeId: res.id.videoId,
     }));
   }
@@ -595,14 +595,12 @@ var appVideo = new Vue({
   },
 });
 
-var cssText = 'position:fixed;pointer-events:none;z-index:-9999;opacity:0;';
-
 $('#shareModal button').click(function() {
   $('#url-text')[0].select();
   try {
     document.execCommand('copy');
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
   }
-  console.log('copied to clipboard');
 });
