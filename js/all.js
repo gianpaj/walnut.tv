@@ -474,53 +474,51 @@ var appVideo = new Vue({
           console.error(error);
         });
     },
-    hasBeenWatched: function(t) {
-      return -1 != this.videosWatched.indexOf(t) && t != this.videoList[this.videoPlaying].youtubeId;
+    hasBeenWatched: function(youtubeId) {
+      return -1 != this.videosWatched.indexOf(youtubeId) && youtubeId != this.videoList[this.videoPlaying].youtubeId;
     },
-    watched: function(t) {
-      -1 == this.videosWatched.indexOf(t) && (this.videosWatched.push(t), this.setStorage());
+    watched: function(i) {
+      if (-1 == this.videosWatched.indexOf(i)) {
+        this.videosWatched.push(i);
+        this.setStorage();
+      }
     },
-    keys: function(t) {
-      t = t || window.event;
-      '37' == t.keyCode ? this.prevVideo() : '39' == t.keyCode && this.nextVideo();
+    keys: function(evt) {
+      evt = evt || window.event;
+      '37' == evt.keyCode ? this.prevVideo() : '39' == evt.keyCode && this.nextVideo();
     },
     playVideo: function(t) {
       if (player && player.loadVideoById) player.loadVideoById(t.youtubeId, 0, 'large');
     },
-    play: function(t) {
-      this.playingVideo = this.videoList[t];
-      this.videoPlaying = t;
-      this.loaded = false;
-      this.loading = false;
-      this.watched(this.videoList[t].youtubeId);
-      if (!player || !player.loadVideoById) return;
-      this.mobile
-        ? player.cueVideoById(this.videoList[t].youtubeId, 0, 'large')
-        : player.loadVideoById(this.videoList[t].youtubeId, 0, 'large');
+    play: function(i) {
+      this.playingVideo = this.videoList[i];
+      this.videoPlaying = i;
+      this.watched(this.videoList[i].youtubeId);
+      this.playVideo(this.videoList[i]);
+      // this.mobile
+      //   ? player.cueVideoById(this.videoList[i].youtubeId, 0, 'large')
+      //   : player.loadVideoById(this.videoList[i].youtubeId, 0, 'large');
     },
     nextVideo: function() {
-      if (this.videoPlaying < this.videoList.length - 1) {
-        this.videoPlaying++;
-        this.play(this.videoPlaying);
-        var t = $('#toolbox'),
-          e = t.scrollTop(),
-          n = $('.active')
-            .parent()
-            .height();
-        t.scrollTop(e + (n + 1));
+      if (this.videoPlaying >= this.videoList.length - 1) {
+        return;
       }
+      this.videoPlaying++;
+      this.play(this.videoPlaying);
+      this.scroll(1);
     },
     prevVideo: function() {
-      if (this.videoPlaying > 0) {
-        this.videoPlaying--;
-        this.play(this.videoPlaying);
-        var t = $('#toolbox'),
-          e = t.scrollTop(),
-          n = $('.active')
-            .parent()
-            .height();
-        t.scrollTop(e - (n + 1));
-      }
+      if (this.videoPlaying < 1) return;
+      this.videoPlaying--;
+      this.play(this.videoPlaying);
+      this.scroll(-1);
+    },
+    scroll: function(num) {
+      var e = $('#toolbox').scrollTop();
+      var n = $('#toolbox .active')
+        .parent()
+        .height();
+      $('#toolbox').scrollTop(e + num === 1 ? n + 1 : -(n + 1));
     },
     getStorage: function() {
       if (this.storageAvailable() && localStorage.getItem('videosWatched')) {
