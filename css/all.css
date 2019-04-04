@@ -276,6 +276,8 @@ h2 {
 }
 
 .loadingMessage {
+  /* FIXME: this hack so the navbar doesn't jump when hiding/showing the videos and the loading spinner */
+  height: 100vh;
   text-align: center;
 }
 
