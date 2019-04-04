@@ -133,13 +133,12 @@ function RedditVideoService() {
 
       if (oembed.url && oembed.url.indexOf(youtubeURL) === 0) {
         return (result.videoUrl = oembed.html.substring(youtubeURLLength));
-      } else {
-        const { html } = oembed;
-        const startIndex = html.indexOf('/embed/') + embedLength;
-        const endIndex = html.indexOf('?');
-        result.videoUrl = html.substring(startIndex, endIndex);
-        result.youtubeId = html.substring(startIndex, endIndex);
       }
+      const { html } = oembed;
+      const startIndex = html.indexOf('/embed/') + embedLength;
+      const endIndex = html.indexOf('?');
+      result.videoUrl = html.substring(startIndex, endIndex);
+      result.youtubeId = html.substring(startIndex, endIndex);
     }
 
     // vimeo video
@@ -317,6 +316,10 @@ function onYouTubeIframeAPIReady() {
   });
 }
 function onPlayerReady() {
+  // if we're playing a specific video (e.g. /general/b97ih5)
+  if (window.location.pathname.split('/').length > 2) {
+    return;
+  }
   appVideo.videoList[0] && appVideo.play(0);
 }
 function onPlayerError() {
@@ -356,18 +359,19 @@ var appVideo = new Vue({
   el: '#appVideo',
   data: {
     // get the channel after the first slash
+    autoplay: true,
     channel: paths.length === 1 && paths[0],
     channels: channels,
-    videoList: [],
-    videosWatched: [],
-    playingVideo: [],
-    videoPlaying: 0,
+    contentType: '', // 'youtube' or 'reddit'
     loadingVideos: true,
-    videoMessage: loadingVideosMessage,
-    autoplay: true,
     mobile: false,
-    searchInput: null,
     options: [],
+    playingVideo: [],
+    searchInput: null,
+    videoList: [],
+    videoMessage: loadingVideosMessage,
+    videoPlaying: 0,
+    videosWatched: [],
   },
   created: function() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
@@ -378,13 +382,21 @@ var appVideo = new Vue({
     getSubReddits: channel => channels.find(c => c.title == channel).subreddit,
     getChannelMinVotes: channel => channels.find(c => c.title == channel).minNumOfVotes,
     fetchVideosFromReddit: function(searchText) {
+      const { pathname } = window.location;
+      this.contentType = 'reddit';
       this.loadingVideos = true;
       this.videoMessage = loadingVideosMessage;
       var subreddits = searchText;
       var minNumOfVotes;
+      var videoId;
       if (!searchText) {
         this.channel || (this.channel = 'general');
-        if (window.location.pathname.split('/r/').length > 1) {
+        // if it's /channel/videoId
+        if (pathname.split('/').length === 3) {
+          videoId = pathname.split('/')[pathname.split('/').length - 1];
+        }
+
+        if (pathname.split('/r/').length > 1) {
           subreddits = this.channel;
         } else {
           subreddits = this.getSubReddits(this.channel);
@@ -416,9 +428,15 @@ var appVideo = new Vue({
             return;
           }
           this.loadingVideos = false;
-          this.watched(this.videoList[0].youtubeId);
 
           this.playingVideo = t;
+          if (pathname.split('/').length === 3) {
+            // find video index to play
+            var index = this.videoList.findIndex(v => v.id === videoId);
+            this.play(index);
+            return;
+          }
+          this.watched(this.videoList[0].youtubeId);
           this.play(0);
         })
         .catch(error => {
@@ -426,6 +444,27 @@ var appVideo = new Vue({
           if (this.searchInput) {
             this.videoMessage = `Sorry, there was an error retrieving videos /r/${this.searchInput}`;
           }
+          // eslint-disable-next-line no-console
+          console.error(error);
+        });
+    },
+    fetchVideosFromYoutube: function(query) {
+      this.contentType = 'youtube';
+      // eslint-disable-next-line no-undef
+      this.loadingVideos = true;
+      this.getStorage();
+      youTubeSearchService
+        .search(query)
+        .then(videos => {
+          if (videos.length < 1) {
+            this.videoMessage = 'Sorry, we couldn\'t find any YouTube videos for "' + query + '"';
+            return;
+          }
+          this.loadingVideos = false;
+          this.videoList = videos;
+          this.play(0);
+        })
+        .catch(error => {
           // eslint-disable-next-line no-console
           console.error(error);
         });
@@ -454,26 +493,6 @@ var appVideo = new Vue({
         this.fetchVideosFromReddit(value);
       } else this.fetchVideosFromReddit();
     },
-    fetchVideosFromYoutube: function(query) {
-      // eslint-disable-next-line no-undef
-      this.loadingVideos = true;
-      this.getStorage();
-      youTubeSearchService
-        .search(query)
-        .then(videos => {
-          if (videos.length < 1) {
-            this.videoMessage = 'Sorry, we couldn\'t find any YouTube videos for "' + query + '"';
-            return;
-          }
-          this.loadingVideos = false;
-          this.videoList = videos;
-          this.play(0);
-        })
-        .catch(error => {
-          // eslint-disable-next-line no-console
-          console.error(error);
-        });
-    },
     hasBeenWatched: function(youtubeId) {
       return -1 != this.videosWatched.indexOf(youtubeId) && youtubeId != this.videoList[this.videoPlaying].youtubeId;
     },
@@ -493,8 +512,11 @@ var appVideo = new Vue({
     play: function(i) {
       this.playingVideo = this.videoList[i];
       this.videoPlaying = i;
-      this.watched(this.videoList[i].youtubeId);
-      this.playVideo(this.videoList[i]);
+      this.watched(this.playingVideo.youtubeId);
+      this.playVideo(this.playingVideo);
+      if (this.contentType == 'reddit') {
+        window.history.replaceState(null, null, '/' + this.channel + '/' + this.playingVideo.id);
+      }
       // this.mobile
       //   ? player.cueVideoById(this.videoList[i].youtubeId, 0, 'large')
       //   : player.loadVideoById(this.videoList[i].youtubeId, 0, 'large');
@@ -547,8 +569,8 @@ var appVideo = new Vue({
       if (this.channel !== channel) {
         player.stopVideo();
         this.channel = channel;
+        window.history.replaceState(null, null, '/' + channel);
         this.fetchVideosFromReddit();
-        window.history.replaceState(null, null, channel);
       }
     },
   },
