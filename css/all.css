@@ -254,9 +254,26 @@ h2 {
   margin-top: 40px;
 }
 
-.video-container .video-details .share-icon {
+.video-container .video-details .share-icon,
+.video-container .video-details .up-vote,
+.video-container .video-details .down-vote {
   cursor: pointer;
+  fill: #fff;
   width: 20px;
+}
+
+.video-container .video-details .up-vote.active,
+.video-container .video-details .down-vote.active {
+  fill: var(--yellow);
+}
+
+.video-container .video-details .down-vote {
+  transform: rotate(180deg);
+}
+
+.up-vote-num {
+  color: white;
+  padding-right: 10px;
 }
 
 .video-container .embed-container {

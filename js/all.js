@@ -118,6 +118,8 @@ function RedditVideoService() {
     result.id = data.id;
     result.permalink = 'https://www.reddit.com/' + data.permalink;
     result.created_utc = data.created_utc;
+    result.ups = data.ups;
+    result.voted = 0;
 
     // reddit video
     if (data.is_video) {
@@ -350,6 +352,9 @@ Vue.filter('maxChar', function(t) {
 Vue.filter('toUrl', function(t) {
   return 'https://img.youtube.com/vi/' + t + '/mqdefault.jpg';
 });
+Vue.filter('shortNumber', function(n) {
+  return shortNumber(n);
+});
 
 var paths = window.location.pathname.split('/').filter(a => a);
 
@@ -372,10 +377,12 @@ var appVideo = new Vue({
     videoMessage: loadingVideosMessage,
     videoPlaying: 0,
     videosWatched: [],
+    voted: 0,
   },
   created: function() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
     this.fetchVideosFromReddit();
+    this.getStorage();
     window.addEventListener('keyup', this.keys);
   },
   methods: {
@@ -405,7 +412,6 @@ var appVideo = new Vue({
       } else {
         this.channel = null;
       }
-      this.getStorage();
       redditVideoService
         .loadHot(subreddits, minNumOfVotes)
         .then(t => {
@@ -511,6 +517,10 @@ var appVideo = new Vue({
         this.setStorage();
       }
     },
+    vote: function(id, num) {
+      this.voted = num;
+      ga('send', 'event', 'voted', 'click');
+    },
     keys: function(evt) {
       evt = evt || window.event;
       '37' == evt.keyCode ? this.prevVideo() : '39' == evt.keyCode && this.nextVideo();
@@ -526,9 +536,6 @@ var appVideo = new Vue({
       if (this.contentType == 'reddit' && this.channel) {
         window.history.replaceState(null, null, '/' + this.channel + '/' + this.playingVideo.id);
       }
-      // if (this.contentType == 'reddit' && this.channel) {
-      //   window.history.replaceState(null, null, '/' + this.channel + '/' + this.playingVideo.id);
-      // }
     },
     nextVideo: function() {
       if (this.videoPlaying >= this.videoList.length - 1) {
@@ -606,3 +613,48 @@ $('#shareModal button').click(function() {
     console.error(err);
   }
 });
+
+// from https://github.com/cfj/short-number/blob/master/index.js
+function shortNumber(num) {
+  if (typeof num !== 'number') {
+    throw new TypeError('Expected a number');
+  }
+
+  if (num > 1e19) {
+    throw new RangeError('Input expected to be < 1e19');
+  }
+
+  if (num < -1e19) {
+    throw new RangeError('Input expected to be > 1e19');
+  }
+
+  if (Math.abs(num) < 1000) {
+    return num;
+  }
+
+  var shortNumber;
+  var exponent;
+  var size;
+  var sign = num < 0 ? '-' : '';
+  var suffixes = {
+    K: 6,
+    M: 9,
+    B: 12,
+    T: 16,
+  };
+
+  num = Math.abs(num);
+  size = Math.floor(num).toString().length;
+
+  exponent = size % 3 === 0 ? size - 3 : size - (size % 3);
+  shortNumber = Math.round(10 * (num / Math.pow(10, exponent))) / 10;
+
+  for (var suffix in suffixes) {
+    if (exponent < suffixes[suffix]) {
+      shortNumber += suffix;
+      break;
+    }
+  }
+
+  return sign + shortNumber;
+}

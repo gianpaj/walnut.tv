@@ -131,7 +131,7 @@
                       <span class="video-watched" v-if="hasBeenWatched(video.youtubeId)">WATCHED</span>
                       <img class="video-image" v-bind:src="video.youtubeId | toUrl" alt="{!! video.title !!}" />
                     </div>
-                    <div class="video-title" :class="{  watched: hasBeenWatched(video.youtubeId)}">
+                    <div class="video-title" :class="{ watched: hasBeenWatched(video.youtubeId)}">
                       <h4>{!! video.title | maxChar !!}</h4>
                     </div>
                   </a>
@@ -150,7 +150,49 @@
                   <a href="{{ playingVideo['permalink'] }}" target="_blank">
                     <h2 v-cloak>{!! playingVideo['title'] !!}</h2>
                   </a>
-                  <img class="share-icon" src="/img/share.svg" alt="share" v-on:click="share(playingVideo)" />
+                  <div v-if="playingVideo['ups']">
+                    <img
+                      alt="share"
+                      title="share"
+                      class="share-icon pull-left"
+                      src="/img/share.svg"
+                      v-on:click="share(playingVideo.id)"
+                    />
+                    <svg
+                      alt="upvote"
+                      title="upvote"
+                      class="up-vote pull-right"
+                      v-on:click="vote(playingVideo.id, 1)"
+                      viewBox="0 0 292.362 292.362"
+                      :class="{ active: voted == 1 }"
+                    >
+                      <g>
+                        <path
+                          d="M286.935,197.286L159.028,69.379c-3.613-3.617-7.895-5.424-12.847-5.424s-9.233,1.807-12.85,5.424L5.424,197.286
+		C1.807,200.9,0,205.184,0,210.132s1.807,9.233,5.424,12.847c3.621,3.617,7.902,5.428,12.85,5.428h255.813
+		c4.949,0,9.233-1.811,12.848-5.428c3.613-3.613,5.427-7.898,5.427-12.847S290.548,200.9,286.935,197.286z"
+                        />
+                      </g>
+                    </svg>
+                    <svg
+                      alt="downvote"
+                      title="downvote"
+                      class="down-vote pull-right"
+                      v-on:click="vote(playingVideo.id, -1)"
+                      viewBox="0 0 292.362 292.362"
+                      :class="{ active: voted == -1 }"
+                    >
+                      <g>
+                        <path
+                          d="M286.935,197.286L159.028,69.379c-3.613-3.617-7.895-5.424-12.847-5.424s-9.233,1.807-12.85,5.424L5.424,197.286
+		C1.807,200.9,0,205.184,0,210.132s1.807,9.233,5.424,12.847c3.621,3.617,7.902,5.428,12.85,5.428h255.813
+		c4.949,0,9.233-1.811,12.848-5.428c3.613-3.613,5.427-7.898,5.427-12.847S290.548,200.9,286.935,197.286z"
+                        />
+                      </g>
+                    </svg>
+
+                    <span v-if="voted" class="up-vote-num pull-right">{{ playingVideo['ups'] | shortNumber }}</span>
+                  </div>
                 </div>
               </div>
             </div>
