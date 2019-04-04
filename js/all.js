@@ -388,12 +388,12 @@ var appVideo = new Vue({
       this.videoMessage = loadingVideosMessage;
       var subreddits = searchText;
       var minNumOfVotes;
-      var videoId;
+      var id;
       if (!searchText) {
         this.channel || (this.channel = 'general');
-        // if it's /channel/videoId
+        // if it's /channel/id
         if (pathname.split('/').length === 3) {
-          videoId = pathname.split('/')[pathname.split('/').length - 1];
+          id = pathname.split('/')[pathname.split('/').length - 1];
         }
 
         if (pathname.split('/r/').length > 1) {
@@ -435,9 +435,11 @@ var appVideo = new Vue({
           this.playingVideo = t;
           if (pathname.split('/').length === 3 && pathname.indexOf('/r/') === -1) {
             // find video index to play
-            var index = this.videoList.findIndex(v => v.id === videoId);
-            this.play(index);
-            return;
+            var index = this.videoList.findIndex(v => v.id === id);
+            if (index !== -1) {
+              this.play(index);
+              return;
+            }
           }
           this.watched(this.videoList[0].youtubeId);
           this.play(0);
@@ -564,7 +566,7 @@ var appVideo = new Vue({
     share: function(video) {
       var url;
       if (this.channel) {
-        url = `https://walnut.tv/${this.channel}/${video.youtubeId}`;
+        url = `https://walnut.tv/${this.channel}/${video.id}`;
       }
       $('#shareModal').modal('show');
       // put text into #url-text
