@@ -83,40 +83,41 @@
     </script>
     <!-- End Single Page Apps for GitHub Pages -->
   </head>
-  <body id="appVideo">
-    <div class="navbar navbar-inverse hide-mobile">
-      <div class="header-container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/"
-            ><img src="/img/walnut-logo.svg" class="walnut-logo" alt="Walnut.tv Logo"
-          /></a>
-          <ul class="nav navbar-nav">
-            <li v-for="item in channels" v-bind:class="{ 'active': item.title == channel && !searchInput }">
-              <a v-on:click="changeChannel(item.title)"> {{ item.title }} </a>
-            </li>
-          </ul>
-          <form class="navbar-form" v-on:submit="onSubmit($event)">
-            <div class="form-group">
-              <span class="glyphicon glyphicon-search form-control-feedback"></span>
-              <v-select
-                placeholder="search"
-                label="title"
-                :on-search="onSearch"
-                :on-change="onChange"
-                :options="options"
-                :value.sync="searchInput"
-              >
-                <template slot="option" slot-scope="option">
-                  <span class="fa-youtube"></span>
-                  {{ option }}
-                </template>
-                <template slot="no-options">
-                  <slot name="no-options"></slot>
-                </template>
-              </v-select>
-            </div>
-          </form>
-          <!-- <div class="dropdown">
+  <body>
+    <div id="appVideo" class="hide-mobile">
+      <div class="navbar navbar-inverse">
+        <div class="header-container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/"
+              ><img src="/img/walnut-logo.svg" class="walnut-logo" alt="Walnut.tv Logo"
+            /></a>
+            <ul class="nav navbar-nav">
+              <li v-for="item in channels" v-bind:class="{ 'active': item.title == channel && !searchInput }">
+                <a v-on:click="changeChannel(item.title)"> {{ item.title }} </a>
+              </li>
+            </ul>
+            <form class="navbar-form" v-on:submit="onSubmit($event)">
+              <div class="form-group">
+                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                <v-select
+                  placeholder="search"
+                  label="title"
+                  :on-search="onSearch"
+                  :on-change="onChange"
+                  :options="options"
+                  :value.sync="searchInput"
+                >
+                  <template slot="option" slot-scope="option">
+                    <span class="fa-youtube"></span>
+                    {{ option }}
+                  </template>
+                  <template slot="no-options">
+                    <slot name="no-options"></slot>
+                  </template>
+                </v-select>
+              </div>
+            </form>
+            <!-- <div class="dropdown">
                 <a
                   id="dLabel"
                   class="nav-link"
@@ -144,59 +145,59 @@
                   <li><a data-href="/outdoors">outdoors</a></li>
                 </ul>
               </div> -->
-          <!-- <div class="navbar-right">
+            <!-- <div class="navbar-right">
               <a href="" class="nav-link" data-toggle="modal" data-target="#about"
                 >About</a
               >
             </div> -->
+          </div>
         </div>
       </div>
-    </div>
-    <div class="container hide-mobile">
-      <div v-show="!loadingVideos">
-        <div class="videoDiv container">
-          <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
-            <ul class="video-list list-unstyled pre-scrollable" id="toolbox">
-              <li class="video" v-for="video in videoList" track-by="$index" data-video-id="{{ $index }}" v-cloak>
-                <a v-on:click="play($index)" :class="{ active: videoPlaying == $index}" class="active">
-                  <div class="video-thumbnail-image hidden-xs">
-                    <span class="video-watched" v-if="hasBeenWatched(video.youtubeId)">WATCHED</span>
-                    <img class="video-image" v-bind:src="video.youtubeId | toUrl" alt="{!! video.title !!}" />
-                  </div>
-                  <div class="video-title" :class="{  watched: hasBeenWatched(video.youtubeId)}">
-                    <h4>{!! video.title | maxChar !!}</h4>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
+      <div class="container">
+        <div v-show="!loadingVideos">
+          <div class="videoDiv container">
+            <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
+              <ul class="video-list list-unstyled pre-scrollable" id="toolbox">
+                <li class="video" v-for="video in videoList" track-by="$index" data-video-id="{{ $index }}" v-cloak>
+                  <a v-on:click="play($index)" :class="{ active: videoPlaying == $index}" class="active">
+                    <div class="video-thumbnail-image hidden-xs">
+                      <span class="video-watched" v-if="hasBeenWatched(video.youtubeId)">WATCHED</span>
+                      <img class="video-image" v-bind:src="video.youtubeId | toUrl" alt="{!! video.title !!}" />
+                    </div>
+                    <div class="video-title" :class="{  watched: hasBeenWatched(video.youtubeId)}">
+                      <h4>{!! video.title | maxChar !!}</h4>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
 
-          <div class="main-content">
-            <div id="video-container" class="video-container pre-scrollable">
-              <div class="embed-container">
-                <div class="videoPlayer">
-                  <div id="player"></div>
+            <div class="main-content">
+              <div id="video-container" class="video-container pre-scrollable">
+                <div class="embed-container">
+                  <div class="videoPlayer">
+                    <div id="player"></div>
+                  </div>
                 </div>
-              </div>
-              <div class="video-details">
-                <a href="{{ playingVideo['permalink'] }}" target="_Blank">
-                  <h2 class="modal-title" id="myModalLabel" v-cloak>
-                    {!! playingVideo['title'] !!}
-                  </h2>
-                </a>
+                <div class="video-details">
+                  <a href="{{ playingVideo['permalink'] }}" target="_Blank">
+                    <h2 class="modal-title" id="myModalLabel" v-cloak>
+                      {!! playingVideo['title'] !!}
+                    </h2>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div v-else>
-        <div class="container" v-cloak>
-          <h2 class="loadingMessage">{!! videoMessage !!}</h2>
+        <div v-else>
+          <div class="container" v-cloak>
+            <h2 class="loadingMessage">{!! videoMessage !!}</h2>
+          </div>
         </div>
-      </div>
 
-      <!-- <div class="modal fade" tabindex="-1" role="dialog" id="about">
+        <!-- <div class="modal fade" tabindex="-1" role="dialog" id="about">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -238,6 +239,7 @@
             </div>
           </div>
         </div> -->
+      </div>
     </div>
     <div class="container visible-xs card p-3 d-flex">
       <img class="card-img-top mt-5 mb-5 flex-fill" src="img/walnut-logo.svg" alt="Walnut logo" />
