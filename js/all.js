@@ -402,6 +402,8 @@ var appVideo = new Vue({
           subreddits = this.getSubReddits(this.channel);
           minNumOfVotes = this.getChannelMinVotes(this.channel);
         }
+      } else {
+        this.channel = null;
       }
       this.getStorage();
       redditVideoService
@@ -427,10 +429,11 @@ var appVideo = new Vue({
             }
             return;
           }
+          // if (searchText) window.history.replaceState(null, null, '/r/' + searchText);
           this.loadingVideos = false;
 
           this.playingVideo = t;
-          if (pathname.split('/').length === 3) {
+          if (pathname.split('/').length === 3 && pathname.indexOf('/r/') === -1) {
             // find video index to play
             var index = this.videoList.findIndex(v => v.id === videoId);
             this.play(index);
@@ -484,12 +487,16 @@ var appVideo = new Vue({
       if (value && value.includes('YouTube')) {
         value = value.split(' (')[0];
 
+        window.history.replaceState(null, null, '/');
+        this.channel = null;
         this.fetchVideosFromYoutube(value);
         return;
       }
       this.searchInput = value;
       if (value) {
         value = value.split(' (')[0];
+        window.history.replaceState(null, null, '/r/' + value);
+        this.channel = value;
         this.fetchVideosFromReddit(value);
       } else this.fetchVideosFromReddit();
     },
@@ -514,7 +521,7 @@ var appVideo = new Vue({
       this.videoPlaying = i;
       this.watched(this.playingVideo.youtubeId);
       this.playVideo(this.playingVideo);
-      if (this.contentType == 'reddit') {
+      if (this.contentType == 'reddit' && this.channel) {
         window.history.replaceState(null, null, '/' + this.channel + '/' + this.playingVideo.id);
       }
       // this.mobile
