@@ -117,39 +117,6 @@
                 </v-select>
               </div>
             </form>
-            <!-- <div class="dropdown">
-                <a
-                  id="dLabel"
-                  class="nav-link"
-                  data-target="#"
-                  href="#"
-                  data-toggle="dropdown"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Channels <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="dLabel">
-                  <li>
-                    <a data-href="/general">general</a>
-                  </li>
-                  <li><a data-href="/curious">curious</a></li>
-                  <li><a data-href="/how_to">how to</a></li>
-                  <li>
-                    <a data-href="/educational">educational</a>
-                  </li>
-                  <li><a data-href="/documentaries">documentaries</a></li>
-                  <li><a data-href="/lectures">lectures</a></li>
-                  <li><a data-href="/food">food</a></li>
-                  <li><a data-href="/outdoors">outdoors</a></li>
-                </ul>
-              </div> -->
-            <!-- <div class="navbar-right">
-              <a href="" class="nav-link" data-toggle="modal" data-target="#about"
-                >About</a
-              >
-            </div> -->
           </div>
         </div>
       </div>
@@ -180,11 +147,10 @@
                   </div>
                 </div>
                 <div class="video-details">
-                  <a href="{{ playingVideo['permalink'] }}" target="_Blank">
-                    <h2 class="modal-title" id="myModalLabel" v-cloak>
-                      {!! playingVideo['title'] !!}
-                    </h2>
+                  <a href="{{ playingVideo['permalink'] }}" target="_blank">
+                    <h2 v-cloak>{!! playingVideo['title'] !!}</h2>
                   </a>
+                  <img class="share-icon" src="/img/share.svg" alt="share" v-on:click="share(playingVideo)" />
                 </div>
               </div>
             </div>
@@ -196,49 +162,6 @@
             <h2 class="loadingMessage">{!! videoMessage !!}</h2>
           </div>
         </div>
-
-        <!-- <div class="modal fade" tabindex="-1" role="dialog" id="about">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button
-                  type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body text-center">
-                <h2>
-                  Walnut.TV the top videos from
-                  <a target="_blank" href="https://www.reddit.com/">Reddit.com</a>
-                </h2>
-                <p>
-                  This website helps you easily discover the best videos
-                  on Reddit.<br />
-                  You can watch videos from any subreddit by adding it to the
-                  URL.<br />i.e.
-                  <a href="https://walnut.tv/r/humour">rake.tv/r/humour</a>
-                </p>
-                <p>
-                  If you have any feedback please
-                  <a href="mailto:hi@walnut.tv">send us an email</a> or
-                  <a
-                    target="_Blank"
-                    href="http://twitter.com/home/?status=Hi @walnut_tv"
-                    >tweet at us</a
-                  >.
-                </p>
-                <p>
-                  Follow <a href="http://twitter.com/walnut_tv">@walnut_tv</a> on
-                  twitter for updates.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
     <div class="container visible-xs card p-3 d-flex">

@@ -69,7 +69,6 @@ h2 {
 }
 
 .video-container .video-details a {
-  float: left;
   text-decoration: none;
 }
 
@@ -244,7 +243,12 @@ h2 {
 
 .video-container .video-details {
   margin-bottom: 40px;
-  margin-top: 20px;
+  margin-top: 40px;
+}
+
+.video-container .video-details .share-icon {
+  cursor: pointer;
+  width: 20px;
 }
 
 .video-container .embed-container {

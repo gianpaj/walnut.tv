@@ -524,9 +524,9 @@ var appVideo = new Vue({
       if (this.contentType == 'reddit' && this.channel) {
         window.history.replaceState(null, null, '/' + this.channel + '/' + this.playingVideo.id);
       }
-      // this.mobile
-      //   ? player.cueVideoById(this.videoList[i].youtubeId, 0, 'large')
-      //   : player.loadVideoById(this.videoList[i].youtubeId, 0, 'large');
+      // if (this.contentType == 'reddit' && this.channel) {
+      //   window.history.replaceState(null, null, '/' + this.channel + '/' + this.playingVideo.id);
+      // }
     },
     nextVideo: function() {
       if (this.videoPlaying >= this.videoList.length - 1) {
@@ -585,3 +585,5 @@ var appVideo = new Vue({
     window.removeEventListener('keyup', this.keys);
   },
 });
+
+var cssText = 'position:fixed;pointer-events:none;z-index:-9999;opacity:0;';
