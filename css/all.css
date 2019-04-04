@@ -359,11 +359,15 @@ h2 {
 }
 
 .v-select .selected-tag {
-  position: absolute;
   background-color: transparent !important;
   border: 0 !important;
   color: white !important;
+  overflow: hidden;
   padding-left: 34px !important;
+  position: absolute;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .v-select .dropdown-toggle {
