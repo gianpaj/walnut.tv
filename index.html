@@ -150,14 +150,14 @@
                   <a href="{{ playingVideo['permalink'] }}" target="_blank">
                     <h2 v-cloak>{!! playingVideo['title'] !!}</h2>
                   </a>
+                  <img
+                    alt="share"
+                    title="share"
+                    class="share-icon pull-left"
+                    src="/img/share.svg"
+                    v-on:click="share(playingVideo.id)"
+                  />
                   <!-- <div v-if="playingVideo['ups']">
-                    <img
-                      alt="share"
-                      title="share"
-                      class="share-icon pull-left"
-                      src="/img/share.svg"
-                      v-on:click="share(playingVideo.id)"
-                    />
                     <svg
                       alt="upvote"
                       title="upvote"
