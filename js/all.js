@@ -20,7 +20,7 @@ const channels = [
   },
   {
     title: 'movies',
-    subreddit: 'movies;documentaries;television;filmmakers;trailers;shortfilms;Truefilm;themakingof;animation',
+    subreddit: 'movies;documentaries;television;filmmakers;trailers;shortfilms;Truefilm;animation',
     minNumOfVotes: 10,
   },
   {
