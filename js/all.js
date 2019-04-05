@@ -358,7 +358,6 @@ var appVideo = new Vue({
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
     this.channel || (this.channel = 'general');
     this.fetchVideosFromReddit();
-    this.getStorage();
     window.addEventListener('keyup', this.keys);
   },
   methods: {
@@ -387,6 +386,7 @@ var appVideo = new Vue({
       } else {
         this.channel = null;
       }
+      this.getStorage();
       redditVideoService
         .loadHot(subreddits, minNumOfVotes)
         .then(t => {
