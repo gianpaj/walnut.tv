@@ -476,11 +476,17 @@ var appVideo = new Vue({
           this.play(0);
         })
         .catch(error => {
+          this.videoMessage = 'Sorry, there was an error getting YouTube videos for "' + query + '"';
           // eslint-disable-next-line no-console
           console.error(error);
         });
     },
+    /**
+     * When the input field is being typed
+     * @param {string} value
+     */
     onSearch: function(value) {
+      this.searchInput = '';
       this.options = [value + ' (YouTube)', value + ' (Subreddit)'];
     },
     onChange: function(value) {

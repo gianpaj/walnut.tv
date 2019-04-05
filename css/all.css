@@ -379,6 +379,10 @@ h2 {
   background-color: black;
 }
 
+.v-select.open > .dropdown-menu .divider {
+  display: none;
+}
+
 .v-select > .dropdown-menu::-webkit-scrollbar {
   width: 0;
 }
