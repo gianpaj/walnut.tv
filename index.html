@@ -85,32 +85,53 @@
             <a class="navbar-brand" href="/"
               ><img src="/img/walnut-logo.svg" class="walnut-logo" alt="Walnut.tv Logo"
             /></a>
-            <ul class="nav navbar-nav">
-              <li v-for="item in channels" v-bind:class="{ 'active': item.title == channel && !searchInput }">
-                <a v-on:click="changeChannel(item.title)"> {{ item.title }} </a>
-              </li>
-            </ul>
-            <form class="navbar-form" v-on:submit="onSubmit($event)">
-              <div class="form-group">
-                <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                <v-select
-                  placeholder="search"
-                  label="title"
-                  :on-search="onSearch"
-                  :on-change="onChange"
-                  :options="options"
-                  :value.sync="searchInput"
-                >
-                  <template slot="option" slot-scope="option">
-                    <span class="fa-youtube"></span>
-                    {{ option }}
-                  </template>
-                  <template slot="no-options">
-                    <slot name="no-options"></slot>
-                  </template>
-                </v-select>
+            <div class="hide-mobile-landscape hide-desktop collapse-container">
+              <button
+                aria-expanded="false"
+                class="hide-mobile-landscape navbar-toggle collapsed"
+                data-toggle="collapse"
+                data-target="#navbar-collapse-1"
+                type="button"
+              >
+                <span class="sr-only">Toggle navigation</span>
+                <span>{{ channel }}</span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                  <li v-for="item in channels" v-bind:class="{ 'active': item.title == channel && !searchInput }">
+                    <a v-on:click="changeChannel(item.title)"> {{ item.title }} </a>
+                  </li>
+                </ul>
               </div>
-            </form>
+            </div>
+            <div class="hide-mobile-portrait mobile-navbar-portrait">
+              <ul class="nav navbar-nav">
+                <li v-for="item in channels" v-bind:class="{ 'active': item.title == channel && !searchInput }">
+                  <a v-on:click="changeChannel(item.title)"> {{ item.title }} </a>
+                </li>
+              </ul>
+              <form class="hide-mobile-portrait navbar-form" v-on:submit="onSubmit($event)">
+                <div class="form-group">
+                  <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                  <v-select
+                    placeholder="search"
+                    label="title"
+                    :on-search="onSearch"
+                    :on-change="onChange"
+                    :options="options"
+                    :value.sync="searchInput"
+                  >
+                    <template slot="option" slot-scope="option">
+                      <span class="fa-youtube"></span>
+                      {{ option }}
+                    </template>
+                    <template slot="no-options">
+                      <slot name="no-options"></slot>
+                    </template>
+                  </v-select>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>

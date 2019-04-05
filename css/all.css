@@ -48,9 +48,15 @@ a:hover {
   outline: 0;
 }
 
-h2 {
+.video-details h2 {
   color: #fff;
   font-size: 24px;
+}
+
+@media screen and (max-width: 992px) {
+  .video-details h2 {
+    font-size: 18px;
+  }
 }
 
 .dropdown-menu {
@@ -77,6 +83,26 @@ h2 {
   width: 100%;
 }
 
+@media screen and (max-width: 992px) {
+  .navbar-toggle {
+    margin-right: 0;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .collapse-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 86px;
+  }
+}
+
+.navbar-toggle span {
+  color: #fff;
+  text-transform: uppercase;
+}
+
 .video-container .video-details a {
   text-decoration: none;
 }
@@ -99,7 +125,7 @@ h2 {
   padding-right: 14px;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 992px) {
   .navbar-inverse .navbar-nav > li > a {
     font-size: 12px;
     padding: 10px 6px;
@@ -112,10 +138,23 @@ h2 {
   padding-right: 0;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 992px) {
   .navbar-form {
     margin: 10px 0;
     padding: 0;
+  }
+}
+
+@media screen and (max-width: 992px) and (orientation: landscape) {
+  .mobile-navbar-portrait {
+    align-items: center;
+    display: flex;
+  }
+}
+
+@media screen and (min-width: 993px) {
+  .mobile-navbar-portrait {
+    display: inline-flex;
   }
 }
 
@@ -229,6 +268,12 @@ h2 {
   margin: 0 20px 0 0;
 }
 
+@media screen and (max-width: 992px) {
+  .navbar-brand {
+    align-self: flex-start;
+  }
+}
+
 .walnut-logo {
   width: 15px;
 }
@@ -243,7 +288,7 @@ h2 {
   padding-right: 30px;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 992px) {
   .header-container {
     padding-left: 20px;
     padding-right: 20px;
@@ -251,10 +296,10 @@ h2 {
 }
 
 .container {
-  width: 100%;
+  background-color: #000;
   display: table;
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0;
+  width: 100%;
 }
 
 .sidebar {
@@ -273,7 +318,7 @@ h2 {
   padding: 15px 30px 0;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 992px) {
   .video-container {
     padding: 5px 10px 0;
   }
@@ -283,7 +328,7 @@ h2 {
   margin: 40px 0;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 992px) {
   .video-container .video-details {
     margin: 40px 10px;
   }
@@ -393,6 +438,24 @@ h2 {
   }
 }
 
+@media (max-width: 992px) and (orientation: portrait) {
+  .hide-mobile-portrait {
+    display: none;
+  }
+}
+
+@media (max-width: 992px) and (orientation: landscape) {
+  .hide-mobile-landscape {
+    display: none;
+  }
+}
+
+@media (min-width: 993px) {
+  .hide-desktop {
+    display: none;
+  }
+}
+
 @media (max-width: 992px) {
   body {
     background-color: #fff;
@@ -446,7 +509,7 @@ h2 {
   display: none !important;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 992px) {
   .v-select input[type='search'] {
     min-width: 90px;
     max-width: 140px !important;

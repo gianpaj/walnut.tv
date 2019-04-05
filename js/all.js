@@ -356,6 +356,7 @@ var appVideo = new Vue({
   },
   created: function() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
+    this.channel || (this.channel = 'general');
     this.fetchVideosFromReddit();
     this.getStorage();
     window.addEventListener('keyup', this.keys);
@@ -372,7 +373,6 @@ var appVideo = new Vue({
       var minNumOfVotes;
       var id;
       if (!searchText) {
-        this.channel || (this.channel = 'general');
         // if it's /channel/id
         if (pathname.split('/').length === 3) {
           id = pathname.split('/')[pathname.split('/').length - 1];
@@ -580,6 +580,7 @@ var appVideo = new Vue({
         window.history.replaceState(null, null, '/' + channel);
         this.fetchVideosFromReddit();
       }
+      $('#navbar-collapse-1').collapse('hide');
     },
   },
   beforeDestroy: function() {
