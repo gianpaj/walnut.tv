@@ -65,6 +65,7 @@ h2 {
 }
 
 .navbar {
+  border-radius: 0;
   min-height: 50px;
   margin-bottom: 0;
 }
@@ -98,10 +99,24 @@ h2 {
   padding-right: 14px;
 }
 
+@media screen and (max-width: 900px) {
+  .navbar-inverse .navbar-nav > li > a {
+    font-size: 12px;
+    padding: 10px 6px;
+  }
+}
+
 .navbar-form {
   margin-top: 10px;
   margin-bottom: 10px;
   padding-right: 0;
+}
+
+@media screen and (max-width: 900px) {
+  .navbar-form {
+    margin: 10px 0;
+    padding: 0;
+  }
 }
 
 .navbar-form .form-control {
@@ -209,6 +224,7 @@ h2 {
 }
 
 .navbar-brand {
+  display: flex;
   padding: 0;
   margin: 0 20px 0 0;
 }
@@ -227,6 +243,13 @@ h2 {
   padding-right: 30px;
 }
 
+@media screen and (max-width: 900px) {
+  .header-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
 .container {
   width: 100%;
   display: table;
@@ -240,18 +263,30 @@ h2 {
 }
 
 .main-content {
-  width: 100%;
-  float: right;
+  background: #000;
   display: table-cell;
+  float: right;
+  width: 100%;
 }
 
 .video-container {
   padding: 15px 30px 0;
 }
 
+@media screen and (max-width: 900px) {
+  .video-container {
+    padding: 5px 10px 0;
+  }
+}
+
 .video-container .video-details {
-  margin-bottom: 40px;
-  margin-top: 40px;
+  margin: 40px 0;
+}
+
+@media screen and (max-width: 900px) {
+  .video-container .video-details {
+    margin: 40px 10px;
+  }
 }
 
 .video-container .video-details .share-icon,
@@ -409,6 +444,13 @@ h2 {
 
 .v-select .open-indicator {
   display: none !important;
+}
+
+@media screen and (max-width: 900px) {
+  .v-select input[type='search'] {
+    min-width: 90px;
+    max-width: 140px !important;
+  }
 }
 
 .modal-dialog {

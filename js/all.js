@@ -2,31 +2,6 @@
 
 var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-function exit() {
-  // http://kevin.vanzonneveld.net
-  // +   original by: Brett Zamir (http://brettz9.blogspot.com)
-  // +      input by: Paul
-  // +   bugfixed by: Hyam Singer (http://www.impact-computing.com/)
-  // +   improved by: Philip Peterson
-  // +   bugfixed by: Brett Zamir (http://brettz9.blogspot.com)
-  // %        note 1: Should be considered expirimental. Please comment on this function.
-  // *     example 1: exit();
-  // *     returns 1: null
-
-  window.addEventListener(
-    'error',
-    function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-    },
-    false
-  );
-
-  throw '';
-}
-
-if (isMobile) exit();
-
 const channels = [
   {
     title: 'general',
@@ -532,7 +507,8 @@ var appVideo = new Vue({
       '37' == evt.keyCode ? this.prevVideo() : '39' == evt.keyCode && this.nextVideo();
     },
     playVideo: function(t) {
-      if (player && player.loadVideoById) player.loadVideoById(t.youtubeId, 0, 'large');
+      if (!player || !player.loadVideoById) return;
+      this.mobile ? player.cueVideoById(t.youtubeId) : player.loadVideoById(t.youtubeId);
     },
     play: function(i) {
       this.playingVideo = this.videoList[i];
