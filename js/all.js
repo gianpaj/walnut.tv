@@ -292,12 +292,10 @@ function onYouTubeIframeAPIReady() {
     },
   });
 }
+var indexToPlay = 0;
 function onPlayerReady() {
   // if we're playing a specific video (e.g. /general/b97ih5)
-  if (window.location.pathname.split('/').length > 2) {
-    return;
-  }
-  appVideo.videoList[0] && appVideo.play(0);
+  appVideo.videoList[indexToPlay] && appVideo.play(indexToPlay);
 }
 function onPlayerError() {
   appVideo.nextVideo();
@@ -418,6 +416,7 @@ var appVideo = new Vue({
             // find video index to play
             var index = this.videoList.findIndex(v => v.id === id);
             if (index !== -1) {
+              indexToPlay = index;
               this.play(index);
               return;
             }
