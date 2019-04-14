@@ -46,7 +46,7 @@ const channels = [
   },
   {
     title: 'crafts',
-    subreddit: 'artisanvideos;maker;howto;TechDIY;woodworking;FastWorkers',
+    subreddit: 'artisanvideos;maker;howto;woodworking;FastWorkers',
     minNumOfVotes: 5,
   },
   {
