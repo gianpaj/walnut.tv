@@ -641,3 +641,11 @@ function shortNumber(num) {
 
   return sign + shortNumber;
 }
+
+// eslint-disable-next-line no-undef
+tippy('.navbar-brand', {
+  placement: 'bottom',
+  theme: 'light',
+  interactive: true,
+  content: '<a href="mailto:hi@walnut.tv">hi@walnut.tv</a>',
+});
