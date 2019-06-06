@@ -1,3 +1,8 @@
+// eslint-disable-next-line no-console
+console.log('%c%s', 'color: green; background: yellow; font-size: 24px;', 'Thanks for checking the code!');
+// eslint-disable-next-line no-console
+console.log('The code is open sourced at https://github.com/gianpaj/walnut.tv');
+
 // @ts-nocheck
 
 var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
