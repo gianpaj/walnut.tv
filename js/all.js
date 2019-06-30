@@ -1,17 +1,18 @@
 // eslint-disable-next-line no-console
-console.log('%c%s', 'color: green; background: yellow; font-size: 24px;', 'Thanks for checking the code!');
+console.log('%c%s', 'color: green; background: yellow; font-size: 24px;', 'Thanks for checking walnut source code!');
 // eslint-disable-next-line no-console
-console.log('The code is open sourced at https://github.com/gianpaj/walnut.tv');
+console.log("Walnut's code is open sourced at https://github.com/gianpaj/walnut.tv");
 
 // @ts-nocheck
 
-var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+// var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 const channels = [
   {
     title: 'general',
     subreddit: 'videos',
     minNumOfVotes: 100,
+    // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
   },
   {
     title: 'curious',
@@ -67,7 +68,7 @@ const channels = [
   },
 ];
 
-const YouTubeApiKey = 'AIzaSyD342vuWxFeyEMKANx58qKyECeNsxlv0f8';
+const youtubeApiKey = 'AIzaSyD342vuWxFeyEMKANx58qKyECeNsxlv0f8';
 const youtubeURL = 'http://www.youtube.com/watch?v=';
 const youtubeURLLength = youtubeURL.length;
 const embedLength = '/embed/'.length;
@@ -173,42 +174,6 @@ function RedditVideoService() {
   }
 
   /**
-   * e.g.
-   * arrayOfArrays =
-   * [[1,2,3], [4,5,6,7,8], [9,10]]
-   *
-   * return
-   * [1, 4, 9, 2, 5, 10, 3, 6, 7, 8]
-   *
-   * TODO: if we skipped the video of a channel the 2nd video
-   */
-  function getOneVideoOfEachChannel(arrayOfArrays) {
-    // find the smallest amount of videos for every channel
-    const leastAmountOfVids = Math.min.apply(null, arrayOfArrays.map(arr => arr.length).filter(arr => arr));
-
-    if (arrayOfArrays.length === 1) {
-      return arrayOfArrays;
-    }
-
-    arrayOfArrays = arrayOfArrays.filter(a => a.length);
-    let videos = [];
-    // get one video of each channel in rotation
-    for (let i = 0; i < leastAmountOfVids; i++) {
-      for (let j = 0; j < arrayOfArrays.length; j++) {
-        const vid = arrayOfArrays[j][i];
-        videos.push(vid);
-      }
-    }
-    // get the rest of videos
-    for (let k = 0; k < arrayOfArrays.length; k++) {
-      const vid = arrayOfArrays[k].slice(leastAmountOfVids);
-      videos.push(...vid);
-    }
-
-    return videos;
-  }
-
-  /**
    * Get videos from subreddit(s)
    *
    * @param {string} channel_s one or more channels - e.g. 'funny' or' 'funny;cool'
@@ -223,7 +188,7 @@ function RedditVideoService() {
 
     const arrayOfArrayOfVideos = await Promise.all(promises);
 
-    let videos = getOneVideoOfEachChannel(arrayOfArrayOfVideos);
+    let videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
 
     const uniq = {};
     // remove duplicate videos
@@ -239,17 +204,74 @@ function RedditVideoService() {
   };
 }
 
-const redditVideoService = new RedditVideoService();
+/**
+ * e.g.
+ * arrayOfArrays =
+ * [[1,2,3], [4,5,6,7,8], [9,10]]
+ *
+ * return
+ * [1, 4, 9, 2, 5, 10, 3, 6, 7, 8]
+ *
+ * TODO: if we skipped the video of a channel the 2nd video
+ */
+function mixElementsFromArraysOfArrays(arrayOfArrays) {
+  // find the smallest amount of videos for every channel
+  const leastAmountOfVids = Math.min.apply(null, arrayOfArrays.map(arr => arr.length).filter(arr => arr));
 
-function YouTubeSearchService() {
+  if (arrayOfArrays.length === 1) {
+    return arrayOfArrays;
+  }
+
+  arrayOfArrays = arrayOfArrays.filter(a => a.length);
+  let videos = [];
+  // get one video of each channel in rotation
+  for (let i = 0; i < leastAmountOfVids; i++) {
+    for (let j = 0; j < arrayOfArrays.length; j++) {
+      const vid = arrayOfArrays[j][i];
+      videos.push(vid);
+    }
+  }
+  // get the rest of videos
+  for (let k = 0; k < arrayOfArrays.length; k++) {
+    const vid = arrayOfArrays[k].slice(leastAmountOfVids);
+    videos.push(...vid);
+  }
+
+  return videos;
+}
+
+const redditService = new RedditVideoService();
+
+function YouTubeService() {
   function search(query) {
+    // from youtube-api-v3-search npm
     // eslint-disable-next-line no-undef
-    return searchYoutube(YouTubeApiKey, {
+    return searchYoutube(youtubeApiKey, {
       part: 'snippet',
       type: 'video',
       maxResults: '25',
       // videoEmbeddable: 'true',
       q: query,
+    }).then(formatResults);
+  }
+  async function loadChannels(channel_s) {
+    channel_s = channel_s.split(';');
+    const promises = channel_s.map(channel => _loadChannel(channel));
+    const arrayOfArrayOfVideos = await Promise.all(promises);
+
+    const videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
+    return [].concat.apply([], videos);
+  }
+  function _loadChannel(channel) {
+    // from youtube-api-v3-search npm
+    // eslint-disable-next-line no-undef
+    return searchYoutube(youtubeApiKey, {
+      part: 'snippet',
+      type: 'video',
+      maxResults: '25',
+      // publishedAfter: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(), // 24 hours back -> yesterday
+      channelId: channel,
+      order: 'date',
     }).then(formatResults);
   }
   function formatResults(results) {
@@ -264,10 +286,11 @@ function YouTubeSearchService() {
   }
   return {
     search,
+    loadChannels,
   };
 }
 
-const youTubeSearchService = new YouTubeSearchService();
+const youtubeService = new YouTubeService();
 
 var youtubeId,
   player,
@@ -360,20 +383,20 @@ var appVideo = new Vue({
   created: function() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
     this.channel || (this.channel = 'general');
-    this.fetchVideosFromReddit();
+    this.fetchAllVideos();
     window.addEventListener('keyup', this.keys);
   },
   methods: {
     getSubReddits: channel => channels.find(c => c.title == channel).subreddit,
+    getYouTubeChannels: channel => channels.find(c => c.title == channel).youtubeChannels,
     getChannelMinVotes: channel => channels.find(c => c.title == channel).minNumOfVotes,
-    fetchVideosFromReddit: function(searchText) {
+    fetchAllVideos: function(searchText) {
+      let id, minNumOfVotes, ytChannels, promises;
+      let subreddits = searchText;
       const { pathname } = window.location;
       this.contentType = 'reddit';
       this.loadingVideos = true;
       this.videoMessage = loadingVideosMessage;
-      var subreddits = searchText;
-      var minNumOfVotes;
-      var id;
       if (!searchText) {
         // if it's /channel/id
         if (pathname.split('/').length === 3) {
@@ -382,30 +405,46 @@ var appVideo = new Vue({
 
         if (pathname.split('/r/').length > 1) {
           subreddits = this.channel;
+          promises = Promise.all([redditService.loadHot(subreddits, minNumOfVotes)]);
         } else {
           subreddits = this.getSubReddits(this.channel);
+          ytChannels = this.getYouTubeChannels(this.channel);
           minNumOfVotes = this.getChannelMinVotes(this.channel);
+          promises = Promise.all([
+            redditService.loadHot(subreddits, minNumOfVotes),
+            ytChannels ? youtubeService.loadChannels(ytChannels) : [],
+          ]);
         }
       } else {
         this.channel = null;
+        promises = Promise.all([redditService.loadHot(subreddits, minNumOfVotes)]);
       }
       this.getStorage();
-      redditVideoService
-        .loadHot(subreddits, minNumOfVotes)
-        .then(t => {
+      promises
+        .then(resolvers => {
+          const [redditVideos, youtubeVideos = []] = resolvers;
           if (window.location.search == '?debug') {
             // eslint-disable-next-line no-console
             console.log(
-              t.map(v => ({
+              redditVideos.map(v => ({
                 subreddit: v.permalink.split('/r/')[1].split('/')[0],
                 title: v.title,
                 link: v.permalink,
                 youtubeId: v.youtubeId,
               }))
             );
+            // eslint-disable-next-line no-console
+            console.log(
+              youtubeVideos.map(v => ({
+                title: v.title,
+                link: v.permalink,
+                youtubeId: v.youtubeId,
+              }))
+            );
           }
-          this.videoList = t;
-          if (t.length < 1) {
+          // this.videoList = redditVideos;
+          this.videoList = mixElementsFromArraysOfArrays([redditVideos, youtubeVideos]);
+          if (redditVideos.length < 1 || (ytChannels && youtubeVideos.length < 1)) {
             this.videoMessage = "Sorry, we couldn't find any videos in /" + this.channel;
 
             if (this.searchInput) {
@@ -416,17 +455,17 @@ var appVideo = new Vue({
           // if (searchText) window.history.replaceState(null, null, '/r/' + searchText);
           this.loadingVideos = false;
 
-          this.playingVideo = t;
+          // this.playingVideo = redditVideos;
           if (pathname.split('/').length === 3 && pathname.indexOf('/r/') === -1) {
             // find video index to play
-            var index = this.videoList.findIndex(v => v.id === id);
+            let index = this.videoList.findIndex(v => v.id === id);
             if (index !== -1) {
               indexToPlay = index;
               this.play(index);
               return;
             }
           }
-          this.watched(this.videoList[0].youtubeId);
+          // this.watched(this.videoList[0].youtubeId);
           this.play(0);
         })
         .catch(error => {
@@ -443,7 +482,7 @@ var appVideo = new Vue({
       // eslint-disable-next-line no-undef
       this.loadingVideos = true;
       this.getStorage();
-      youTubeSearchService
+      youtubeService
         .search(query)
         .then(videos => {
           if (videos.length < 1) {
@@ -490,8 +529,8 @@ var appVideo = new Vue({
         value = value.split(' (')[0];
         window.history.replaceState(null, null, '/r/' + value);
         this.channel = value;
-        this.fetchVideosFromReddit(value);
-      } else this.fetchVideosFromReddit();
+        this.fetchAllVideos(value);
+      } else this.fetchAllVideos();
     },
     hasBeenWatched: function(youtubeId) {
       return -1 != this.videosWatched.indexOf(youtubeId) && youtubeId != this.videoList[this.videoPlaying].youtubeId;
@@ -582,7 +621,7 @@ var appVideo = new Vue({
         player.stopVideo();
         this.channel = channel;
         window.history.replaceState(null, null, '/' + channel);
-        this.fetchVideosFromReddit();
+        this.fetchAllVideos();
       }
       $('#navbar-collapse-1').collapse('hide');
     },
