@@ -55,17 +55,6 @@ const channels = [
     subreddit: 'artisanvideos;maker;howto;woodworking;FastWorkers',
     minNumOfVotes: 5,
   },
-  {
-    title: 'gaming',
-    subreddit: 'gamernews;Games;themakingofgames;AndroidGaming;indiegames;gamingvids;YouTubeGamers',
-    textColor: '',
-    minNumOfVotes: 50,
-  },
-  {
-    title: 'news',
-    subreddit: 'PoliticalVideo',
-    minNumOfVotes: 0,
-  },
 ];
 
 const youtubeApiKey = 'AIzaSyD342vuWxFeyEMKANx58qKyECeNsxlv0f8';
