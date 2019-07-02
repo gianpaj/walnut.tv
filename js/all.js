@@ -18,6 +18,7 @@ const channels = [
     title: 'curious',
     subreddit: 'curiousvideos;mealtimevideos;futurology;educativevideos;watchandlearn;sciencevideos',
     minNumOfVotes: 3,
+    youtubeChannels: 'PowerfulJRE;UC1zZE_kJ8rQHgLTVfobLi_g;UC4a-Gbdw7vOaccHmFo40b9g;UCpVm7bg6pXKo1Pr6k5kxG9A;ScienceChannel;UCGs1JjiRBEKMlVD4eUxJ2ww;crashcourse;UCDsElQQt_gCZ9LgnW-7v-cQ;UCmmPgObSUPw1HL2lq6H4ffA;UCtGG8ucQgEJPeUPhJZ4M4jA;UC7IcJI8PUf5Z3zKxnZvTBog;UCGi_crMdUZnrcsvkCa8pt-g;UCZYTClx2T1of7BRZ86-8fow;AsapSCIENCE;destinws2;minutephysics;TheBackyardScientist;UC9uD-W5zQHQuAVT2GdcLCvg',
   },
   {
     title: 'science',
@@ -26,7 +27,7 @@ const channels = [
   },
   {
     title: 'movies',
-    subreddit: 'movies;documentaries;television;filmmakers;trailers;shortfilms;Truefilm;animation',
+    subreddit: 'movies;documentaries;Truefilm',
     minNumOfVotes: 10,
   },
   {
@@ -36,24 +37,34 @@ const channels = [
   },
   {
     title: 'fun',
-    subreddit: 'humor;contagiouslaughter;youtubehaiku',
+    subreddit: 'humor',
     minNumOfVotes: 50,
+    youtubeChannels: 'TheOnion;UCOpcACMWblDls9Z6GERVi1A;rhettandlink2;UCr3cBLTYmIK9kY0F_OdFWFQ;UCtHaxi4GTYDpJgMSGy7AeSw;UCqpeqqzqqSb-280EB8oHDDA;collegehumor;UC67f2Qf7FYhtoUIF4Sf29cA;SaturdayNightLive;AboveAverageNetwork;FunnyorDie;dontbethatguyfilms;comedycentral',
   },
   {
     title: 'active',
     subreddit: 'climbing;kayaking;theocho;surfing;sports;adrenaline',
     minNumOfVotes: 1,
+    youtubeChannels: 'UCSqk_coiJhy9FMyr_Go8ftg/videos;UCB5nIbygLmBO6hBjhilxREQ;UCFXRhM8mT2spmusw-HoyENA;UCe0TLA0EsQbE-MjuHXevj2A;UCHI0kOgUQRkJcEBmDsHVh1A;UCHVdwBKQFsAD2rNF0JwE-cg',
   },
   {
     title: 'food',
     subreddit: 'veganrecipes;permaculture;FoodVideos;cookingvideos',
     textColor: '',
     minNumOfVotes: 5,
+    youtubeChannels: 'UCbpMy0Fg74eXXkvxJrtEn3w;growingyourgreens;ByronTalbott;workwithnature;JamieOliver;cookingwithdog;bgfilms;jastownsendandson;donalskehan;Manjulaskitchen;UC1GO0P2HsI0XLiMalC5_wQw;ryoya1983;UCekQr9znsk2vWxBo3YiLq2w;ByronTalbott;UCPD_bxCRGpmmeQcbe2kpPaA;chefsteps;EpicMealTime;americastestkitchen;Munchies;UCJFp8uSYCjXOMnkUyb3CQ3Q;BrothersGreenEats;foodwishes;gordonramsay;UChBSJmgtiMGG1IUUuzj9Acw;UCARXOI1UlItgIevoI5jZViQ',
   },
   {
     title: 'crafts',
     subreddit: 'artisanvideos;maker;howto;woodworking;FastWorkers',
     minNumOfVotes: 5,
+    youtubeChannels: 'UCIxAaCJ84uefATKmazDyIjw;UCuGS1iJpM_4ZYFp62mia2xQ',
+  },
+   {
+    title: 'startup',
+    subreddit: 'startup',
+    minNumOfVotes: 10,
+    youtubeChannels: 'UC1LAjODfg7dnSSrrPGGPPMw;UCcefcZRL2oaA_uBNeo5UOWg;UCK-zlnUfoDHzUwXcbddtnkg;UCCjyq_K1Xwfg8Lndy7lKMpA;UC9cn0TuPq4dnbTY-CBsm8XA'
   },
 ];
 
