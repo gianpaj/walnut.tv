@@ -45,7 +45,7 @@ const channels = [
     title: 'active',
     subreddit: 'climbing;kayaking;theocho;surfing;sports;adrenaline',
     minNumOfVotes: 1,
-    youtubeChannels: 'UCSqk_coiJhy9FMyr_Go8ftg/videos;UCB5nIbygLmBO6hBjhilxREQ;UCFXRhM8mT2spmusw-HoyENA;UCe0TLA0EsQbE-MjuHXevj2A;UCHI0kOgUQRkJcEBmDsHVh1A;UCHVdwBKQFsAD2rNF0JwE-cg',
+    youtubeChannels: 'UCSqk_coiJhy9FMyr_Go8ftg;UCB5nIbygLmBO6hBjhilxREQ;UCFXRhM8mT2spmusw-HoyENA;UCe0TLA0EsQbE-MjuHXevj2A;UCHI0kOgUQRkJcEBmDsHVh1A;UCHVdwBKQFsAD2rNF0JwE-cg',
   },
   {
     title: 'food',
