@@ -18,6 +18,7 @@ const channels = [
     title: 'curious',
     subreddit: 'curiousvideos;mealtimevideos;futurology;educativevideos;watchandlearn;sciencevideos',
     minNumOfVotes: 3,
+    youtubeChannels: 'UCzQUP1qoWDoEbmsQxvdjxgQ;UC1zZE_kJ8rQHgLTVfobLi_g;UC4a-Gbdw7vOaccHmFo40b9g;UCpVm7bg6pXKo1Pr6k5kxG9A;UCvJiYiBUbw4tmpRSZT2r1Hw;UCGs1JjiRBEKMlVD4eUxJ2ww;UCX6b17PVsYBQ0ip5gyeme-Q;UCDsElQQt_gCZ9LgnW-7v-cQ;UCmmPgObSUPw1HL2lq6H4ffA;UCtGG8ucQgEJPeUPhJZ4M4jA;UC7IcJI8PUf5Z3zKxnZvTBog;UCGi_crMdUZnrcsvkCa8pt-g;UCZYTClx2T1of7BRZ86-8fow;UCC552Sd-3nyi_tk2BudLUzA;UC6107grRI4m0o2-emgoDnAA;UCUHW94eEFW7hkUMVaZz4eDg;UC06E4Y_-ybJgBUMtXx8uNNw;UC9uD-W5zQHQuAVT2GdcLCvg',
   },
   {
     title: 'science',
@@ -26,7 +27,7 @@ const channels = [
   },
   {
     title: 'movies',
-    subreddit: 'movies;documentaries;television;filmmakers;trailers;shortfilms;Truefilm;animation',
+    subreddit: 'movies;documentaries;Truefilm',
     minNumOfVotes: 10,
   },
   {
@@ -36,24 +37,34 @@ const channels = [
   },
   {
     title: 'fun',
-    subreddit: 'humor;contagiouslaughter;youtubehaiku',
+    subreddit: 'humor',
     minNumOfVotes: 50,
+    youtubeChannels: 'UCfAOh2t5DpxVrgS9NQKjC7A;UCOpcACMWblDls9Z6GERVi1A;UCr3cBLTYmIK9kY0F_OdFWFQ;UCtHaxi4GTYDpJgMSGy7AeSw;UCqpeqqzqqSb-280EB8oHDDA;UCPDXXXJj9nax0fr0Wfc048g;UC67f2Qf7FYhtoUIF4Sf29cA;UCqFzWxSCi39LnW1JKFR3efg;UCNVBYBxWj9dMHqKEl_V8HBQ;UCzS3-65Y91JhOxFiM7j6grg;UC310aJFjr6Gn9mGZjMZ2VTQ;UCUsN5ZwHx2kILm84-jPDeXw',
   },
   {
     title: 'active',
     subreddit: 'climbing;kayaking;theocho;surfing;sports;adrenaline',
     minNumOfVotes: 1,
+    youtubeChannels: 'UCSqk_coiJhy9FMyr_Go8ftg;UCB5nIbygLmBO6hBjhilxREQ;UCFXRhM8mT2spmusw-HoyENA;UCe0TLA0EsQbE-MjuHXevj2A;UCHI0kOgUQRkJcEBmDsHVh1A;UCHVdwBKQFsAD2rNF0JwE-cg',
   },
   {
     title: 'food',
     subreddit: 'veganrecipes;permaculture;FoodVideos;cookingvideos',
     textColor: '',
     minNumOfVotes: 5,
+    youtubeChannels: 'UCbpMy0Fg74eXXkvxJrtEn3w;UCUnFheTbVpASikm0YPb8pSw;UCD5WWnRed32y3xGwmrDhUiQ;UCHmdRuKUSB7xrbv8uC0TKxg;UCpSgg_ECBj25s9moCDfSTsA;UCpprBWvibvmOlI8yJOEAAjA;UCJHA_jMfCvEnv-3kRjTCQXw;UCxr2d4As312LulcajAkKJYw;UCwZcpfUOuLH9UEXvFPHIAWQ;UCb75CvYbm5BXpbEkGqFKABw;UC1GO0P2HsI0XLiMalC5_wQw;UCQBG3PzyQKY8ieMG2gDAyOQ;UCekQr9znsk2vWxBo3YiLq2w;UCD5WWnRed32y3xGwmrDhUiQ;UCPD_bxCRGpmmeQcbe2kpPaA;UCxD2E-bVoUbaVFL0Q3PvJTg;UCxAS_aK7sS2x_bqnlJHDSHw;UCaLfMkkHhSA_LaCta0BzyhQ;UCJFp8uSYCjXOMnkUyb3CQ3Q;UCzH5n3Ih5kgQoiDAQt2FwLw;UCRIZtPl9nb9RiXc9btSTQNw;UCIEv3lZ_tNXHzL3ox-_uUGQ;UChBSJmgtiMGG1IUUuzj9Acw;UCARXOI1UlItgIevoI5jZViQ',
   },
   {
     title: 'crafts',
     subreddit: 'artisanvideos;maker;howto;woodworking;FastWorkers',
     minNumOfVotes: 5,
+    youtubeChannels: 'UCIxAaCJ84uefATKmazDyIjw;UCuGS1iJpM_4ZYFp62mia2xQ',
+  },
+   {
+    title: 'startup',
+    subreddit: 'startup',
+    minNumOfVotes: 10,
+    youtubeChannels: 'UC1LAjODfg7dnSSrrPGGPPMw;UCcefcZRL2oaA_uBNeo5UOWg;UCK-zlnUfoDHzUwXcbddtnkg;UCCjyq_K1Xwfg8Lndy7lKMpA;UC9cn0TuPq4dnbTY-CBsm8XA'
   },
 ];
 
