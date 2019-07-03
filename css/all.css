@@ -542,7 +542,7 @@ details .up-vote-num {
 
 .modal-dialog {
   margin: 40% auto;
-  width: 400px;
+  width: 455px;
 }
 
 .modal-content {
@@ -553,7 +553,7 @@ details .up-vote-num {
 .modal-body textarea {
   overflow: hidden;
   resize: none;
-  width: 300px !important;
+  width: 360px !important;
 }
 
 .btn-primary {

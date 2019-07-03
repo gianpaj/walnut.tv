@@ -598,8 +598,11 @@ var appVideo = new Vue({
     },
     share: function(video) {
       var url;
-      if (this.channel) {
+      if (this.channel && this.playingVideo.permalink.includes('reddit.com')) {
         url = `https://walnut.tv/${this.channel}/${video.id}`;
+      } else {
+        // YouTube
+        url = this.playingVideo.permalink;
       }
       $('#shareModal').modal('show');
       // put text into #url-text
