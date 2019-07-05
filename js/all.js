@@ -65,7 +65,7 @@ const channels = [
     youtubeChannels: 'UCIxAaCJ84uefATKmazDyIjw;UCuGS1iJpM_4ZYFp62mia2xQ',
   },
   {
-    title: 'startup',
+    title: 'startups',
     subreddit: 'startup',
     minNumOfVotes: 10,
     youtubeChannels:
@@ -448,7 +448,7 @@ var appVideo = new Vue({
           }
           // this.videoList = redditVideos;
           this.videoList = mixElementsFromArraysOfArrays([redditVideos, youtubeVideos]);
-          if (redditVideos.length < 1 || (ytChannels && youtubeVideos.length < 1)) {
+          if (redditVideos.length < 1 && (ytChannels && youtubeVideos.length < 1)) {
             this.videoMessage = "Sorry, we couldn't find any videos in /" + this.channel;
 
             if (this.searchInput) {
