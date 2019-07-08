@@ -273,7 +273,7 @@ function YouTubeService() {
       part: 'snippet',
       type: 'video',
       maxResults: '25',
-      // publishedAfter: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(), // 24 hours back -> yesterday
+      publishedAfter: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(), // 24 hours back -> yesterday
       channelId: channel,
       order: 'date',
     }).then(formatResults);
@@ -282,10 +282,12 @@ function YouTubeService() {
     if (!results.items) return null;
     return results.items.map(res => ({
       id: res.id.videoId, // reddit id
-      // created_utc: res.snippet.publishedAt,
       permalink: 'https://www.youtube.com/watch?v=' + res.id.videoId,
       title: res.snippet.title,
+      channelTitle: res.snippet.channelTitle,
+      description: res.snippet.description,
       youtubeId: res.id.videoId,
+      publishedAt: res.snippet.publishedAt,
     }));
   }
   return {
@@ -443,6 +445,7 @@ var appVideo = new Vue({
                 title: v.title,
                 link: v.permalink,
                 youtubeId: v.youtubeId,
+                publishedAt: v.publishedAt,
               }))
             );
           }
