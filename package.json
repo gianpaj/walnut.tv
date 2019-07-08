@@ -4,6 +4,7 @@
   "description": "Always Interesting Videos (webapp)",
   "main": "index.js",
   "scripts": {
+    "start": "browser-sync start --server --files=\"*.html, js/*.js, *.css\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "uglifyjs js/all.js -o js/all.min.js"
   },
@@ -21,6 +22,7 @@
   },
   "homepage": "https://walnut.tv",
   "devDependencies": {
+    "browser-sync": "^2.26.7",
     "eslint": "^6.0.1",
     "stylelint": "^10.1.0",
     "stylelint-config-standard": "^18.3.0"
