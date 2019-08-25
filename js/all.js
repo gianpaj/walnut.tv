@@ -27,21 +27,14 @@ const channels = [
     minNumOfVotes: 3,
   },
   {
-    title: 'movies',
-    subreddit: 'movies;documentaries;Truefilm',
+    title: 'documentaries',
+    subreddit: 'documentaries',
     minNumOfVotes: 10,
   },
   {
     title: 'music',
     subreddit: 'listentothis',
     minNumOfVotes: 5,
-  },
-  {
-    title: 'fun',
-    subreddit: 'humor',
-    minNumOfVotes: 50,
-    youtubeChannels:
-      'UCfAOh2t5DpxVrgS9NQKjC7A;UCOpcACMWblDls9Z6GERVi1A;UCr3cBLTYmIK9kY0F_OdFWFQ;UCtHaxi4GTYDpJgMSGy7AeSw;UCqpeqqzqqSb-280EB8oHDDA;UCPDXXXJj9nax0fr0Wfc048g;UC67f2Qf7FYhtoUIF4Sf29cA;UCqFzWxSCi39LnW1JKFR3efg;UCNVBYBxWj9dMHqKEl_V8HBQ;UCzS3-65Y91JhOxFiM7j6grg;UC310aJFjr6Gn9mGZjMZ2VTQ;UCUsN5ZwHx2kILm84-jPDeXw',
   },
   {
     title: 'active',
@@ -64,18 +57,7 @@ const channels = [
     minNumOfVotes: 5,
     youtubeChannels: 'UCIxAaCJ84uefATKmazDyIjw;UCuGS1iJpM_4ZYFp62mia2xQ',
   },
-  {
-    title: 'startups',
-    subreddit: 'startup',
-    minNumOfVotes: 10,
-    youtubeChannels:
-      // HyperChange TV
-      // Y Combinator
-      // ARK Invest
-      // TechCrunch
-      // a16z
-      `UC1LAjODfg7dnSSrrPGGPPMw;UCcefcZRL2oaA_uBNeo5UOWg;UCK-zlnUfoDHzUwXcbddtnkg;UCCjyq_K1Xwfg8Lndy7lKMpA;UC9cn0TuPq4dnbTY-CBsm8XA`,
-  },
+ 
 ];
 
 const youtubeApiKey = 'AIzaSyD342vuWxFeyEMKANx58qKyECeNsxlv0f8';
