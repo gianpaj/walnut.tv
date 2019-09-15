@@ -19,7 +19,7 @@ const channels = [
     subreddit: 'curiousvideos;mealtimevideos;futurology;educativevideos;watchandlearn;sciencevideos',
     minNumOfVotes: 3,
     youtubeChannels:
-      'UCzQUP1qoWDoEbmsQxvdjxgQ;UC1zZE_kJ8rQHgLTVfobLi_g;UC4a-Gbdw7vOaccHmFo40b9g;UCpVm7bg6pXKo1Pr6k5kxG9A;UCvJiYiBUbw4tmpRSZT2r1Hw;UCGs1JjiRBEKMlVD4eUxJ2ww;UCX6b17PVsYBQ0ip5gyeme-Q;UCDsElQQt_gCZ9LgnW-7v-cQ;UCmmPgObSUPw1HL2lq6H4ffA;UCtGG8ucQgEJPeUPhJZ4M4jA;UC7IcJI8PUf5Z3zKxnZvTBog;UCGi_crMdUZnrcsvkCa8pt-g;UCZYTClx2T1of7BRZ86-8fow;UCC552Sd-3nyi_tk2BudLUzA;UC6107grRI4m0o2-emgoDnAA;UCUHW94eEFW7hkUMVaZz4eDg;UC06E4Y_-ybJgBUMtXx8uNNw;UC9uD-W5zQHQuAVT2GdcLCvg',
+      'UCzQUP1qoWDoEbmsQxvdjxgQ;UC4a-Gbdw7vOaccHmFo40b9g;UCpVm7bg6pXKo1Pr6k5kxG9A;UCvJiYiBUbw4tmpRSZT2r1Hw;UCGs1JjiRBEKMlVD4eUxJ2ww;UCX6b17PVsYBQ0ip5gyeme-Q;UCDsElQQt_gCZ9LgnW-7v-cQ;UCmmPgObSUPw1HL2lq6H4ffA;UCtGG8ucQgEJPeUPhJZ4M4jA;UC7IcJI8PUf5Z3zKxnZvTBog;UCGi_crMdUZnrcsvkCa8pt-g;UCZYTClx2T1of7BRZ86-8fow;UCC552Sd-3nyi_tk2BudLUzA;UC6107grRI4m0o2-emgoDnAA;UCUHW94eEFW7hkUMVaZz4eDg;UC06E4Y_-ybJgBUMtXx8uNNw;UC9uD-W5zQHQuAVT2GdcLCvg',
   },
   {
     title: 'science',
