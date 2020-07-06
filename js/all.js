@@ -21,9 +21,14 @@ const channels = [
     youtubeChannels:
       'UCzQUP1qoWDoEbmsQxvdjxgQ;UCDsElQQt_gCZ9LgnW-7v-cQ;UCX6b17PVsYBQ0ip5gyeme-Q;UCmmPgObSUPw1HL2lq6H4ffA;UC7IcJI8PUf5Z3zKxnZvTBog;UCZYTClx2T1of7BRZ86-8fow;UC9uD-W5zQHQuAVT2GdcLCvg',
   },
+    {
+    title: 'environment',
+    youtubeChannels:
+      'BBCEarth;UCNXvxXpDJXp-mZu3pFMzYHQ;KraigAdams;NatureVideoChannel;HotMessPBS;GreenpeaceVideo;patagoniavideo;RobJGreenfield;offgridnick;NRDCflix;wwfus;ConservationInternational',
+  },
   {
     title: 'science',
-    subreddit: 'physics;biology;psychology;lectures;space;philosophy;math',
+    subreddit: 'biology;psychology;lectures;space;philosophy;physics;math',
     minNumOfVotes: 3,
   },
   {
@@ -32,30 +37,25 @@ const channels = [
     minNumOfVotes: 10,
   },
   {
-    title: 'music',
-    subreddit: 'listentothis',
-    minNumOfVotes: 5,
-  },
-  {
     title: 'active',
-    subreddit: 'climbing;kayaking;theocho;surfing;sports;adrenaline',
+    subreddit: 'climbing;kayaking',
     minNumOfVotes: 1,
     youtubeChannels:
-      'UCSqk_coiJhy9FMyr_Go8ftg;UCB5nIbygLmBO6hBjhilxREQ;UCFXRhM8mT2spmusw-HoyENA;UCe0TLA0EsQbE-MjuHXevj2A;UCHI0kOgUQRkJcEBmDsHVh1A;UCHVdwBKQFsAD2rNF0JwE-cg',
+      'UCB5nIbygLmBO6hBjhilxREQ;reifindout;UC18exdGWh7piVWisrnDXiZg;UCFXRhM8mT2spmusw-HoyENA;UCe0TLA0EsQbE-MjuHXevj2A;UCHI0kOgUQRkJcEBmDsHVh1A;UCHVdwBKQFsAD2rNF0JwE-cg;ElinaOsborne;FrozensAdventures;UCQhqmV26773qZhzqJz4VFcw',
   },
   {
     title: 'food',
-    subreddit: 'permaculture;veganrecipes;FoodVideos;cookingvideos',
+    subreddit: 'permaculture;veganrecipes',
     textColor: '',
     minNumOfVotes: 5,
     youtubeChannels:
-      'UCbpMy0Fg74eXXkvxJrtEn3w;UCUnFheTbVpASikm0YPb8pSw;UCD5WWnRed32y3xGwmrDhUiQ;UCHmdRuKUSB7xrbv8uC0TKxg;UCpSgg_ECBj25s9moCDfSTsA;UCpprBWvibvmOlI8yJOEAAjA;UCJHA_jMfCvEnv-3kRjTCQXw;UCxr2d4As312LulcajAkKJYw;UCwZcpfUOuLH9UEXvFPHIAWQ;UCb75CvYbm5BXpbEkGqFKABw;UC1GO0P2HsI0XLiMalC5_wQw;UCQBG3PzyQKY8ieMG2gDAyOQ;UCekQr9znsk2vWxBo3YiLq2w;UCD5WWnRed32y3xGwmrDhUiQ;UCPD_bxCRGpmmeQcbe2kpPaA;UCxD2E-bVoUbaVFL0Q3PvJTg;UCxAS_aK7sS2x_bqnlJHDSHw;UCaLfMkkHhSA_LaCta0BzyhQ;UCJFp8uSYCjXOMnkUyb3CQ3Q;UCzH5n3Ih5kgQoiDAQt2FwLw;UCRIZtPl9nb9RiXc9btSTQNw;UCIEv3lZ_tNXHzL3ox-_uUGQ;UChBSJmgtiMGG1IUUuzj9Acw;UCARXOI1UlItgIevoI5jZViQ',
+      'UCbpMy0Fg74eXXkvxJrtEn3w;UCUnFheTbVpASikm0YPb8pSw;UCHmdRuKUSB7xrbv8uC0TKxg;UCxr2d4As312LulcajAkKJYw;UC1GO0P2HsI0XLiMalC5_wQw;UCQBG3PzyQKY8ieMG2gDAyOQ;UChBSJmgtiMGG1IUUuzj9Acw;UCARXOI1UlItgIevoI5jZViQ;MIgardener',
   },
   {
     title: 'crafts',
     subreddit: 'artisanvideos;maker;howto;woodworking;FastWorkers',
     minNumOfVotes: 5,
-    youtubeChannels: 'UCIxAaCJ84uefATKmazDyIjw;UCuGS1iJpM_4ZYFp62mia2xQ',
+    youtubeChannels: 'UCloswWQLpsnzCy-KrJ6CfPw;UCIxAaCJ84uefATKmazDyIjw',
   },
  
 ];
