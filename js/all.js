@@ -24,7 +24,7 @@ const channels = [
     {
     title: 'environment',
     youtubeChannels:
-      'BBCEarth;UCNXvxXpDJXp-mZu3pFMzYHQ;KraigAdams;NatureVideoChannel;HotMessPBS;GreenpeaceVideo;patagoniavideo;RobJGreenfield;offgridnick;NRDCflix;wwfus;ConservationInternational',
+      'UCwmZiChSryoWQCZMIQezgTg;UCNXvxXpDJXp-mZu3pFMzYHQ;UCpnuadQ_w3r6f4Q_NRlqd-w;UC7c8mE90qCtu11z47U0KErg;UCsaEBhRsI6tmmz12fkSEYdw;UCTDTSx8kbxGECZJxOa9mIKA;UCKirXBZV7hE4Fws3VSdYkRQ;UCZZldeOoWhKe7SaisbCPk5Q;UCam5sCp6mzGBcn8ZBB2RBJg',
   },
   {
     title: 'science',
@@ -41,7 +41,7 @@ const channels = [
     subreddit: 'climbing;kayaking',
     minNumOfVotes: 1,
     youtubeChannels:
-      'UCB5nIbygLmBO6hBjhilxREQ;reifindout;UC18exdGWh7piVWisrnDXiZg;UCFXRhM8mT2spmusw-HoyENA;UCe0TLA0EsQbE-MjuHXevj2A;UCHI0kOgUQRkJcEBmDsHVh1A;UCHVdwBKQFsAD2rNF0JwE-cg;ElinaOsborne;FrozensAdventures;UCQhqmV26773qZhzqJz4VFcw',
+      'UCl3xZ-f3cQhOHvH6f-7-ssQ;UCB5nIbygLmBO6hBjhilxREQ;UCUuCrzSQ45VLi2UTB8iGZtA;UCwZcNfPpV9CXSVbpH1ckVmw;UC18exdGWh7piVWisrnDXiZg;UCFXRhM8mT2spmusw-HoyENA;UCe0TLA0EsQbE-MjuHXevj2A;UCHI0kOgUQRkJcEBmDsHVh1A;UCHVdwBKQFsAD2rNF0JwE-cg;UCkA3z-lSyEg6ZN-BqMy6wow;UCj7YznKvjMpXAXuzs9wWvtg;UC78MfBn7erIL0jprd3PJfaA;UCQhqmV26773qZhzqJz4VFcw;UC885b3fcSEShQdz6-v8KwLg',
   },
   {
     title: 'food',
@@ -49,13 +49,16 @@ const channels = [
     textColor: '',
     minNumOfVotes: 5,
     youtubeChannels:
-      'UCbpMy0Fg74eXXkvxJrtEn3w;UCUnFheTbVpASikm0YPb8pSw;UCHmdRuKUSB7xrbv8uC0TKxg;UCxr2d4As312LulcajAkKJYw;UC1GO0P2HsI0XLiMalC5_wQw;UCQBG3PzyQKY8ieMG2gDAyOQ;UChBSJmgtiMGG1IUUuzj9Acw;UCARXOI1UlItgIevoI5jZViQ;MIgardener',
+      'UCbpMy0Fg74eXXkvxJrtEn3w;UCUnFheTbVpASikm0YPb8pSw;UCHmdRuKUSB7xrbv8uC0TKxg;UCxr2d4As312LulcajAkKJYw;UC1GO0P2HsI0XLiMalC5_wQw;UCQBG3PzyQKY8ieMG2gDAyOQ;UChBSJmgtiMGG1IUUuzj9Acw;UCARXOI1UlItgIevoI5jZViQ;UCVGVbOl6F5rGF4wSYS6Y5yQ',
   },
   {
     title: 'crafts',
     subreddit: 'artisanvideos;maker;howto;woodworking;FastWorkers',
     minNumOfVotes: 5,
-    youtubeChannels: 'UCloswWQLpsnzCy-KrJ6CfPw;UCIxAaCJ84uefATKmazDyIjw',
+    youtubeChannels: 'UCloswWQLpsnzCy-KrJ6CfPw;UCIxAaCJ84uefATKmazDyIjw;UCq6H4g9eVY9WxoboCFd0iRA;UCXvzpK4eKUJysEZ42zjTUdw;',
+  },
+  {
+    title: 'hi@walnut.tv',
   },
  
 ];
