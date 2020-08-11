@@ -505,12 +505,6 @@ details .up-vote-num {
   }
 }
 
-@media (max-width: 992px) {
-  body {
-    background-color: #fff;
-  }
-}
-
 @media screen and (min-width: 992px) {
   .navbar-brand {
     display: flex;
