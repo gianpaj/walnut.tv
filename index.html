@@ -57,18 +57,15 @@
       // When the single page app is loaded further down in this file,
       // the correct url will be waiting in the browser's history for
       // the single page app to route accordingly.
-      (function(l) {
+      (function (l) {
         if (!l.search) return;
         var q = {};
         l.search
           .slice(1)
           .split('&')
-          .forEach(function(v) {
+          .forEach(function (v) {
             var a = v.split('=');
-            q[a[0]] = a
-              .slice(1)
-              .join('=')
-              .replace(/~and~/g, '&');
+            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
           });
         if (q.p !== undefined) {
           window.history.replaceState(
@@ -212,6 +209,10 @@
 
                     <span v-if="voted" class="up-vote-num pull-right">{{ playingVideo['ups'] | shortNumber }}</span>
                   </div> -->
+                </div>
+                <div class="terms-container">
+                  <a class="terms" target="_black" href="https://www.youtube.com/t/terms">YouTube ToS</a> &nbsp;
+                  <a class="terms" target="_black" href="https://policies.google.com/privacy">Google Privacy Policy</a>
                 </div>
                 <div class="video-controls hide-desktop">
                   <svg
