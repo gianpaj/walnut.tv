@@ -21,11 +21,6 @@ const channels = [
     youtubeChannels:
       'UCzQUP1qoWDoEbmsQxvdjxgQ;UCDsElQQt_gCZ9LgnW-7v-cQ;UCX6b17PVsYBQ0ip5gyeme-Q;UCmmPgObSUPw1HL2lq6H4ffA;UC7IcJI8PUf5Z3zKxnZvTBog;UCZYTClx2T1of7BRZ86-8fow;UC9uD-W5zQHQuAVT2GdcLCvg',
   },
-    {
-    title: 'environment',
-    youtubeChannels:
-      'UCwmZiChSryoWQCZMIQezgTg;UCNXvxXpDJXp-mZu3pFMzYHQ;UCpnuadQ_w3r6f4Q_NRlqd-w;UC7c8mE90qCtu11z47U0KErg;UCsaEBhRsI6tmmz12fkSEYdw;UCTDTSx8kbxGECZJxOa9mIKA;UCKirXBZV7hE4Fws3VSdYkRQ;UCZZldeOoWhKe7SaisbCPk5Q;UCam5sCp6mzGBcn8ZBB2RBJg',
-  },
   {
     title: 'science',
     subreddit: 'biology;psychology;lectures;space;philosophy;physics;math',
