@@ -147,7 +147,7 @@
                       <span class="video-watched" v-if="hasBeenWatched(video.youtubeId)">WATCHED</span>
                       <img class="video-image" v-bind:src="video.youtubeId | toUrl" alt="{!! video.title !!}" />
                     </div>
-                    <div class="video-title" :class="{ watched: hasBeenWatched(video.youtubeId)}">
+                    <div class="video-title" :title="video.title" :class="{ watched: hasBeenWatched(video.youtubeId)}">
                       <h4>{!! video.title | maxChar !!}</h4>
                     </div>
                   </a>
