@@ -18,6 +18,7 @@
     />
     <link href="/css/all.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,300,700" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css">
     <meta property="og:image" content="https://walnut.tv/img/walnut-logo-white-background.png" />
     <meta property="og:image:width" content="2273" />
     <meta property="og:image:height" content="2273" />
@@ -117,10 +118,10 @@
                   <v-select
                     placeholder="search"
                     label="title"
-                    :on-search="onSearch"
-                    :on-change="onChange"
+                    @search="onSearch"
+                    @input="onChange"
                     :options="options"
-                    :value.sync="searchInput"
+                    :value="searchInput"
                   >
                     <template slot="option" slot-scope="option">
                       <span class="fa-youtube"></span>
@@ -141,14 +142,14 @@
           <div class="container">
             <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
               <ul class="video-list list-unstyled pre-scrollable" id="toolbox">
-                <li class="video" v-for="video in videoList" track-by="$index" data-video-id="{{ $index }}" v-cloak>
-                  <a v-on:click="play($index)" :class="{ active: videoPlaying == $index}" class="active">
+                <li class="video" v-for="(video, index) in videoList" track-by="index" v-bind:data-video-id="index" v-cloak>
+                  <a v-on:click="play(index)" v-bind:class="{ active: videoPlaying == index}">
                     <div class="video-thumbnail-image hidden-xs">
                       <span class="video-watched" v-if="hasBeenWatched(video.youtubeId)">WATCHED</span>
-                      <img class="video-image" v-bind:src="video.youtubeId | toUrl" alt="{!! video.title !!}" />
+                      <img class="video-image" v-bind:src="video.imgUrl" v-bind:alt="video.title" />
                     </div>
-                    <div class="video-title" :title="video.title" :class="{ watched: hasBeenWatched(video.youtubeId)}">
-                      <h4>{!! video.title | maxChar !!}</h4>
+                    <div class="video-title" v-bind:title="video.title" v-bind:class="{ watched: hasBeenWatched(video.youtubeId)}">
+                      <h4 v-text="">{{ video.title | maxChar }}</h4>
                     </div>
                   </a>
                 </li>
@@ -163,8 +164,8 @@
                   </div>
                 </div>
                 <div class="video-details">
-                  <a href="{{ playingVideo['permalink'] }}" target="_blank">
-                    <h2 v-cloak>{!! playingVideo['title'] !!}</h2>
+                  <a v-bind:href="playingVideo['permalink']" target="_blank" v-bind:title="playingVideo['title']">
+                    <h2 v-cloak v-html="playingVideo['title']"></h2>
                   </a>
                   <img
                     alt="share"
@@ -253,9 +254,9 @@
           </div>
         </div>
 
-        <div v-else>
+        <div v-show="loadingVideos">
           <div class="container" v-cloak>
-            <h2 class="loadingMessage">{!! videoMessage !!}</h2>
+            <h2 class="loadingMessage" v-html="videoMessage"></h2>
           </div>
         </div>
       </div>
@@ -274,10 +275,9 @@
         </div>
       </div>
     </div>
-    <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/reddit.js@0.1.4/reddit.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/combine/npm/jquery@1.12.4,npm/reddit.js@0.1.4,npm/vue@1.0.10/dist/vue.min.js,npm/vue-select@1.3.3,npm/youtube-api-v3-search@1.2.1/dist/youtube-api-v3-search.min.js,npm/popper.js@1.15.0,npm/tippy.js@4.2.1"></script>
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script crossorigin="anonymous" src="https://unpkg.com/vue-select@3.11.2"></script>
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/combine/npm/jquery@1.12.4,npm/reddit.js@0.1.4,npm/youtube-api-v3-search@1.2.1/dist/youtube-api-v3-search.min.js,npm/popper.js@1.15.0,npm/tippy.js@4.2.1"></script>
     <script
       src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
       integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
@@ -285,7 +285,7 @@
     ></script>
     <script src="/js/all.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-91188052-5"></script>
+    <script crossorigin="anonymous" async src="https://www.googletagmanager.com/gtag/js?id=UA-91188052-5"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {

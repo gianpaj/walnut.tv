@@ -9,6 +9,7 @@
 ::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 10px;
+  -webkit-background-clip: content-box;
   background-clip: content-box;
   background-color: var(--dark);
 }
@@ -19,6 +20,7 @@
   --gray2: #4e4e4e;
   --dark: #0e0e0e;
   --blue: #4e8dff;
+  --light: #b2aba1;
 }
 
 body,
@@ -59,13 +61,20 @@ a:hover {
   }
 }
 
-.dropdown-menu {
-  padding: 10px 0;
+.vs__dropdown-toggle {
+  /* padding: 10px 0; */
   font-size: 13px;
   min-width: 180px;
+  padding: 0;
+  background-color: black;
+  border: 0 !important;
 }
 
-.dropdown-menu > li > a {
+.vs__dropdown-toggle a {
+  color: white;
+}
+
+.vs__dropdown-toggle > li > a {
   padding: 6px 20px;
   color: #2e3436;
 }
@@ -114,10 +123,6 @@ a:hover {
   border-left: 4px solid transparent;
 }
 
-.v-select > .dropdown-menu a {
-  color: white;
-}
-
 .navbar-inverse .navbar-nav > li > a {
   color: var(--gray2);
   font-weight: 600;
@@ -156,22 +161,21 @@ a:hover {
   }
 }
 
-.navbar-form .form-control {
+.navbar-form .vs__search {
   border: 0;
-  color: #ccc;
-  padding-left: 34px !important;
+  color: var(--gray);
 }
 
-.form-control:focus {
+.vs__search:focus {
   box-shadow: none;
 }
 
-.form-control::placeholder {
-  color: #555;
+.vs__search::placeholder {
+  color: var(--white);
 }
 
 .form-control-feedback {
-  color: #565656;
+  color: var(--light);
   right: initial;
   top: 11px;
 }
@@ -515,24 +519,19 @@ details .up-vote-num {
   height: 35px;
 }
 
-.v-select > .dropdown-menu {
-  padding: 0;
-  background-color: black;
-}
-
-.v-select.open > .dropdown-menu .divider {
+.open > .vs__dropdown-toggle .divider {
   display: none;
 }
 
-.v-select > .dropdown-menu::-webkit-scrollbar {
+.vs__dropdown-toggle::-webkit-scrollbar {
   width: 0;
 }
 
-.v-select > .dropdown-menu > li.highlight {
+.vs__dropdown-toggle > li.highlight {
   background-color: var(--gray-2);
 }
 
-.v-select .selected-tag {
+.vs__selected-tag {
   background-color: transparent !important;
   border: 0 !important;
   color: white !important;
@@ -544,12 +543,14 @@ details .up-vote-num {
   width: 100%;
 }
 
-.v-select .dropdown-toggle {
-  border: 0 !important;
+.vs__open-indicator {
+  display: none !important;
 }
 
-.v-select .open-indicator {
-  display: none !important;
+.v-select input[type='search'] {
+  padding-top: 4px !important;
+  padding-left: 34px !important;
+  font-size: 14px;
 }
 
 @media screen and (max-width: 992px) {

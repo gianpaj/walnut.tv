@@ -112,6 +112,7 @@ function RedditVideoService() {
       const endIndex = html.indexOf('?');
       result.videoUrl = html.substring(startIndex, endIndex);
       result.youtubeId = html.substring(startIndex, endIndex);
+      result.imgUrl = toYouTubeImgUrl(html.substring(startIndex, endIndex));
     }
 
     // vimeo video
@@ -271,11 +272,12 @@ function YouTubeService() {
     if (!results.items) return null;
     return results.items.map(res => ({
       id: res.id.videoId, // reddit id
-      permalink: 'https://www.youtube.com/watch?v=' + res.id.videoId,
-      title: res.snippet.title,
+      permalink: `https://www.youtube.com/watch?v=${res.id.videoId}`,
+      title: decodeEntities(res.snippet.title),
       channelTitle: res.snippet.channelTitle,
       description: res.snippet.description,
       youtubeId: res.id.videoId,
+      imgUrl: toYouTubeImgUrl(res.id.videoId),
       publishedAt: res.snippet.publishedAt,
     }));
   }
@@ -284,6 +286,26 @@ function YouTubeService() {
     loadChannels,
   };
 }
+
+const decodeEntities = (function() {
+  // this prevents any overhead from creating the object each time
+  const element = document.createElement('div');
+
+  function decodeHTMLEntities (str) {
+    if(str && typeof str === 'string') {
+      // strip script/html tags
+      str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+      str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+      element.innerHTML = str;
+      str = element.textContent;
+      element.textContent = '';
+    }
+
+    return str;
+  }
+
+  return decodeHTMLEntities;
+})();
 
 const youtubeService = YouTubeService();
 
@@ -327,8 +349,6 @@ function onPlayerStateChange(t) {
   0 === t.data && appVideo.autoplay && appVideo.nextVideo();
 }
 
-Vue.config.unsafeDelimiters = ['{!!', '!!}'];
-Vue.config.debug = false;
 Vue.component('v-select', VueSelect.VueSelect);
 Vue.filter('maxChar', function(t) {
   var e = t;
@@ -345,18 +365,17 @@ Vue.filter('maxChar', function(t) {
     e
   );
 });
-Vue.filter('toUrl', function(t) {
-  return 'https://img.youtube.com/vi/' + t + '/mqdefault.jpg';
-});
+const toYouTubeImgUrl = id => `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+
 Vue.filter('shortNumber', function(n) {
   return shortNumber(n);
 });
 
-var paths = window.location.pathname.split('/').filter(a => a);
+const paths = window.location.pathname.split('/').filter(a => a);
 
-var loadingVideosMessage = 'Loading Videos <img src="/img/spin.svg" class="loading" alt="Loading Videos">';
+const loadingVideosMessage = 'Loading Videos <img src="/img/spin.svg" class="loading" alt="Loading Videos">';
 
-var appVideo = new Vue({
+const appVideo = new Vue({
   el: '#appVideo',
   data: {
     // get the channel after the first slash
@@ -385,6 +404,9 @@ var appVideo = new Vue({
     getSubReddits: channel => channels.find(c => c.title == channel).subreddit,
     getYouTubeChannels: channel => channels.find(c => c.title == channel).youtubeChannels,
     getChannelMinVotes: channel => channels.find(c => c.title == channel).minNumOfVotes,
+    /**
+     * @param {string} searchText 
+     */
     fetchAllVideos: function(searchText) {
       let id, minNumOfVotes, ytChannels, promises;
       let subreddits = searchText;
@@ -499,22 +521,25 @@ var appVideo = new Vue({
      * @param {string} value
      */
     onSearch: function(value) {
+      console.log('onSearch', value)
       this.searchInput = '';
       this.options = [value + ' (YouTube)', value + ' (Subreddit)'];
     },
     onChange: function(value) {
+      console.log('onChange', value)
       if (value) this.search(value);
     },
     onSubmit: function(event) {
       event.preventDefault();
     },
     search: function(value) {
+      console.log('search', value)
       // this.$emit('input', event);
       player.stopVideo();
       if (value && value.includes('YouTube')) {
         value = value.split(' (')[0];
 
-        window.history.replaceState(null, null, '/');
+        // window.history.replaceState(null, null, '/');
         this.channel = null;
         this.fetchVideosFromYoutube(value);
         return;
@@ -522,16 +547,17 @@ var appVideo = new Vue({
       this.searchInput = value;
       if (value) {
         value = value.split(' (')[0];
-        window.history.replaceState(null, null, '/r/' + value);
+        // window.history.replaceState(null, null, '/r/' + value);
         this.channel = value;
         this.fetchAllVideos(value);
       } else this.fetchAllVideos();
     },
     hasBeenWatched: function(youtubeId) {
-      return -1 != this.videosWatched.indexOf(youtubeId) && youtubeId != this.videoList[this.videoPlaying].youtubeId;
+      return -1 != this.videosWatched.indexOf(youtubeId);
     },
     watched: function(i) {
       if (-1 == this.videosWatched.indexOf(i)) {
+        console.log('watched', i)
         this.videosWatched.push(i);
         this.setStorage();
       }
@@ -550,13 +576,14 @@ var appVideo = new Vue({
     },
     play: function(i) {
       this.playingVideo = this.videoList[i];
+      console.log('videoPlaying', i)
       this.videoPlaying = i;
       this.voted = 0;
       this.watched(this.playingVideo.youtubeId);
       this.playVideo(this.playingVideo);
       if (!this.channel) return;
       if (this.playingVideo.permalink.includes('reddit.com')) {
-        window.history.replaceState(null, null, '/' + this.channel + '/' + this.playingVideo.id);
+        // window.history.replaceState(null, null, '/' + this.channel + '/' + this.playingVideo.id);
       }
       // else {
       //   console.log('youtube video');
@@ -622,7 +649,7 @@ var appVideo = new Vue({
       if (this.channel !== channel) {
         player.stopVideo();
         this.channel = channel;
-        window.history.replaceState(null, null, '/' + channel);
+        // window.history.replaceState(null, null, '/' + channel);
         this.fetchAllVideos();
       }
       $('#navbar-collapse-1').collapse('hide');
@@ -632,6 +659,8 @@ var appVideo = new Vue({
     window.removeEventListener('keyup', this.keys);
   },
 });
+
+Vue.component('v-select', VueSelect.VueSelect);
 
 $('#shareModal button').click(function() {
   $('#url-text')[0].select();
