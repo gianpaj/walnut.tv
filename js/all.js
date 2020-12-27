@@ -660,8 +660,6 @@ const appVideo = new Vue({
   },
 });
 
-Vue.component('v-select', VueSelect.VueSelect);
-
 $('#shareModal button').click(function() {
   $('#url-text')[0].select();
   try {

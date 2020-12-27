@@ -138,14 +138,14 @@
           <div class="container">
             <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
               <ul class="video-list list-unstyled pre-scrollable" id="toolbox">
-                <li class="video" v-for="(video, index) in videoList" track-by="index" v-bind:data-video-id="index" v-cloak>
+                <li class="video" v-for="(video, index) in videoList" v-bind:key="video.index" v-bind:data-video-id="index" v-cloak>
                   <a v-on:click="play(index)" v-bind:class="{ active: videoPlaying == index}">
                     <div class="video-thumbnail-image hidden-xs">
                       <span class="video-watched" v-if="hasBeenWatched(video.youtubeId)">WATCHED</span>
                       <img class="video-image" v-bind:src="video.imgUrl" v-bind:alt="video.title" />
                     </div>
                     <div class="video-title" v-bind:title="video.title" v-bind:class="{ watched: hasBeenWatched(video.youtubeId)}">
-                      <h4 v-text="">{{ video.title | maxChar }}</h4>
+                      <h4>{{ video.title | maxChar }}</h4>
                     </div>
                   </a>
                 </li>
