@@ -378,8 +378,8 @@ const loadingVideosMessage = 'Loading Videos <img src="/img/spin.svg" class="loa
 const appVideo = new Vue({
   el: '#appVideo',
   data: {
-    // get the channel after the first slash
     autoplay: true,
+    // get the channel after the first slash
     channel: paths.length === 1 && paths[0],
     channels: channels,
     contentType: '', // 'youtube' or 'reddit'
@@ -395,6 +395,7 @@ const appVideo = new Vue({
     voted: 0,
   },
   created: function() {
+    // is mobile
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
     this.channel || (this.channel = 'general');
     this.fetchAllVideos();
@@ -526,7 +527,6 @@ const appVideo = new Vue({
       this.options = [value + ' (YouTube)', value + ' (Subreddit)'];
     },
     onChange: function(value) {
-      console.log('onChange', value)
       if (value) this.search(value);
     },
     onSubmit: function(event) {
@@ -557,7 +557,6 @@ const appVideo = new Vue({
     },
     watched: function(i) {
       if (-1 == this.videosWatched.indexOf(i)) {
-        console.log('watched', i)
         this.videosWatched.push(i);
         this.setStorage();
       }
@@ -576,7 +575,6 @@ const appVideo = new Vue({
     },
     play: function(i) {
       this.playingVideo = this.videoList[i];
-      console.log('videoPlaying', i)
       this.videoPlaying = i;
       this.voted = 0;
       this.watched(this.playingVideo.youtubeId);

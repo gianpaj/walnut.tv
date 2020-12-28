@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Walnut - Always Interesting Videos</title>
     <meta name="description" content="Always Interesting Videos" />
     <link
@@ -18,7 +18,7 @@
     />
     <link href="/css/all.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,300,700" rel="stylesheet" type="text/css" />
-    <link href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css" rel="stylesheet">
+    <link href="https://unpkg.com/vue-select@3.0.0/dist/vue-select.css" rel="stylesheet" />
     <meta property="og:image" content="https://walnut.tv/img/walnut-logo-white-background.png" />
     <meta property="og:image:width" content="2273" />
     <meta property="og:image:height" content="2273" />
@@ -80,9 +80,9 @@
       <div class="navbar navbar-inverse">
         <div class="header-container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="/"
-              ><img src="/img/walnut-logo.svg" class="walnut-logo" alt="Walnut.tv Logo"
-            /></a>
+            <a class="navbar-brand" href="/">
+              <img src="/img/walnut-logo.svg" class="walnut-logo" alt="Walnut.tv Logo" />
+            </a>
             <div class="hide-mobile-landscape hide-desktop collapse-container">
               <button
                 aria-expanded="false"
@@ -97,7 +97,7 @@
               <div class="collapse navbar-collapse" id="navbar-collapse-1">
                 <ul class="nav navbar-nav">
                   <li v-for="item in channels" v-bind:class="{ 'active': item.title == channel && !searchInput }">
-                    <a v-on:click="changeChannel(item.title)"> {{ item.title }} </a>
+                    <a v-on:click="changeChannel(item.title)">{{ item.title }}</a>
                   </li>
                 </ul>
               </div>
@@ -105,7 +105,7 @@
             <div class="hide-mobile-portrait mobile-navbar-portrait">
               <ul class="nav navbar-nav">
                 <li v-for="item in channels" v-bind:class="{ 'active': item.title == channel && !searchInput }">
-                  <a v-on:click="changeChannel(item.title)"> {{ item.title }} </a>
+                  <a v-on:click="changeChannel(item.title)">{{ item.title }}</a>
                 </li>
               </ul>
               <form class="hide-mobile-portrait navbar-form" v-on:submit="onSubmit($event)">
@@ -137,14 +137,25 @@
         <div v-show="!loadingVideos">
           <div class="container">
             <div v-if="!mobile" class="sidebar hidden-sm hidden-xs">
+              <!-- video list -->
               <ul class="video-list list-unstyled pre-scrollable" id="toolbox">
-                <li class="video" v-for="(video, index) in videoList" v-bind:key="video.index" v-bind:data-video-id="index" v-cloak>
+                <li
+                  class="video"
+                  v-for="(video, index) in videoList"
+                  v-bind:key="video.index"
+                  v-bind:data-video-id="index"
+                  v-cloak
+                >
                   <a v-on:click="play(index)" v-bind:class="{ active: videoPlaying == index}">
                     <div class="video-thumbnail-image hidden-xs">
                       <span class="video-watched" v-if="hasBeenWatched(video.youtubeId)">WATCHED</span>
                       <img class="video-image" v-bind:src="video.imgUrl" v-bind:alt="video.title" />
                     </div>
-                    <div class="video-title" v-bind:title="video.title" v-bind:class="{ watched: hasBeenWatched(video.youtubeId)}">
+                    <div
+                      class="video-title"
+                      v-bind:title="video.title"
+                      v-bind:class="{ watched: hasBeenWatched(video.youtubeId)}"
+                    >
                       <h4>{{ video.title | maxChar }}</h4>
                     </div>
                   </a>
@@ -208,7 +219,8 @@
                   </div> -->
                 </div>
                 <div class="terms-container">
-                  <a class="terms" target="_black" href="https://www.youtube.com/t/terms">YouTube ToS</a> &nbsp;
+                  <a class="terms" target="_black" href="https://www.youtube.com/t/terms">YouTube ToS</a>
+                  &nbsp;
                   <a class="terms" target="_black" href="https://policies.google.com/privacy">Google Privacy Policy</a>
                 </div>
                 <div class="video-controls hide-desktop">
@@ -273,7 +285,10 @@
     </div>
     <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script crossorigin="anonymous" src="https://unpkg.com/vue-select@3.11.2"></script>
-    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/combine/npm/jquery@1.12.4,npm/reddit.js@0.1.4,npm/youtube-api-v3-search@1.2.1/dist/youtube-api-v3-search.min.js,npm/popper.js@1.15.0,npm/tippy.js@4.2.1"></script>
+    <script
+      crossorigin="anonymous"
+      src="https://cdn.jsdelivr.net/combine/npm/jquery@1.12.4,npm/reddit.js@0.1.4,npm/youtube-api-v3-search@1.2.1/dist/youtube-api-v3-search.min.js,npm/popper.js@1.15.0,npm/tippy.js@4.2.1"
+    ></script>
     <script
       src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
       integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
