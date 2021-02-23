@@ -32,15 +32,8 @@ const channels = [
     minNumOfVotes: 10,
   },
   {
-    title: 'active',
-    subreddit: 'climbing;kayaking',
-    minNumOfVotes: 1,
-    youtubeChannels:
-      'UCl3xZ-f3cQhOHvH6f-7-ssQ;UCB5nIbygLmBO6hBjhilxREQ;UCUuCrzSQ45VLi2UTB8iGZtA;UCwZcNfPpV9CXSVbpH1ckVmw;UC18exdGWh7piVWisrnDXiZg;UCFXRhM8mT2spmusw-HoyENA;UCe0TLA0EsQbE-MjuHXevj2A;UCHI0kOgUQRkJcEBmDsHVh1A;UCHVdwBKQFsAD2rNF0JwE-cg;UCkA3z-lSyEg6ZN-BqMy6wow;UCj7YznKvjMpXAXuzs9wWvtg;UC78MfBn7erIL0jprd3PJfaA;UCQhqmV26773qZhzqJz4VFcw;UC885b3fcSEShQdz6-v8KwLg',
-  },
-  {
     title: 'food',
-    subreddit: 'permaculture;veganrecipes',
+    subreddit: 'veganrecipes',
     textColor: '',
     minNumOfVotes: 5,
     youtubeChannels:
@@ -51,9 +44,6 @@ const channels = [
     subreddit: 'artisanvideos;maker;howto;woodworking;FastWorkers',
     minNumOfVotes: 5,
     youtubeChannels: 'UCloswWQLpsnzCy-KrJ6CfPw;UCIxAaCJ84uefATKmazDyIjw;UCq6H4g9eVY9WxoboCFd0iRA;UCXvzpK4eKUJysEZ42zjTUdw;',
-  },
-  {
-    title: 'hi@walnut.tv',
   },
  
 ];
