@@ -32,14 +32,6 @@ const channels = [
     minNumOfVotes: 10,
   },
   {
-    title: 'food',
-    subreddit: 'veganrecipes',
-    textColor: '',
-    minNumOfVotes: 5,
-    youtubeChannels:
-      'UCbpMy0Fg74eXXkvxJrtEn3w;UCUnFheTbVpASikm0YPb8pSw;UCHmdRuKUSB7xrbv8uC0TKxg;UCxr2d4As312LulcajAkKJYw;UC1GO0P2HsI0XLiMalC5_wQw;UCQBG3PzyQKY8ieMG2gDAyOQ;UChBSJmgtiMGG1IUUuzj9Acw;UCARXOI1UlItgIevoI5jZViQ;UCVGVbOl6F5rGF4wSYS6Y5yQ',
-  },
-  {
     title: 'crafts',
     subreddit: 'artisanvideos;maker;howto;woodworking;FastWorkers',
     minNumOfVotes: 5,
