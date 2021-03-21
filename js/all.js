@@ -31,12 +31,6 @@ const channels = [
     subreddit: 'documentaries',
     minNumOfVotes: 10,
   },
-  {
-    title: 'crafts',
-    subreddit: 'artisanvideos;maker;howto;woodworking;FastWorkers',
-    minNumOfVotes: 5,
-    youtubeChannels: 'UCloswWQLpsnzCy-KrJ6CfPw;UCIxAaCJ84uefATKmazDyIjw;UCq6H4g9eVY9WxoboCFd0iRA;UCXvzpK4eKUJysEZ42zjTUdw;',
-  },
  
 ];
 
