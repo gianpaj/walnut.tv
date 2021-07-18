@@ -380,19 +380,19 @@ var appVideo = new Vue({
 
         if (pathname.split('/r/').length > 1) {
           subreddits = this.channel;
-          promises = Promise.all([redditService.loadHot(subreddits, minNumOfVotes)]);
+          promises = redditService.loadHot(subreddits, minNumOfVotes);
         } else {
           subreddits = this.getSubReddits(this.channel);
           ytChannels = this.getYouTubeChannels(this.channel);
           minNumOfVotes = this.getChannelMinVotes(this.channel);
           promises = Promise.all([
-            redditService.loadHot(subreddits, minNumOfVotes),
+            subreddits ? redditService.loadHot(subreddits, minNumOfVotes) : [],
             ytChannels ? youtubeService.loadChannels(ytChannels) : [],
           ]);
         }
       } else {
         this.channel = null;
-        promises = Promise.all([redditService.loadHot(subreddits, minNumOfVotes)]);
+        promises = redditService.loadHot(subreddits, minNumOfVotes);
       }
       this.getStorage();
       promises
