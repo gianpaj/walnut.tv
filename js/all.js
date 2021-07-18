@@ -34,7 +34,7 @@ const channels = [
   {
     title: 'food',
     youtubeChannels:
-    'UCbpMy0Fg74eXXkvxJrtEn3w;UCUnFheTbVpASikm0YPb8pSw;UCHmdRuKUSB7xrbv8uC0TKxg;UCxr2d4As312LulcajAkKJYw;UC1GO0P2HsI0XLiMalC5_wQw;UCQBG3PzyQKY8ieMG2gDAyOQ;UChBSJmgtiMGG1IUUuzj9Acw;UCARXOI1UlItgIevoI5jZViQ;UCVGVbOl6F5rGF4wSYS6Y5yQ',
+      'UCbpMy0Fg74eXXkvxJrtEn3w;UCUnFheTbVpASikm0YPb8pSw;UCHmdRuKUSB7xrbv8uC0TKxg;UCxr2d4As312LulcajAkKJYw;UC1GO0P2HsI0XLiMalC5_wQw;UCQBG3PzyQKY8ieMG2gDAyOQ;UChBSJmgtiMGG1IUUuzj9Acw;UCARXOI1UlItgIevoI5jZViQ;UCVGVbOl6F5rGF4wSYS6Y5yQ',
   },
 ];
 
@@ -110,7 +110,7 @@ function RedditVideoService() {
       sortOrder = -1;
       property = property.substr(1);
     }
-    return function(a, b) {
+    return function (a, b) {
       const result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
       return result * sortOrder;
     };
@@ -125,20 +125,20 @@ function RedditVideoService() {
       if (after) query = query.after(after);
 
       query.fetch(
-        res => {
+        (res) => {
           if (res.error) return reject(res);
           let videos = res.data.children.filter(isVideoObject);
 
           if (upsMin) {
-            videos = videos.filter(vid => filterByUpvotes(vid, upsMin));
+            videos = videos.filter((vid) => filterByUpvotes(vid, upsMin));
           }
 
-          videos = videos.map(childObjectToDomainVideoModel).filter(v => v.type === 'youtube');
+          videos = videos.map(childObjectToDomainVideoModel).filter((v) => v.type === 'youtube');
 
           result(videos);
         },
         // err contains the error from Reddit
-        err => reject(err)
+        (err) => reject(err)
       );
     });
   }
@@ -153,7 +153,7 @@ function RedditVideoService() {
   async function loadHot(channel_s, upsMin) {
     const channel_arr = channel_s.split(';');
     // console.warn("fetching", channel_s.length, "channels");
-    const promises = channel_arr.map(channel => _loadHot(channel, upsMin));
+    const promises = channel_arr.map((channel) => _loadHot(channel, upsMin));
 
     const arrayOfArrayOfVideos = await Promise.all(promises);
 
@@ -161,7 +161,7 @@ function RedditVideoService() {
 
     const uniq = {};
     // remove duplicate videos
-    videos = videos.filter(arr => !uniq[arr.videoUrl] && (uniq[arr.videoUrl] = true));
+    videos = videos.filter((arr) => !uniq[arr.videoUrl] && (uniq[arr.videoUrl] = true));
 
     return [].concat.apply([], videos);
     // .sort(dynamicSort("created_utc"));
@@ -185,17 +185,20 @@ function RedditVideoService() {
  */
 function mixElementsFromArraysOfArrays(arrayOfArrays) {
   // find the smallest amount of videos for every channel
-  const leastAmountOfVids = Math.min.apply(null, arrayOfArrays.map(arr => arr.length).filter(arr => arr));
+  const leastAmountOfVids = Math.min.apply(
+    null,
+    arrayOfArrays.map((arr) => arr.length).filter((arr) => arr)
+  );
 
   if (arrayOfArrays.length === 1) {
     return arrayOfArrays;
   }
 
-  if (arrayOfArrays.filter(arr => arr.length > 0).length === 0) {
+  if (arrayOfArrays.filter((arr) => arr.length > 0).length === 0) {
     return [];
   }
 
-  arrayOfArrays = arrayOfArrays.filter(a => a.length);
+  arrayOfArrays = arrayOfArrays.filter((a) => a.length);
   let videos = [];
   // get one video of each channel in rotation
   for (let i = 0; i < leastAmountOfVids; i++) {
@@ -229,7 +232,7 @@ function YouTubeService() {
   }
   async function loadChannels(channel_s) {
     channel_s = channel_s.split(';');
-    const searches = channel_s.map(channel => getYouTubeChannelSearch(channel));
+    const searches = channel_s.map((channel) => getYouTubeChannelSearch(channel));
     const arrayOfArrayOfVideos = await Promise.all(searches);
 
     const videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
@@ -249,7 +252,7 @@ function YouTubeService() {
   }
   function formatResults(results) {
     if (!results.items) return null;
-    return results.items.map(res => ({
+    return results.items.map((res) => ({
       id: res.id.videoId, // reddit id
       permalink: 'https://www.youtube.com/watch?v=' + res.id.videoId,
       title: res.snippet.title,
@@ -310,29 +313,20 @@ function onPlayerStateChange(t) {
 Vue.config.unsafeDelimiters = ['{!!', '!!}'];
 Vue.config.debug = false;
 Vue.component('v-select', VueSelect.VueSelect);
-Vue.filter('maxChar', function(t) {
+Vue.filter('maxChar', function (t) {
   var e = t;
   return (
-    void 0 != e &&
-      e.length > 90 &&
-      (e =
-        jQuery
-          .trim(e)
-          .substring(0, 80)
-          .split(' ')
-          .slice(0, -1)
-          .join(' ') + '...'),
-    e
+    void 0 != e && e.length > 90 && (e = jQuery.trim(e).substring(0, 80).split(' ').slice(0, -1).join(' ') + '...'), e
   );
 });
-Vue.filter('toUrl', function(t) {
+Vue.filter('toUrl', function (t) {
   return 'https://img.youtube.com/vi/' + t + '/mqdefault.jpg';
 });
-Vue.filter('shortNumber', function(n) {
+Vue.filter('shortNumber', function (n) {
   return shortNumber(n);
 });
 
-var paths = window.location.pathname.split('/').filter(a => a);
+var paths = window.location.pathname.split('/').filter((a) => a);
 
 var loadingVideosMessage = 'Loading Videos <img src="/img/spin.svg" class="loading" alt="Loading Videos">';
 
@@ -355,17 +349,17 @@ var appVideo = new Vue({
     videosWatched: [],
     voted: 0,
   },
-  created: function() {
+  created: function () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
     this.channel || (this.channel = 'general');
     this.fetchAllVideos();
     window.addEventListener('keyup', this.keys);
   },
   methods: {
-    getSubReddits: channel => channels.find(c => c.title == channel).subreddit,
-    getYouTubeChannels: channel => channels.find(c => c.title == channel).youtubeChannels,
-    getChannelMinVotes: channel => channels.find(c => c.title == channel).minNumOfVotes,
-    fetchAllVideos: function(searchText) {
+    getSubReddits: (channel) => channels.find((c) => c.title == channel).subreddit,
+    getYouTubeChannels: (channel) => channels.find((c) => c.title == channel).youtubeChannels,
+    getChannelMinVotes: (channel) => channels.find((c) => c.title == channel).minNumOfVotes,
+    fetchAllVideos: function (searchText) {
       let id, minNumOfVotes, ytChannels, promises;
       let subreddits = searchText;
       const { pathname } = window.location;
@@ -396,12 +390,12 @@ var appVideo = new Vue({
       }
       this.getStorage();
       promises
-        .then(resolvers => {
+        .then((resolvers) => {
           const [redditVideos, youtubeVideos = []] = resolvers;
           if (window.location.search == '?debug') {
             // eslint-disable-next-line no-console
             console.log(
-              redditVideos.map(v => ({
+              redditVideos.map((v) => ({
                 subreddit: v.permalink.split('/r/')[1].split('/')[0],
                 title: v.title,
                 link: v.permalink,
@@ -410,7 +404,7 @@ var appVideo = new Vue({
             );
             // eslint-disable-next-line no-console
             console.log(
-              youtubeVideos.map(v => ({
+              youtubeVideos.map((v) => ({
                 title: v.title,
                 link: v.permalink,
                 youtubeId: v.youtubeId,
@@ -433,7 +427,7 @@ var appVideo = new Vue({
           // this.playingVideo = redditVideos;
           if (pathname.split('/').length === 3 && pathname.indexOf('/r/') === -1) {
             // find video index to play
-            let index = this.videoList.findIndex(v => v.id === id);
+            let index = this.videoList.findIndex((v) => v.id === id);
             if (index !== -1) {
               indexToPlay = index;
               this.play(index);
@@ -443,7 +437,7 @@ var appVideo = new Vue({
           // this.watched(this.videoList[0].youtubeId);
           this.play(0);
         })
-        .catch(error => {
+        .catch((error) => {
           this.videoMessage = 'Sorry, there was an error retrieving videos in /' + this.channel;
           if (this.searchInput) {
             this.videoMessage = `Sorry, there was an error retrieving videos /r/${this.searchInput}`;
@@ -452,14 +446,14 @@ var appVideo = new Vue({
           console.error(error);
         });
     },
-    fetchVideosFromYoutube: function(query) {
+    fetchVideosFromYoutube: function (query) {
       this.contentType = 'youtube';
       // eslint-disable-next-line no-undef
       this.loadingVideos = true;
       this.getStorage();
       youtubeService
         .search(query)
-        .then(videos => {
+        .then((videos) => {
           if (videos.length < 1) {
             this.videoMessage = 'Sorry, we couldn\'t find any YouTube videos for "' + query + '"';
             return;
@@ -468,7 +462,7 @@ var appVideo = new Vue({
           this.videoList = videos;
           this.play(0);
         })
-        .catch(error => {
+        .catch((error) => {
           this.videoMessage = 'Sorry, there was an error getting YouTube videos for "' + query + '"';
           // eslint-disable-next-line no-console
           console.error(error);
@@ -478,17 +472,17 @@ var appVideo = new Vue({
      * When the input field is being typed
      * @param {string} value
      */
-    onSearch: function(value) {
+    onSearch: function (value) {
       this.searchInput = '';
       this.options = [value + ' (YouTube)', value + ' (Subreddit)'];
     },
-    onChange: function(value) {
+    onChange: function (value) {
       if (value) this.search(value);
     },
-    onSubmit: function(event) {
+    onSubmit: function (event) {
       event.preventDefault();
     },
-    search: function(value) {
+    search: function (value) {
       // this.$emit('input', event);
       player.stopVideo();
       if (value && value.includes('YouTube')) {
@@ -507,28 +501,28 @@ var appVideo = new Vue({
         this.fetchAllVideos(value);
       } else this.fetchAllVideos();
     },
-    hasBeenWatched: function(youtubeId) {
+    hasBeenWatched: function (youtubeId) {
       return -1 != this.videosWatched.indexOf(youtubeId) && youtubeId != this.videoList[this.videoPlaying].youtubeId;
     },
-    watched: function(i) {
+    watched: function (i) {
       if (-1 == this.videosWatched.indexOf(i)) {
         this.videosWatched.push(i);
         this.setStorage();
       }
     },
-    vote: function(id, num) {
+    vote: function (id, num) {
       this.voted = num;
       ga('send', 'event', 'voted', 'click');
     },
-    keys: function(evt) {
+    keys: function (evt) {
       evt = evt || window.event;
       '37' == evt.keyCode ? this.prevVideo() : '39' == evt.keyCode && this.nextVideo();
     },
-    playVideo: function(t) {
+    playVideo: function (t) {
       if (!player || !player.loadVideoById) return;
       this.mobile ? player.cueVideoById(t.youtubeId) : player.loadVideoById(t.youtubeId);
     },
-    play: function(i) {
+    play: function (i) {
       this.playingVideo = this.videoList[i];
       this.videoPlaying = i;
       this.voted = 0;
@@ -542,7 +536,7 @@ var appVideo = new Vue({
       //   console.log('youtube video');
       // }
     },
-    nextVideo: function() {
+    nextVideo: function () {
       if (this.videoPlaying >= this.videoList.length - 1) {
         return;
       }
@@ -550,32 +544,30 @@ var appVideo = new Vue({
       this.play(this.videoPlaying);
       this.scroll(1);
     },
-    prevVideo: function() {
+    prevVideo: function () {
       if (this.videoPlaying < 1) return;
       this.videoPlaying--;
       this.play(this.videoPlaying);
       this.scroll(-1);
     },
-    scroll: function(num) {
+    scroll: function (num) {
       var e = $('#toolbox').scrollTop();
-      var n = $('#toolbox .active')
-        .parent()
-        .height();
+      var n = $('#toolbox .active').parent().height();
       $('#toolbox').scrollTop(e + num === 1 ? n + 1 : -(n + 1));
     },
-    getStorage: function() {
+    getStorage: function () {
       if (this.storageAvailable() && localStorage.getItem('videosWatched')) {
         var t = localStorage.getItem('videosWatched');
         this.videosWatched = JSON.parse(t);
       }
     },
-    setStorage: function() {
+    setStorage: function () {
       if (this.storageAvailable()) {
         var t = JSON.stringify(this.videosWatched);
         localStorage.setItem('videosWatched', t);
       }
     },
-    share: function(video) {
+    share: function (video) {
       var url;
       if (this.channel && this.playingVideo.permalink.includes('reddit.com')) {
         url = `https://walnut.tv/${this.channel}/${video.id}`;
@@ -587,7 +579,7 @@ var appVideo = new Vue({
       // put text into #url-text
       $('#url-text')[0].value = url;
     },
-    storageAvailable: function() {
+    storageAvailable: function () {
       try {
         var n = '__storage_test__';
         window.localStorage.setItem(n, n);
@@ -597,7 +589,7 @@ var appVideo = new Vue({
         return false;
       }
     },
-    changeChannel: function(channel) {
+    changeChannel: function (channel) {
       this.searchInput = '';
       if (this.channel !== channel) {
         player.stopVideo();
@@ -608,12 +600,12 @@ var appVideo = new Vue({
       $('#navbar-collapse-1').collapse('hide');
     },
   },
-  beforeDestroy: function() {
+  beforeDestroy: function () {
     window.removeEventListener('keyup', this.keys);
   },
 });
 
-$('#shareModal button').click(function() {
+$('#shareModal button').click(function () {
   $('#url-text')[0].select();
   try {
     document.execCommand('copy');
