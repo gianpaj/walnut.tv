@@ -379,7 +379,7 @@ var appVideo = new Vue({
           subreddits = this.getSubReddits(this.channel);
           ytChannels = this.getYouTubeChannels(this.channel);
           minNumOfVotes = this.getChannelMinVotes(this.channel);
-          promises = Promise.all([
+          promises = Promise.allSettled([
             subreddits ? redditService.loadHot(subreddits, minNumOfVotes) : [],
             ytChannels ? youtubeService.loadChannels(ytChannels) : [],
           ]);
@@ -391,7 +391,10 @@ var appVideo = new Vue({
       this.getStorage();
       promises
         .then((resolvers) => {
-          const [redditVideos, youtubeVideos = []] = resolvers;
+          resolvers.filter((i) => i.status !== 'fulfilled').forEach((e) => console.error(e));
+
+          resolvers = resolvers.filter((i) => i.status === 'fulfilled').map((i) => i.value);
+          const [redditVideos = [], youtubeVideos = []] = resolvers;
           if (window.location.search == '?debug') {
             // eslint-disable-next-line no-console
             console.log(
