@@ -31,6 +31,21 @@ const channels = [
     subreddit: 'documentaries',
     minNumOfVotes: 10,
   },
+   {
+
+   title: 'travel',
+      youtubeChannels: 'UCGs1JjiRBEKMlVD4eUxJ2ww;UCj7YznKvjMpXAXuzs9wWvtg;UC2N2HqEyaVE5Tt1rFqe3_Og;UCpnuadQ_w3r6f4Q_NRlqd-w;UC6am0tFqAQVqYwF2YV31zZQ;UC_uIW_MvxONcZsAkaMq1ujA;UCa1WbVCkTqd5ecG6G2adIow;UCpbClyFMuJQJJH7skfiVeQg;UCH81s83yNAl2YiH48DjxJpg;UC54bvNhGfYlw38iW5KCjJAA;UCDRqoPBHJ7oFcxqvyPBAg6A;UCBVEq4QRqxb6yPO5OpJJ1XQ;UCyEd6QBSgat5kkC6svyjudA;UCp2dhjQXkhY1O40lj15JQzw;UCDTINI9skkeZNY2ZXnBqIkQ;UC4ijq8Cg-8zQKx8OH12dUSw;UC0Ize0RLIbGdH5x4wI45G-A;UCwO9naEwEdTuT9Q5Vze6XCA;UCey7V2zwnjaxPKhfJ0sYE4g;UC_tXKhJlqZrgr_qdhEKmrDQ;UClnm4LP43k7AkjhdwKrOONA;UCUmVotIMVDOHNetxVKxs2Tg;UCxDZs_ltFFvn0FDHT6kmoXA;UCXulruMI7BHj3kGyosNa0jA;UCgZM50Ig7STDS0l6f_QnrXw;',
+
+ },
+
+ {
+
+   title: 'spaces',
+   
+   youtubeChannels: 'UCDsElQQt_gCZ9LgnW-7v-cQ;UCw3LUhWr0j-z2rpqGfQK8Tg;UC8EQAfueDGNeqb1ALm0LjHA;UCXvzpK4eKUJysEZ42zjTUdw;UCdMHDOiMLVGlntDX-4I_-rg;UC0k238zFx-Z8xFH0sxCrPJg;UCq6H4g9eVY9WxoboCFd0iRA;UC6-X3epFE06GDWRHLQG_YMA;UCY04Nk2nZkUkT4hqf_7suZA;UCHNK-JM63_vb2CJc1wC4p8g;UC6kpDTAXXNV5SEP5g1HoPTA;UCulFhrW_YCwkq_BP16C82mA;UC_zQ777U6YTyatP3P1wi3xw;UCNZ3t1dMKJGl6-kV9BD5Lqg;UCdvcXJuHTUkJ_uvu8Qw7U2A;UCFuyCsMOEkJ27lHZ-AT9TmA;UCIxAaCJ84uefATKmazDyIjw;UCCkFJmUgzrZdkeHl_qPItsA;UC39z4_U8Kls0llAij3RRZAQ;UCHYSw4XKO_q1GaChw5pxa-w',
+
+ },
+
   {
     title: 'food',
     youtubeChannels:
