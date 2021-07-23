@@ -16,21 +16,12 @@ const channels = [
   },
   {
     title: 'curious',
-    subreddit: 'curiousvideos;mealtimevideos;educativevideos;watchandlearn',
+    subreddit: 'mealtimevideos;watchandlearn',
     minNumOfVotes: 3,
     youtubeChannels:
-      'UCzQUP1qoWDoEbmsQxvdjxgQ;UCDsElQQt_gCZ9LgnW-7v-cQ;UCX6b17PVsYBQ0ip5gyeme-Q;UCmmPgObSUPw1HL2lq6H4ffA;UC7IcJI8PUf5Z3zKxnZvTBog;UCZYTClx2T1of7BRZ86-8fow;UC9uD-W5zQHQuAVT2GdcLCvg',
+      'UCX6b17PVsYBQ0ip5gyeme-Q;UCmmPgObSUPw1HL2lq6H4ffA;UC7IcJI8PUf5Z3zKxnZvTBog;UCZYTClx2T1of7BRZ86-8fow;UC9uD-W5zQHQuAVT2GdcLCvg;UCsXVk37bltHxD1rDPwtNM8Q;UC6107grRI4m0o2-emgoDnAA;UCHnyfMqiRRG1u-2MsSQLbXA;UC6nSFpj9HTCZ5t-N3Rm3-HA;UC7DdEm33SyaTDtWYGO2CwdA;UC3KEoMzNz8eYnwBC34RaKCQ;UCt_t6FwNsqr3WWoL6dFqG9w;UClIZqOLqUCro7bKztUjYCNA;UCC552Sd-3nyi_tk2BudLUzA;UCYLrBefhyp8YyI9VGPbghvw;UCH4BNI0-FOK2dMXoFtViWHw;UCeiYXex_fwgYDonaTcSIk6w;UC7_gcs09iThXybpVgjHZ_7g;UCpJmBQ8iNHXeQ7jQWDyGe3A;UCfMJ2MchTSW2kWaT0kK94Yw;UCtHaxi4GTYDpJgMSGy7AeSw;UCHsRtomD4twRf5WVHHk-cMw;UCbwp5B-uDBy-fS4bDA0TEaw;UCj1VqrHhDte54oLgPG4xpuQ;UCIRiWCPZoUyZDbydIqitHtQ;UCY1kMZp36IQSyNx_9h4mpCg;UC9RM-iSvTu1uPJb8X5yp3EQ;UCEik-U3T6u6JA0XiHLbNbOw;UCYO_jab_esuFRV4b17AJtAw;UCR1IuLEqb6UEA_zQ81kwXfg;UCtxJFU9DgUhfr2J2bveCHkQ;UCEIwxahdLz7bap-VDs9h35A;UCBa659QWEk1AI4Tg--mrJ2A;UCP5tjEmvPItGyLhmjdwP7Ww;UCUHW94eEFW7hkUMVaZz4eDg;UCzWQYUVCpZqtN93H8RR44Qw',
   },
-  {
-    title: 'science',
-    subreddit: 'biology;psychology;lectures;space;philosophy;physics;math',
-    minNumOfVotes: 3,
-  },
-  {
-    title: 'documentaries',
-    subreddit: 'documentaries',
-    minNumOfVotes: 10,
-  },
+ 
    {
 
    title: 'travel',
@@ -50,6 +41,16 @@ const channels = [
     title: 'food',
     youtubeChannels:
       'UCbpMy0Fg74eXXkvxJrtEn3w;UCUnFheTbVpASikm0YPb8pSw;UCHmdRuKUSB7xrbv8uC0TKxg;UCxr2d4As312LulcajAkKJYw;UC1GO0P2HsI0XLiMalC5_wQw;UCQBG3PzyQKY8ieMG2gDAyOQ;UChBSJmgtiMGG1IUUuzj9Acw;UCARXOI1UlItgIevoI5jZViQ;UCVGVbOl6F5rGF4wSYS6Y5yQ;UCcjhYlL1WRBjKaJsMH_h7Lg;UCJHA_jMfCvEnv-3kRjTCQXw;UCPzFLpOblZEaIx2lpym1l1A;UCuL-5ytBmu6KG0BwjSFaD0g;UC_oqZXtcxfJTaw1j2M1H1XQ;UCDq5v10l4wkV5-ZBIJJFbzQ;UCzH5n3Ih5kgQoiDAQt2FwLw;UCsdD3quGf01RWABJt8wLe9g;UChBEbMKI1eCcejTtmI32UEw;UCwZcpfUOuLH9UEXvFPHIAWQ;UCRzPUBhXUZHclB7B5bURFXw;UCoMum0pwewO8_WtTlUQxGHw;UCekQr9znsk2vWxBo3YiLq2w;UCIEv3lZ_tNXHzL3ox-_uUGQ;UCpSgg_ECBj25s9moCDfSTsA;UCffs63OaN2nh-6StR6hzfiQ;UCj0V0aG4LcdHmdPJ7aTtSCQ',
+  },
+   {
+    title: 'science',
+    subreddit: 'biology;psychology;lectures;space;philosophy;physics;math',
+    minNumOfVotes: 3,
+  },
+  {
+    title: 'docus',
+    subreddit: 'documentaries',
+    minNumOfVotes: 10,
   },
 ];
 
