@@ -3,10 +3,6 @@ console.log('%c%s', 'color: green; background: yellow; font-size: 24px;', 'Thank
 // eslint-disable-next-line no-console
 console.log("Walnut's code is open sourced at https://github.com/gianpaj/walnut.tv");
 
-// @ts-nocheck
-
-// var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
 const channels = [
   {
     title: 'general',
@@ -483,7 +479,6 @@ var appVideo = new Vue({
       event.preventDefault();
     },
     search: function (value) {
-      // this.$emit('input', event);
       player.stopVideo();
       if (value && value.includes('YouTube')) {
         value = value.split(' (')[0];
@@ -633,11 +628,8 @@ function shortNumber(num) {
     return num;
   }
 
-  var shortNumber;
-  var exponent;
-  var size;
-  var sign = num < 0 ? '-' : '';
-  var suffixes = {
+  const sign = num < 0 ? '-' : '';
+  const suffixes = {
     K: 6,
     M: 9,
     B: 12,
@@ -645,19 +637,19 @@ function shortNumber(num) {
   };
 
   num = Math.abs(num);
-  size = Math.floor(num).toString().length;
+  const size = Math.floor(num).toString().length;
 
-  exponent = size % 3 === 0 ? size - 3 : size - (size % 3);
-  shortNumber = Math.round(10 * (num / Math.pow(10, exponent))) / 10;
+  const exponent = size % 3 === 0 ? size - 3 : size - (size % 3);
+  let shortNum = Math.round(10 * (num / Math.pow(10, exponent))) / 10;
 
-  for (var suffix in suffixes) {
+  for (const suffix in suffixes) {
     if (exponent < suffixes[suffix]) {
-      shortNumber += suffix;
+      shortNum += suffix;
       break;
     }
   }
 
-  return sign + shortNumber;
+  return sign + shortNum;
 }
 
 // eslint-disable-next-line no-undef
