@@ -215,7 +215,7 @@ a:hover {
 }
 
 .video-list .video-thumbnail-image .video-image {
-  max-width: 70px;
+  max-width: 125px;
 }
 
 .video-list .video .video-title {
@@ -302,7 +302,7 @@ a:hover {
 
 .sidebar {
   display: table-cell;
-  width: 360px;
+  width: 400px;
 }
 
 .main-content {
