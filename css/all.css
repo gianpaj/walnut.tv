@@ -9,6 +9,7 @@
 ::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 10px;
+  -webkit-background-clip: content-box;
   background-clip: content-box;
   background-color: var(--dark);
 }
@@ -404,6 +405,7 @@ details .up-vote-num {
   position: relative;
   padding-bottom: 47%;
   height: 0;
+
   /* overflow: hidden; */
 
   /* .col */
@@ -695,7 +697,9 @@ details .up-vote-num {
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+
   /* margin-right: -15px; */
+
   /* margin-left: -15px; */
 }
 
