@@ -6,8 +6,10 @@
   "scripts": {
     "start": "browser-sync start --server --files=\"*.html, js/*.js, css/*.css\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "node scripts/check-channels.js",
-    "build": "echo \"works\""
+    "build": "uglifyjs js/all.js -o js/all.min.js"
+  },
+  "dependencies": {
+    "uglify-es": "^3.3.9"
   },
   "repository": {
     "type": "git",
