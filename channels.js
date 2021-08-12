@@ -30,6 +30,8 @@ const channels = [
   },
 ];
 
-module.exports = {
-  channels,
-};
+if (typeof document === 'undefined') {
+  module.exports = {
+    channels,
+  };
+}
