@@ -5,12 +5,6 @@ const channels = [
     minNumOfVotes: 100,
     // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
   },
-   {
-
-   title: 'crypto',
-   youtubeChannels: 'UCnhdZlwVd6ocXGhdSyV9Axg;UCbLhGKVY-bJPcawebgtNfbw;UCqK_GSMbpiV8spgD3ZGloSw;UCRvqjQPSeaWn-uEx-w0XOIg;UCI7M65p3A-D3P4v5qW8POxQ;UCu7Sre5A1NMV8J3s2FhluCw;UCofTOFX4QuhT8OY-3-fFRFw;UC188KLMYLLGqVJZdYq7mYFw;UCpceefaJ9vs4RYUTsO9Y3FA;UC4xKdmAXFh4ACyhpiQ_3qBw;UCZ3fejCy_P5xhv9QF-V6-YA;UCbkjUYiPN8P48r0lurEBP8w;UCjemQfjaXAzA-95RKoy9n_g;UCCatR7nWbYrkVXdxXb4cGXw;UCrYmtJBtLdtm2ov84ulV-yg;UCJWCJCWOxBYSi5DhCieLOLQ;UCRvqjQPSeaWn-uEx-w0XOIg;UCevXpeL8cNyAnww-NqJ4m2w;UCMtJYS0PrtiUwlk6zjGDEMA;UCxODjeUwZHk3p-7TU-IsDOA;UCGyqEtcGQQtXyUwvcy7Gmyg;UCJgHxpqfhWEEjYH9cLXqhIQ;UCl2oCaw8hdR_kbqyqd2klIA;UCiUnrCUGCJTCC7KjuW493Ww;UC-5HLi3buMzdxjdTdic3Aig;UCQNHKsYDGlWefzv9MAaOJGA;UCi7RBPfTtRkVchV6qO8PUzg;UCq41LOyktVBW_CaVi2WKKXw;UClgJyzwGs-GyaNxUHcLZrkg;UC23Tb0Q1b0Vd3-m5As6N59Q;UCeBbEvlSOeJMwSVYOdXOvvw',
-
- },
   {
 
    title: 'nft',
