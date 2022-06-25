@@ -414,59 +414,8 @@ var appVideo = new Vue({
           console.error(error);
         });
     },
-    fetchVideosFromYoutube: function (query) {
-      this.contentType = 'youtube';
-      // eslint-disable-next-line no-undef
-      this.loadingVideos = true;
-      this.getStorage();
-      youtubeService
-        .search(query)
-        .then((videos) => {
-          if (videos.length < 1) {
-            this.videoMessage = 'Sorry, we couldn\'t find any YouTube videos for "' + query + '"';
-            return;
-          }
-          this.loadingVideos = false;
-          this.videoList = videos;
-          this.play(0);
-        })
-        .catch((error) => {
-          this.videoMessage = 'Sorry, there was an error getting YouTube videos for "' + query + '"';
-          // eslint-disable-next-line no-console
-          console.error(error);
-        });
-    },
-    /**
-     * When the input field is being typed
-     * @param {string} value
-     */
-    onSearch: function (value) {
-      this.searchInput = '';
-      this.options = [value + ' (YouTube)', value + ' (Subreddit)'];
-    },
-    onChange: function (value) {
-      if (value) this.search(value);
-    },
     onSubmit: function (event) {
       event.preventDefault();
-    },
-    search: function (value) {
-      player.stopVideo();
-      if (value && value.includes('YouTube')) {
-        value = value.split(' (')[0];
-
-        window.history.replaceState(null, null, '/');
-        this.channel = null;
-        this.fetchVideosFromYoutube(value);
-        return;
-      }
-      this.searchInput = value;
-      if (value) {
-        value = value.split(' (')[0];
-        window.history.replaceState(null, null, '/r/' + value);
-        this.channel = value;
-        this.fetchAllVideos(value);
-      } else this.fetchAllVideos();
     },
     hasBeenWatched: function (youtubeId) {
       return -1 != this.videosWatched.indexOf(youtubeId) && youtubeId != this.videoList[this.videoPlaying].youtubeId;

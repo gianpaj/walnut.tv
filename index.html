@@ -111,27 +111,6 @@
                   <a v-on:click="changeChannel(item.title)">{{ item.title }}</a>
                 </li>
               </ul>
-              <form class="hide-mobile-portrait navbar-form" v-on:submit="onSubmit($event)">
-                <div class="form-group">
-                  <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                  <v-select
-                    placeholder="search"
-                    label="title"
-                    :on-search="onSearch"
-                    :on-change="onChange"
-                    :options="options"
-                    :value.sync="searchInput"
-                  >
-                    <template slot="option" slot-scope="option">
-                      <span class="fa-youtube"></span>
-                      {{ option }}
-                    </template>
-                    <template slot="no-options">
-                      <slot name="no-options"></slot>
-                    </template>
-                  </v-select>
-                </div>
-              </form>
             </div>
           </div>
         </div>
