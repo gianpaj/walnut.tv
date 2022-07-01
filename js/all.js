@@ -316,7 +316,7 @@ var appVideo = new Vue({
   },
   created: function () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
-    this.channel || (this.channel = 'general');
+    this.channel || (this.channel = channels[0].title);
     this.fetchAllVideos();
     window.addEventListener('keyup', this.keys);
   },
