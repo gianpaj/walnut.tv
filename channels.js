@@ -23,7 +23,7 @@ const channels = [
 
  },
   {
-    title: 'general',
+    title: 'reddit',
     subreddit: 'videos',
     minNumOfVotes: 100,
     // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
