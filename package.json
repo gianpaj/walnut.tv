@@ -7,7 +7,8 @@
     "start": "browser-sync start --server --files=\"*.html, js/*.js, css/*.css\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "node scripts/check-channels.js",
-    "build": "echo \"works\""
+    "build": "echo \"works\"",
+    "watch-prebuild": "nodemon scripts/check-channels.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,9 @@
   "devDependencies": {
     "browser-sync": "2.27.10",
     "eslint": "8.18.0",
+    "nodemon": "^2.0.19",
     "stylelint": "14.9.1",
-    "stylelint-config-standard": "26.0.0"
+    "stylelint-config-standard": "26.0.0",
+    "yup": "^0.32.11"
   }
 }
