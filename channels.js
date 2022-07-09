@@ -1,5 +1,11 @@
 const channels = [
   {
+    title: 'reddit',
+    subreddit: 'videos',
+    minNumOfVotes: 100,
+    // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
+  },
+  {
     title: 'crypto',
     youtubeChannels:
       'UCAl9Ld79qaZxp9JzEOwd3aA;UCbLhGKVY-bJPcawebgtNfbw;UCqK_GSMbpiV8spgD3ZGloSw;UCKQvGU-qtjEthINeViNbn6A;UClgJyzwGs-GyaNxUHcLZrkg;UCvCp6vKY5jDr87htKH6hgDA;UCYWsYz5cKw4wZ9Mpe4kuM_g;UC7TghOL755nBk7HelHoi9LQ;UCzrWKkFIRS0kjZf7x24GdGg;UC_Jt1VYHZO4Kc4cJQP5utdw;UCxIU1RFIdDpvA8VOITswQ1A;UCOaX0Vu-dWB7bNjFMnbBo2A;UCWiiMnsnw5Isc2PP1to9nNw;UCtdbWsnfA08KhSUO4amVLaQ;UCh-0T48JrvvmKDX41aWB_Vg;UCtTBOezgZJ2yxXCio4TIMsA;UCAQd2EsaG7-KcEsFljnPTEg;UC-dmTM1R31S8uFgPmexxkNg;UCL0J4MLEdLP0-UyLu0hCktg;UCJ0QV-XhATeq4-hTgqMz1TQ;UCnhdZlwVd6ocXGhdSyV9Axg;UCofTOFX4QuhT8OY-3-fFRFw;UC188KLMYLLGqVJZdYq7mYFw;UC4xKdmAXFh4ACyhpiQ_3qBw;UCZ3fejCy_P5xhv9QF-V6-YA;UCbkjUYiPN8P48r0lurEBP8w;UCI7M65p3A-D3P4v5qW8POxQ;UCCatR7nWbYrkVXdxXb4cGXw;UCrYmtJBtLdtm2ov84ulV-yg;UCJWCJCWOxBYSi5DhCieLOLQ;UCJgHxpqfhWEEjYH9cLXqhIQ;UCMtJYS0PrtiUwlk6zjGDEMA;UCxODjeUwZHk3p-7TU-IsDOA;UCGyqEtcGQQtXyUwvcy7Gmyg;UCl2oCaw8hdR_kbqyqd2klIA;UCq41LOyktVBW_CaVi2WKKXw;UCiUnrCUGCJTCC7KjuW493Ww;UC-5HLi3buMzdxjdTdic3Aig;UCQNHKsYDGlWefzv9MAaOJGA;UCi7RBPfTtRkVchV6qO8PUzg;UC5irSAibfE6Ads_ReDFrffA;UCeFTwAO3Y6cYLoLkDcqyHmg;UCqbNSUPGHvNOH8GsrQ_bkEQ;UC4sS8q8E5ayyghbhiPon4uw;UCru3nlhzHrbgK21x0MdB_eg;UCHqubNRiGzQbmKAG9MEbCnw;UC7Ur1JsjMcqikYg09dunhsQ;UCGzF9nOSNKQcMJOII3tl6_w;UCjpkwsuHgYx9fBE0ojsJ_-w;UC-OTgwOAI7KmP0eDAtqN3Ow;UCl4takhOQtiyprismCPsa2Q;UCFQMnBA3CS502aghlcr0_aw;UCtOV5M-T3GcsJAq8QKaf0lg;UCY0xL8V6NzzFcwzHCgB8orQ;UCevXpeL8cNyAnww-NqJ4m2w',
@@ -34,12 +40,7 @@ const channels = [
     youtubeChannels:
       'UC-JHxwWL4-WoqyQIYsBvTbA;UCC8wczy7734jKPhiR2UkS9A;UCba-OKnXOFOe3eTXlXYuDTQ;UC0iJ3ldvDUGiUPfGiiifzVQ;UCxkIzPnPzWLz4IeuxIROflg;UCHMxkQsC2jpuhxhSvfzJ9CQ;UCy8r-oIbZj5T5d37EQO_5Cg;UCg60QRUSvLZMF4zHv2ajBqA;UCSDclSDfDZLCTfxbt64IotQ;UCLX9HF0CKKiBSkkhqpYGxgQ;UCeq8GxD-kFVV5S1i0MCmzTg;UCg1lOvBv6l0TzmiUvEL53UQ;UCF_UTPI3t0oLT-waokYoesQ;UCWlOCsyXCLceQ3QCgfUgmsg;UC8w05MpPAcR0wNVcuadBBow;UC2ZB_N0Vpg6iB5HxdxWg8gQ;UCjtbFqsqVORPBJMein0zLWQ;UC7Ntfp-i0JeIHdhfg0Ka47Q;UCjzMc58B0E8ikYtW20_dUfg;UCBmELdKuL34d0x3LBX31Pxg;UCWDAUvqMCfdeSdruAAdF5Zg;UCvGJ3qWSObAuTozOMy6tq6g;UCWkaYdz5OWL_z1Ij96sYmhQ;UCfgNHqq9IfmSfj3JsvTIoTQ;UCjfIlZRd2nFImCDGl30xCHw;UC5Dr2kj6jTNnhLzK83eVkTQ;UC8Sh9yuLqlpnQdBdcfwFErA;UC34AYD6is66Xpv6HPRB0Miw;UC0vPu0MpUQucAnZukUbtJuw;UClUSEsDS2sdgNJfCcCM_5Uw;UCufEXE2Ir9IBgTIPGcJdtCA;UCvYbWjz7350Xc6poxlk-S0A;UCUG5BEHfTZXPLwSHl4NSy3Q;UCSF8nJz-r7UMZ3ZBFhUuS4g;UCpBvckYg2UXArcfzRcjpPjw;UCPHntYYv-dwbTP-g-y4RYsg',
   },
-  {
-    title: 'reddit',
-    subreddit: 'videos',
-    minNumOfVotes: 100,
-    // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
-  },
+  
   {
     title: 'curious',
     subreddit: 'mealtimevideos;watchandlearn;biology;psychology;lectures;space;philosophy;physics;math',
