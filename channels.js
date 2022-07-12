@@ -5,16 +5,6 @@ const channels = [
     minNumOfVotes: 100,
     // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
   },
-    {
-    title: 'curious',
-    subreddit: 'mealtimevideos;watchandlearn;biology;psychology;lectures;space;philosophy;physics;math',
-    minNumOfVotes: 3,
-  },
-    {
-    title: 'hustle',
-    youtubeChannels:
-      'UCyaN6mg5u8Cjy2ZI4ikWaug;UCVneetxSKb5lwa2_6c-qO8Q;UCF2v8v8te3_u4xhIQ8tGy1g;UChFahjDeMBV67DSXiF5pwBA;UC36zt_eM_gZQXayw_pAdASg;UCyFqFYfTW2VoIQKylJ04Rtw;UCIBgYfDjtWlbJhg--Z4sOgQ;UCO3tlaeZ6Z0ZN5frMZI3-uQ;UC1LAjODfg7dnSSrrPGGPPMw;UCUyDOdBWhC1MCxEjC46d-zw;UCtx8VrbY0M7oLgzl5M_ELsg;UCfRtwc6K_VU9N4OjNnU2P7g;UCMSYZVlQmyG8_2MkIKzg0kw;UCUvvj5lwue7PspotMDjk5UA;UChObmEJP3bgGUXJGc2ePP3Q;UCPi6sb9M-Kj-j-PKptcUNJQ;UC4bq21IPPbpu0Qrsl7LW0sw;UCcefcZRL2oaA_uBNeo5UOWg;UCO8SO6KTCosQOvdLj68yyQQ;UC36zt_eM_gZQXayw_pAdASg;UCESLZhusAkFfsNsApnjF_Cg;UCdZxojNw026cW3RuA-B1f7w;UCfVPKWScEOPeHx63ws-E9nw;UCRCCrE1uX5Y05cmkXFiviWw;UCkkhmBWfS7pILYIk0izkc3A;UCidsrMKtX7u_QJDsjAw-vKA;UCbVefFvKHAKAvuCCN0gmssg;UC0rQo28wJ0WU30W5athbrOA;UCznv7Vf9nBdJYvBagFdAHWw;UCESLZhusAkFfsNsApnjF_Cg;UCuoxrRDDgk3UUnxR4tlkJYQ;UCp8mr0kjVyVAmvexLDqB60A;UCS4ITAOQlFP9_ny2Zl5b0ig;UCcnyjTK4IheQN2ycsE7NZTQ;UCwB3HiWejAkml1UZ0Qo2bFg;UCGwuxdEeCf0TIA2RbPOj-8g;UCAeAB8ABXGoGMbXuYPmiu2A;UCNFGSWVOdVWEe9XJNnfTdyQ;UCJLMboBYME_CLEfwsduI0wQ;UCSPYNpQ2fHv9HJ-q6MIMaPw;UCl-Zrl0QhF66lu1aGXaTbfw;UCLkq3HC2y2NPpyQzaeR9slA;UCKHiA-dJxESze4gFBxk3ygQ;UCCKpicnIwBP3VPxBAZWDeNA;UCkCGANrihzExmu9QiqZpPlQ;UCASM0cgfkJxQ1ICmRilfHLw;UCvSXMi2LebwJEM1s4bz5IBA;UCWhJUz6BvjkhaW4AfSrBevw;UCoOae5nYA7VqaXzerajD0lg;UCAm8TlOEXTPq2B04yQ0lDuA;UCV6KDgJskWaEckne5aPA0aQ;UCdIM_XmhsVYbBhl3pgPq3dA;UCPa0bvFsR1mbBpk5mIPFGLA;UCUwkeSWSq3WFd6VSvBb4v7g;UCTQuKo8v0PaPCvk5aRxc_Yg;UCT3EznhW_CNFcfOlyDNTLLw;UCnkmQCJ4f6rRl1PXCblppvA;UC9SLXh5V1bwFiS82DTRUx8A;UCZ59iKBmGRfQlnl73sOX0Lw;UCs5wAPodliO0oVxiTD8ruvg;UCSPYNpQ2fHv9HJ-q6MIMaPw;UCBiCWypofB8i9BOPYUvihhA;UC9cn0TuPq4dnbTY-CBsm8XA;UCK-zlnUfoDHzUwXcbddtnkg;UCNm6S6esHHxJGt13lNaR9VQ;UCL_v4tC26PvOFytV1_eEVSg;UCPbMnGLeHscshhD7PAEnvbw;UCdazTKVCKYe_tjvjuQQmpgQ',
-  },
   {
     title: 'crypto',
     youtubeChannels:
@@ -39,6 +29,16 @@ const channels = [
     title: 'charts',
     youtubeChannels:
       'UCRvqjQPSeaWn-uEx-w0XOIg;UCeBbEvlSOeJMwSVYOdXOvvw;UCnwxzpFzZNtLH8NgTeAROFA;UCPx92fC_fwQJyfKeBmKGdkA;UCDq7GjSes-8kQn_Vcg35jfA;UCz2wzs4KacqHth7R_N5grgA;UCpBm7mATacoeNMtlkiWE_ig;UCwGflGmzevf4fcm-z8E-twA;UCL-QLzGmf468WAL1U-9g0qA;UCrRIGXx4L5hlU3YX0_dXEuQ;UCrqilwm_w0Jww188AyxBq7w',
+  },
+   {
+    title: 'hustle',
+    youtubeChannels:
+      'UCyaN6mg5u8Cjy2ZI4ikWaug;UCF2v8v8te3_u4xhIQ8tGy1g;UChFahjDeMBV67DSXiF5pwBA;UC36zt_eM_gZQXayw_pAdASg;UCyFqFYfTW2VoIQKylJ04Rtw;UCIBgYfDjtWlbJhg--Z4sOgQ;UCO3tlaeZ6Z0ZN5frMZI3-uQ;UC1LAjODfg7dnSSrrPGGPPMw;UCUyDOdBWhC1MCxEjC46d-zw;UCtx8VrbY0M7oLgzl5M_ELsg;UCfRtwc6K_VU9N4OjNnU2P7g;UCMSYZVlQmyG8_2MkIKzg0kw;UCUvvj5lwue7PspotMDjk5UA;UChObmEJP3bgGUXJGc2ePP3Q;UCPi6sb9M-Kj-j-PKptcUNJQ;UC4bq21IPPbpu0Qrsl7LW0sw;UCcefcZRL2oaA_uBNeo5UOWg;UCO8SO6KTCosQOvdLj68yyQQ;UC36zt_eM_gZQXayw_pAdASg;UCESLZhusAkFfsNsApnjF_Cg;UCdZxojNw026cW3RuA-B1f7w;UCfVPKWScEOPeHx63ws-E9nw;UCRCCrE1uX5Y05cmkXFiviWw;UCkkhmBWfS7pILYIk0izkc3A;UCidsrMKtX7u_QJDsjAw-vKA;UCbVefFvKHAKAvuCCN0gmssg;UC0rQo28wJ0WU30W5athbrOA;UCznv7Vf9nBdJYvBagFdAHWw;UCESLZhusAkFfsNsApnjF_Cg;UCuoxrRDDgk3UUnxR4tlkJYQ;UCp8mr0kjVyVAmvexLDqB60A;UCS4ITAOQlFP9_ny2Zl5b0ig;UCcnyjTK4IheQN2ycsE7NZTQ;UCwB3HiWejAkml1UZ0Qo2bFg;UCGwuxdEeCf0TIA2RbPOj-8g;UCAeAB8ABXGoGMbXuYPmiu2A;UCNFGSWVOdVWEe9XJNnfTdyQ;UCJLMboBYME_CLEfwsduI0wQ;UCSPYNpQ2fHv9HJ-q6MIMaPw;UCl-Zrl0QhF66lu1aGXaTbfw;UCLkq3HC2y2NPpyQzaeR9slA;UCKHiA-dJxESze4gFBxk3ygQ;UCCKpicnIwBP3VPxBAZWDeNA;UCkCGANrihzExmu9QiqZpPlQ;UCASM0cgfkJxQ1ICmRilfHLw;UCvSXMi2LebwJEM1s4bz5IBA;UCWhJUz6BvjkhaW4AfSrBevw;UCoOae5nYA7VqaXzerajD0lg;UCAm8TlOEXTPq2B04yQ0lDuA;UCV6KDgJskWaEckne5aPA0aQ;UCdIM_XmhsVYbBhl3pgPq3dA;UCPa0bvFsR1mbBpk5mIPFGLA;UCUwkeSWSq3WFd6VSvBb4v7g;UCTQuKo8v0PaPCvk5aRxc_Yg;UCT3EznhW_CNFcfOlyDNTLLw;UCnkmQCJ4f6rRl1PXCblppvA;UC9SLXh5V1bwFiS82DTRUx8A;UCZ59iKBmGRfQlnl73sOX0Lw;UCs5wAPodliO0oVxiTD8ruvg;UCSPYNpQ2fHv9HJ-q6MIMaPw;UCBiCWypofB8i9BOPYUvihhA;UCVneetxSKb5lwa2_6c-qO8Q;UC9cn0TuPq4dnbTY-CBsm8XA;UCK-zlnUfoDHzUwXcbddtnkg;UCNm6S6esHHxJGt13lNaR9VQ;UCL_v4tC26PvOFytV1_eEVSg;UCPbMnGLeHscshhD7PAEnvbw;UCdazTKVCKYe_tjvjuQQmpgQ',
+  },
+      {
+    title: 'curious',
+    subreddit: 'mealtimevideos;watchandlearn;biology;psychology;lectures;space;philosophy;physics;math',
+    minNumOfVotes: 3,
   },
   {
     title: 'docus',
