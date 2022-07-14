@@ -1,10 +1,5 @@
 const channels = [
-  {
-    title: 'reddit',
-    subreddit: 'videos',
-    minNumOfVotes: 100,
-    // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
-  },
+
   {
     title: 'crypto',
     youtubeChannels:
@@ -29,6 +24,12 @@ const channels = [
     title: 'charts',
     youtubeChannels:
       'UCRvqjQPSeaWn-uEx-w0XOIg;UCeBbEvlSOeJMwSVYOdXOvvw;UCnwxzpFzZNtLH8NgTeAROFA;UCPx92fC_fwQJyfKeBmKGdkA;UCDq7GjSes-8kQn_Vcg35jfA;UCz2wzs4KacqHth7R_N5grgA;UCpBm7mATacoeNMtlkiWE_ig;UCwGflGmzevf4fcm-z8E-twA;UCL-QLzGmf468WAL1U-9g0qA;UCrRIGXx4L5hlU3YX0_dXEuQ;UCrqilwm_w0Jww188AyxBq7w',
+  },
+    {
+    title: 'reddit',
+    subreddit: 'videos',
+    minNumOfVotes: 100,
+    // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
   },
    {
     title: 'hustle',
