@@ -7,7 +7,7 @@ const channels = [
   },
     {
     title: 'curious',
-    subreddit: 'mealtimevideos;watchandlearn;biology;psychology;lectures;space;philosophy;physics;math',
+    subreddit: 'mealtimevideos;watchandlearn;biology;psychology;space;philosophy;physics',
     minNumOfVotes: 3,
   },
      {
