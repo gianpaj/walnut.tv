@@ -1,1 +1,9 @@
-<svg enable-background="new 0 0 1635.795 2723.659" viewBox="0 0 1635.795 2723.659" xmlns="http://www.w3.org/2000/svg"><path d="m0 0h542v542h-542z" fill="#a955ff"/><path d="m546.898 542h542v542h-542z" fill="#009cff"/><path d="m1088.898 1090.83h542v542h-542z" fill="#ff00c0"/><path d="m546.898 1632.83h542v542h-542z" fill="#00ff2a"/><path d="m0 2174.83h542v542h-542z" fill="#ffea00"/></svg>
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 457 687" width="457" height="687">
+	<title>walnut-logo-white-background (1)</title>
+	<defs>
+		<image  width="457" height="687" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAckAAAKvBAMAAADzVCmYAAAAAXNSR0IB2cksfwAAABtQTFRFSEhIAAAAT09PV1dXV1dXPT09PT09V1dXLCwsD4ihdwAAAAl0Uk5T/wD+gP///gECTPQNfAAAAsBJREFUeJzt0kEKQEAUgOFxA87gAsoFLFzAwhkcgaUdx1ZWEnae0vfX1PSmpr56KYWXFdHl8UhKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkrKlyvr6KoPlG14TQpfn4KSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpLyf8o+vGFa12Wc9nO4PE5Pz9fT26/mD5Rd+PbklJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlO8qN19pApoPUMVtAAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+	</style>
+	<use id="Background" href="#img1" x="0" y="0"/>
+</svg>
