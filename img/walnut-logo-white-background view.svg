@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 1200 1200" fill-rule="evenodd" clip-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <path fill="#484848" d="M 609 256 L 609.049 486 L 379 486 L 379 256 L 609 256 Z" bx:origin="0.5 0.5"/>
+  <path fill="#565656" d="M 608.997 486 L 839 486 L 839 716 L 609.025 716 L 608.997 486 Z"/>
+  <path fill="#3c3d3c" d="M 379 716 L 609 715.985 L 609 946 L 379 946 L 379 716 Z"/>
+</svg>
