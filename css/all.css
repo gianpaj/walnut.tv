@@ -359,13 +359,13 @@ a:hover {
   padding: 20px 0 40px;
 }
 
-.video-container .video-details .share-icon,
+/* .video-container .video-details .share-icon,
 .video-container .video-details .up-vote,
 .video-container .video-details .down-vote {
   cursor: pointer;
   fill: #fff;
   width: 20px;
-}
+} */
 
 .video-container .video-controls .next-video,
 .video-container .video-controls .prev-video {
@@ -379,21 +379,17 @@ a:hover {
   fill: var(--gray);
 }
 
-.video-container .video-details .up-vote.active,
+/* .video-container .video-details .up-vote.active,
 .video-container .video-details .down-vote.active {
   fill: var(--yellow);
 }
 
 .video-container .video-details .down-vote {
   transform: rotate(180deg);
-}
+} */
 
 .video-container .video-controls .prev-video {
-  transform: rotate(-90deg);
-}
-
-.video-container .video-controls .next-video {
-  transform: rotate(90deg);
+  transform: rotate(180deg);
 }
 
 details .up-vote-num {
