@@ -25,7 +25,7 @@
     "eslint": "8.21.0",
     "nodemon": "2.0.19",
     "stylelint": "14.9.1",
-    "stylelint-config-standard": "26.0.0",
+    "stylelint-config-standard": "27.0.0",
     "yup": "0.32.11"
   }
 }
