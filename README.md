@@ -4,7 +4,7 @@
 
 <a href="https://www.producthunt.com/posts/walnut-2?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-walnut-2" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=151473&theme=dark" alt="Walnut - The hottest videos from Reddit in the last 24 hours 📺🔥 | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
-TV of the future
+Your TV on your own terms
 
 ## Getting Started
 
