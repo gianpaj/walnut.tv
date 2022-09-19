@@ -308,6 +308,7 @@ var appVideo = new Vue({
     options: [],
     playingVideo: [],
     searchInput: null,
+    sortBy: 'hot',
     videoList: [],
     videoMessage: loadingVideosMessage,
     videoPlaying: 0,
@@ -388,7 +389,16 @@ var appVideo = new Vue({
             }
             return;
           }
-          this.videoList = mixElementsFromArraysOfArrays([redditVideos, youtubeVideos]);
+          const videoList = mixElementsFromArraysOfArrays([redditVideos, youtubeVideos]);
+          if (this.sortBy === 'new') {
+            this.videoList = videoList.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+          } else {
+            this.videoList = videoList;
+          }
+          // console.log(
+          //   'this.videoList',
+          //   this.videoList.map((v) => v.publishedAt)
+          // );
           // if (searchText) window.history.replaceState(null, null, '/r/' + searchText);
           this.loadingVideos = false;
 

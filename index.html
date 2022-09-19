@@ -112,6 +112,17 @@
                 </li>
               </ul>
             </div>
+            <div class="navbar-sorby">
+              <input
+                type="checkbox"
+                id="sort-by"
+                v-model="sortBy"
+                v-bind:true-value="'new'"
+                v-bind:false-value="'hot'"
+                @change="fetchAllVideos()"
+                title="sort by most recent?"
+              />
+            </div>
           </div>
         </div>
       </div>

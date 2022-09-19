@@ -704,3 +704,17 @@ details .up-vote-num {
     padding: 20px 0 0;
   }
 }
+
+#sort-by {
+  display: none;
+  margin: -1em;
+}
+
+.navbar-sorby {
+  padding: 1em;
+  cursor: pointer;
+}
+
+.navbar-sorby:hover #sort-by {
+  display: block;
+}

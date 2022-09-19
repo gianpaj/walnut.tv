@@ -1,5 +1,4 @@
 const channels = [
-
   {
     title: 'crypto',
     youtubeChannels:
