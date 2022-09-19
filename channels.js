@@ -14,7 +14,7 @@ const channels = [
   {
     title: 'defi/charts',
     youtubeChannels:
-      'UC7B3Y1yrg4S7mmgoR-NsfxA;UCRvqjQPSeaWn-uEx-w0XOIg;UChktQbmIzLZKSwEZh8yE1Kw;UCPIMrjFNbYwsbCuZdgEaqeA;UC-o87lCF9HaEuj0R-3VT1yg;UC_o4_cOevPVYC5pXs9OOexg;UCt7esZt_MwWXl9fgT0yO1eA;UCh1ob28ceGdqohUnR7vBACA;UCPFMk8WxX3SJKy1jh61xxGw;UCM7ppuKNvT47DfbYEZv2eZA;UCjcJAutcux5YrqLv7Dgl4TA;UCgygld4agfGKO5TJMxFs8_g;UCEL45QB7k-UnGa05GAx6HZA;UCatItl6C7wJp9txFMbXbSTg;UCC2UPtfjtdAgofzuxUPZJ6g;UCB67PxhB5LAWEbI4etQS7aw;UCllRhrCFGEF5Wi2kQ2T7ikw;UCcvr_fLs0J9LEvK-BqLkiBA;UCBgtLgzDgqRjaBeSKsrjAAQ;UCCatR7nWbYrkVXdxXb4cGXw;UCnwxzpFzZNtLH8NgTeAROFA;UCPx92fC_fwQJyfKeBmKGdkA;UCDq7GjSes-8kQn_Vcg35jfA;UCz2wzs4KacqHth7R_N5grgA;UCpBm7mATacoeNMtlkiWE_ig;UCwGflGmzevf4fcm-z8E-twA;UCL-QLzGmf468WAL1U-9g0qA;UCrRIGXx4L5hlU3YX0_dXEuQ;UCrqilwm_w0Jww188AyxBq7w',
+      'UC7B3Y1yrg4S7mmgoR-NsfxA;UCRvqjQPSeaWn-uEx-w0XOIg;UChktQbmIzLZKSwEZh8yE1Kw;UCPIMrjFNbYwsbCuZdgEaqeA;UC-o87lCF9HaEuj0R-3VT1yg;UC_o4_cOevPVYC5pXs9OOexg;UCB9rdQtUlOCMliMhC5wGxjw;UCt7esZt_MwWXl9fgT0yO1eA;UCh1ob28ceGdqohUnR7vBACA;UCPFMk8WxX3SJKy1jh61xxGw;UCM7ppuKNvT47DfbYEZv2eZA;UCjcJAutcux5YrqLv7Dgl4TA;UCgygld4agfGKO5TJMxFs8_g;UCEL45QB7k-UnGa05GAx6HZA;UCatItl6C7wJp9txFMbXbSTg;UCC2UPtfjtdAgofzuxUPZJ6g;UCB67PxhB5LAWEbI4etQS7aw;UCllRhrCFGEF5Wi2kQ2T7ikw;UCcvr_fLs0J9LEvK-BqLkiBA;UCBgtLgzDgqRjaBeSKsrjAAQ;UCCatR7nWbYrkVXdxXb4cGXw;UCnwxzpFzZNtLH8NgTeAROFA;UCPx92fC_fwQJyfKeBmKGdkA;UCDq7GjSes-8kQn_Vcg35jfA;UCz2wzs4KacqHth7R_N5grgA;UCpBm7mATacoeNMtlkiWE_ig;UCwGflGmzevf4fcm-z8E-twA;UCL-QLzGmf468WAL1U-9g0qA;UCrRIGXx4L5hlU3YX0_dXEuQ;UCrqilwm_w0Jww188AyxBq7w',
   },
   {
     title: 'hustle',
