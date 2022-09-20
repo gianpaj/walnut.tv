@@ -93,7 +93,6 @@
         var request = __webpack_require__(1);
         var common = __webpack_require__(2);
         module.exports = function (key, options, cb) {
-          console.log('browserJS');
           return common(request, key, options, cb);
         };
 
@@ -132,7 +131,6 @@
             };
             req.open('GET', url, true);
             if (etag) {
-              console.log('etag', etag);
               req.setRequestHeader('If-None-Match', etag);
             }
 
@@ -153,9 +151,7 @@
           if (!key && typeof cb === 'function') return cb(new Error('API Key is required'));
           else if (!key) throw new Error('API Key is required');
           fillData(key, options);
-          console.log('options', options);
           var q = querystring.stringify(config.options);
-          console.log('config', config);
           if (typeof cb === 'function')
             request(config.URL + q, config.options.etag)
               .then(function (res) {

@@ -195,13 +195,17 @@ function YouTubeService() {
       q: query,
     }).then(formatResults);
   }
-  async function loadChannels(channel_s) {
+  async function loadChannels(channel_s, sortBy) {
     channel_s = channel_s.split(';');
     const searches = channel_s.map((channel) => getYouTubeChannelSearch(channel));
     const arrayOfArrayOfVideos = await Promise.all(searches);
 
-    const videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
-    return [].concat.apply([], videos);
+    let videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
+    videos = [].concat.apply([], videos);
+    if (sortBy === 'new') {
+      return videos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+    }
+    return videos;
   }
   function getYouTubeChannelSearch(channel) {
     // from youtube-api-v3-search npm
@@ -334,7 +338,6 @@ var appVideo = new Vue({
     options: [],
     playingVideo: [],
     searchInput: null,
-    sortBy: 'hot',
     videoList: [],
     videoMessage: loadingVideosMessage,
     videoPlaying: 0,
@@ -368,12 +371,13 @@ var appVideo = new Vue({
           subreddits = this.channel;
           promises = redditService.loadHot(subreddits, minNumOfVotes);
         } else {
-          subreddits = this.getSubReddits(this.channel);
-          ytChannels = this.getYouTubeChannels(this.channel);
-          minNumOfVotes = this.getChannelMinVotes(this.channel);
+          const channel = channels.find((c) => c.title == this.channel);
+          subreddits = channel.subreddit;
+          ytChannels = channel.youtubeChannels;
+          minNumOfVotes = channel.minNumOfVotes;
           promises = Promise.allSettled([
             subreddits ? redditService.loadHot(subreddits, minNumOfVotes) : [],
-            ytChannels ? youtubeService.loadChannels(ytChannels) : [],
+            ytChannels ? youtubeService.loadChannels(ytChannels, channel.sortBy) : [],
           ]);
         }
       } else {
@@ -415,12 +419,7 @@ var appVideo = new Vue({
             }
             return;
           }
-          const videoList = mixElementsFromArraysOfArrays([redditVideos, youtubeVideos]);
-          if (this.sortBy === 'new') {
-            this.videoList = videoList.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-          } else {
-            this.videoList = videoList;
-          }
+          this.videoList = mixElementsFromArraysOfArrays([redditVideos, youtubeVideos]);
           // console.log(
           //   'this.videoList',
           //   this.videoList.map((v) => v.publishedAt)
