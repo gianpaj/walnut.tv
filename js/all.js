@@ -184,7 +184,7 @@ function mixElementsFromArraysOfArrays(arrayOfArrays) {
 const redditService = RedditVideoService();
 
 function YouTubeService() {
-  function search(query) {
+  function search(query, etag) {
     // from youtube-api-v3-search npm
     // eslint-disable-next-line no-undef
     return searchYoutube(youtubeApiKey, {
@@ -195,17 +195,26 @@ function YouTubeService() {
       q: query,
     }).then(formatResults);
   }
-  async function loadChannels(channel_s) {
+  async function loadChannels(channel_s, sortBy) {
     channel_s = channel_s.split(';');
     const searches = channel_s.map((channel) => getYouTubeChannelSearch(channel));
     const arrayOfArrayOfVideos = await Promise.all(searches);
 
-    const videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
-    return [].concat.apply([], videos);
+    let videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
+    videos = [].concat.apply([], videos);
+    if (sortBy === 'new') {
+      return videos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+    }
+    return videos;
   }
   function getYouTubeChannelSearch(channel) {
     // from youtube-api-v3-search npm
     // eslint-disable-next-line no-undef
+
+    let etag;
+
+    // console.log('etags[channel]', etags[channel]);
+    etag = localStorage.getItem(`etag_${channel}`);
     return searchYoutube(youtubeApiKey, {
       part: 'snippet',
       type: 'video',
@@ -213,10 +222,31 @@ function YouTubeService() {
       publishedAfter: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(), // 24 hours back => yesterday
       channelId: channel,
       order: 'date',
-    }).then(formatResults);
+      etag,
+    }).then((res) => formatResults(res, channel));
   }
-  function formatResults(results) {
+  function formatResults(results, channel) {
+    if (results.status === 304) {
+      // console.log('304. use cache.', results);
+      // console.log('cache[channel]', cache[channel]);
+      let items = localStorage.getItem(`cache_${channel}`);
+      try {
+        items = JSON.parse(items);
+        results.items = items;
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+    } else {
+      // update cache etag
+      if (channel) {
+        localStorage.setItem(`etag_${channel}`, results.etag);
+        localStorage.setItem(`cache_${channel}`, JSON.stringify(results.items));
+        // console.log('results.etag', results.etag);
+      }
+    }
     if (!results.items) return null;
+
     return results.items.map((res) => ({
       id: res.id.videoId, // reddit id
       permalink: 'https://www.youtube.com/watch?v=' + res.id.videoId,
@@ -341,12 +371,13 @@ var appVideo = new Vue({
           subreddits = this.channel;
           promises = redditService.loadHot(subreddits, minNumOfVotes);
         } else {
-          subreddits = this.getSubReddits(this.channel);
-          ytChannels = this.getYouTubeChannels(this.channel);
-          minNumOfVotes = this.getChannelMinVotes(this.channel);
+          const channel = channels.find((c) => c.title == this.channel);
+          subreddits = channel.subreddit;
+          ytChannels = channel.youtubeChannels;
+          minNumOfVotes = channel.minNumOfVotes;
           promises = Promise.allSettled([
             subreddits ? redditService.loadHot(subreddits, minNumOfVotes) : [],
-            ytChannels ? youtubeService.loadChannels(ytChannels) : [],
+            ytChannels ? youtubeService.loadChannels(ytChannels, channel.sortBy) : [],
           ]);
         }
       } else {
@@ -389,6 +420,10 @@ var appVideo = new Vue({
             return;
           }
           this.videoList = mixElementsFromArraysOfArrays([redditVideos, youtubeVideos]);
+          // console.log(
+          //   'this.videoList',
+          //   this.videoList.map((v) => v.publishedAt)
+          // );
           // if (searchText) window.history.replaceState(null, null, '/r/' + searchText);
           this.loadingVideos = false;
 
