@@ -412,10 +412,10 @@ var appVideo = new Vue({
             );
           }
           if (redditVideos.length < 1 && youtubeVideos.length < 1) {
-            this.videoMessage = "Sorry, we couldn't find any videos in /" + this.channel;
+            this.videoMessage = "Come back tomorrow, today's Youtube quota was used for /" + this.channel;
 
             if (this.searchInput) {
-              this.videoMessage = `Sorry, we couldn't find any videos in /r/${this.searchInput}`;
+              this.videoMessage = `Come back tomorrow, today's Youtube quota was used for /r/${this.searchInput}`;
             }
             return;
           }
