@@ -183,21 +183,41 @@ function mixElementsFromArraysOfArrays(arrayOfArrays) {
 
 const redditService = RedditVideoService();
 
-function YouTubeService() {
-  function search(query, etag) {
-    // from youtube-api-v3-search npm
-    // eslint-disable-next-line no-undef
-    return searchYoutube(youtubeApiKey, {
-      part: 'snippet',
-      type: 'video',
-      maxResults: '25',
-      // videoEmbeddable: 'true',
-      q: query,
-    }).then(formatResults);
+class YouTubeService {
+  initiated = false;
+  init() {
+    return new Promise((resolve, reject) => {
+      // if (!gapi.client) {
+      //   return reject(new Error('gapi.client is not defined'));
+      // }
+      const start = () => {
+        gapi.client
+          .init({
+            apiKey: youtubeApiKey,
+            discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
+            scope: 'https://www.googleapis.com/auth/youtube.readonly',
+          })
+          .then(() => {
+            this.initiated = true;
+            console.log('gapi.client initiated');
+            resolve();
+          })
+          .catch((reason) => {
+            reject(reason);
+            console.log('Error: ' + reason.result.error.message);
+          });
+      };
+      gapi.load('client', start);
+    });
   }
-  async function loadChannels(channel_s, sortBy) {
+
+  async loadChannels(channel_s, sortBy) {
+    if (!this.initiated) {
+      console.error('gapi.client not initiated');
+      return;
+    }
     channel_s = channel_s.split(';');
-    const searches = channel_s.map((channel) => getYouTubeChannelSearch(channel));
+    const searches = channel_s.map((channel) => this.getYouTubeChannelSearch(channel));
     const arrayOfArrayOfVideos = await Promise.all(searches);
 
     let videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
@@ -207,63 +227,87 @@ function YouTubeService() {
     }
     return videos;
   }
-  function getYouTubeChannelSearch(channel) {
-    // from youtube-api-v3-search npm
-    // eslint-disable-next-line no-undef
 
-    let etag;
+  getYouTubeChannelSearch(channel) {
+    // const youtubeApiParams = {};
+
+    // // if it's not a channel id
+    // if (channel.length !== 24) {
+    //   youtubeApiParams.forUsername = channel;
+    // } else {
+    //   youtubeApiParams.id = channel;
+    // }
+    // console.log('youtubeApiParams', youtubeApiParams);
+    // use youtube api v3 gapi
+    return gapi.client.youtube.channels
+      .list({
+        part: 'snippet,contentDetails,statistics',
+        id: channel,
+        // TODO: use channel name. Returns different result schema
+        // forUsername: 'Bankless',
+        // ...youtubeApiParams,
+      })
+      .then(
+        (res) =>
+          // get the youtube related playlist id
+          res.result.items[0].contentDetails.relatedPlaylists.uploads
+      )
+      .then((playlistId) =>
+        gapi.client.youtube.playlistItems.list({
+          part: 'snippet',
+          playlistId,
+          maxResults: 50,
+        })
+      )
+      .then((res) =>
+        // get youtube videos snippets
+        res.result.items.map((item) => item.snippet)
+      )
+      .then((snippets) => this.formatResults(snippets))
+      .catch((err) => console.error(err));
+
+    // let etag;
 
     // console.log('etags[channel]', etags[channel]);
-    etag = localStorage.getItem(`etag_${channel}`);
-    return searchYoutube(youtubeApiKey, {
-      part: 'snippet',
-      type: 'video',
-      maxResults: '25',
-      publishedAfter: new Date(new Date() - 24 * 60 * 60 * 1000).toISOString(), // 24 hours back => yesterday
-      channelId: channel,
-      order: 'date',
-      etag,
-    }).then((res) => formatResults(res, channel));
+    // etag = localStorage.getItem(`etag_${channel}`);
   }
-  function formatResults(results, channel) {
-    if (results.status === 304) {
-      // console.log('304. use cache.', results);
-      // console.log('cache[channel]', cache[channel]);
-      let items = localStorage.getItem(`cache_${channel}`);
-      try {
-        items = JSON.parse(items);
-        results.items = items;
-      } catch (error) {
-        console.error(error);
-        return [];
-      }
-    } else {
-      // update cache etag
-      if (channel) {
-        localStorage.setItem(`etag_${channel}`, results.etag);
-        localStorage.setItem(`cache_${channel}`, JSON.stringify(results.items));
-        // console.log('results.etag', results.etag);
-      }
-    }
-    if (!results.items) return null;
 
-    return results.items.map((res) => ({
-      id: res.id.videoId, // reddit id
-      permalink: 'https://www.youtube.com/watch?v=' + res.id.videoId,
-      title: res.snippet.title,
-      channelTitle: res.snippet.channelTitle,
-      description: res.snippet.description,
-      youtubeId: res.id.videoId,
-      publishedAt: res.snippet.publishedAt,
+  formatResults(snippets) {
+    // if (results.status === 304) {
+    //   // console.log('304. use cache.', results);
+    //   // console.log('cache[channel]', cache[channel]);
+    //   let items = localStorage.getItem(`cache_${channel}`);
+    //   try {
+    //     items = JSON.parse(items);
+    //     results.items = items;
+    //   } catch (error) {
+    //     console.error(error);
+    //     return [];
+    //   }
+    // } else {
+    //   // update cache etag
+    //   if (channel) {
+    //     localStorage.setItem(`etag_${channel}`, results.etag);
+    //     localStorage.setItem(`cache_${channel}`, JSON.stringify(results.items));
+    //     // console.log('results.etag', results.etag);
+    //   }
+    // }
+    if (!snippets) return null;
+
+    return snippets.map((res) => ({
+      // get the snippets video id
+      id: res.resourceId.videoId,
+      youtubeId: res.resourceId.videoId,
+      permalink: `https://www.youtube.com/watch?v=${res.resourceId.videoId}`,
+      title: res.title,
+      channelTitle: res.channelTitle,
+      description: res.description,
+      publishedAt: res.publishedAt,
     }));
   }
-  return {
-    search,
-    loadChannels,
-  };
 }
 
-const youtubeService = YouTubeService();
+const youtubeService = new YouTubeService();
 
 var youtubeId,
   player,
@@ -344,9 +388,19 @@ var appVideo = new Vue({
     videosWatched: [],
     voted: 0,
   },
-  created: function () {
+  created: async function () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
     this.channel || (this.channel = channels[0].title);
+
+    await youtubeService.init();
+    // while (!youtubeService.initiated) {
+    //   try {
+    //     await sleep(100);
+    //     console.log('awaiting youtubeService.initiate');
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // }
     this.fetchAllVideos();
     window.addEventListener('keyup', this.keys);
   },
@@ -615,3 +669,5 @@ tippy('.navbar-brand', {
   interactive: true,
   content: '<a href="mailto:hi@walnut.tv">hi@walnut.tv</a>',
 });
+
+// const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
