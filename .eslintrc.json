@@ -7,15 +7,16 @@
   },
   "extends": "eslint:recommended",
   "globals": {
-    "subreddits": "readonly",
+    "channels": "readonly",
     "ga": "readonly",
+    "gapi": "readonly",
     "reddit": "readonly",
     "YT": "readonly",
     "Vue": "readonly",
     "VueSelect": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "rules": {}
