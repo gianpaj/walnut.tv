@@ -8,7 +8,7 @@ const youtubeURL = 'http://www.youtube.com/watch?v=';
 const youtubeURLLength = youtubeURL.length;
 const embedLength = '/embed/'.length;
 
-const MAX_VIDEOS_PER_CHANNEL = 25;
+const MAX_VIDEOS_PER_CHANNEL = 4;
 
 function RedditVideoService() {
   function isVideoObject(obj) {
