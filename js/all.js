@@ -8,6 +8,8 @@ const youtubeURL = 'http://www.youtube.com/watch?v=';
 const youtubeURLLength = youtubeURL.length;
 const embedLength = '/embed/'.length;
 
+const MAX_VIDEOS_PER_CHANNEL = 25;
+
 function RedditVideoService() {
   function isVideoObject(obj) {
     var data = obj.data;
@@ -255,7 +257,7 @@ class YouTubeService {
         gapi.client.youtube.playlistItems.list({
           part: 'snippet',
           playlistId,
-          maxResults: 50,
+          maxResults: MAX_VIDEOS_PER_CHANNEL,
         })
       )
       .then((res) =>
