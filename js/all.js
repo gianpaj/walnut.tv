@@ -9,6 +9,7 @@ const youtubeURLLength = youtubeURL.length;
 const embedLength = '/embed/'.length;
 
 const MAX_VIDEOS_PER_CHANNEL = 4;
+const YOUTUBE_VIDEO_MAX_AGE_HOURS = 24;
 
 function RedditVideoService() {
   function isVideoObject(obj) {
@@ -240,9 +241,10 @@ class YouTubeService {
     // }
     // console.log('youtubeApiParams', youtubeApiParams);
     // use youtube api v3 gapi
+    // quota cost of 1 unit.
     return gapi.client.youtube.channels
       .list({
-        part: 'snippet,contentDetails,statistics',
+        part: 'contentDetails',
         id: channel,
         // TODO: use channel name. Returns different result schema
         // forUsername: 'Bankless',
@@ -254,6 +256,7 @@ class YouTubeService {
           res.result.items[0].contentDetails.relatedPlaylists.uploads
       )
       .then((playlistId) =>
+        // quota cost of 1 unit.
         gapi.client.youtube.playlistItems.list({
           part: 'snippet',
           playlistId,
@@ -295,7 +298,16 @@ class YouTubeService {
     // }
     if (!snippets) return null;
 
-    return snippets.map((res) => ({
+    const now = new Date();
+
+    const videos = snippets.filter((snippet) => {
+      const publishedAt = new Date(snippet.publishedAt);
+      const diff = now - publishedAt;
+      const hours = diff / 1000 / 60 / 60;
+      return hours < YOUTUBE_VIDEO_MAX_AGE_HOURS;
+    });
+
+    return videos.map((res) => ({
       // get the snippets video id
       id: res.resourceId.videoId,
       youtubeId: res.resourceId.videoId,
