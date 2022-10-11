@@ -268,7 +268,7 @@ class YouTubeService {
         res.result.items.map((item) => item.snippet)
       )
       .then((snippets) => this.formatResults(snippets))
-      .catch((err) => console.error(err));
+      .catch((err) => err);
 
     // let etag;
 
@@ -342,6 +342,7 @@ function onYouTubeIframeAPIReady() {
       onError: onPlayerError,
     },
     playerVars: {
+      autoplay: 0,
       controls: 1,
       showinfo: 0,
       rel: 0,
