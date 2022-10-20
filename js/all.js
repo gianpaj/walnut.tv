@@ -360,7 +360,7 @@ function onPlayerError() {
   appVideo.nextVideo();
 }
 function onPlayerStateChange(t) {
-  0 === t.data && appVideo.autoplay && appVideo.nextVideo();
+  YT.PlayerState.ENDED === t.data && appVideo.autoplay && appVideo.nextVideo();
 }
 
 Vue.config.unsafeDelimiters = ['{!!', '!!}'];
@@ -386,8 +386,9 @@ var loadingVideosMessage = 'Loading Videos <img src="/img/spin.svg" class="loadi
 var appVideo = new Vue({
   el: '#appVideo',
   data: {
+    // autoplay the next video when video has ended (onPlayerStateChange)
+    autoplay: false,
     // get the channel after the first slash
-    autoplay: true,
     channel: paths.length === 1 && paths[0],
     channels: channels,
     contentType: '', // 'youtube' or 'reddit'
@@ -538,8 +539,10 @@ var appVideo = new Vue({
       '37' == evt.keyCode ? this.prevVideo() : '39' == evt.keyCode && this.nextVideo();
     },
     playVideo: function (t) {
-      if (!player || !player.loadVideoById) return;
-      this.mobile ? player.cueVideoById(t.youtubeId) : player.loadVideoById(t.youtubeId);
+      if (!t.youtubeId) {
+        return;
+      }
+      player?.cueVideoById?.(t.youtubeId);
     },
     play: function (i) {
       this.playingVideo = this.videoList[i];
