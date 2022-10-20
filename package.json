@@ -29,6 +29,6 @@
     "yup": "0.32.11"
   },
   "dependencies": {
-    "@types/gapi": "^0.0.42"
+    "@types/gapi": "^0.0.43"
   }
 }
