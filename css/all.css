@@ -15,6 +15,7 @@
 
 :root {
   --yellow: #ffec00;
+  --lightgray: #8e8c8c;
   --gray: #5a5a5a;
   --gray2: #4e4e4e;
   --dark: #0e0e0e;
@@ -660,7 +661,7 @@ details .up-vote-num {
 }
 
 .terms {
-  color: var(--gray);
+  color: var(--lightgray);
 }
 
 .terms:active,
