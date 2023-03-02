@@ -23,7 +23,7 @@
   "devDependencies": {
     "browser-sync": "2.28.1",
     "eslint": "8.35.0",
-    "nodemon": "2.0.20",
+    "nodemon": "2.0.21",
     "stylelint": "15.2.0",
     "stylelint-config-standard": "30.0.1",
     "yup": "1.0.2"
