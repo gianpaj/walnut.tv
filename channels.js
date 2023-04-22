@@ -5,6 +5,12 @@ const channels = [
     minNumOfVotes: 100,
     // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
   },
+    {
+    title: 'ai',
+    sortBy: 'new',
+    youtubeChannels:
+      'UCbY9xX3_jW5c2fjlZVBI4cg;UChpleBmo18P08aKCIgti38g;UCn2RJFAA1ndipnVJsYAwWOw;UCDq7SjbgRKty5TgGafW8Clg;UCxRU9z5Jm-r11oQpYFtNQ8g;UCKelCK4ZaO6HeEI1KQjqzWA',
+     },
   {
     title: 'crypto',
     sortBy: 'new',
