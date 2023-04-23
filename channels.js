@@ -9,7 +9,7 @@ const channels = [
     title: 'ai',
     sortBy: 'new',
     youtubeChannels:
-      'UCED3hlYdD0SlCff7jJ8tF3Q;UCpV_X0VrL8-jg3t6wYGS-1g;UC66Ggxy8MHX9DCDohdRYDTA;UCXIa1dlKtpeCEBHObZFQgsA;UCR9j1jqqB5Rse69wjUnbYwA;UCNJ1Ymd5yFuUPtn21xtRbbw;UCbY9xX3_jW5c2fjlZVBI4cg;UChpleBmo18P08aKCIgti38g;UCn2RJFAA1ndipnVJsYAwWOw;UCDq7SjbgRKty5TgGafW8Clg;UCxRU9z5Jm-r11oQpYFtNQ8g;UCKelCK4ZaO6HeEI1KQjqzWA',
+      'UCn8ujwUInbJkBhffxqAPBVQ;UCED3hlYdD0SlCff7jJ8tF3Q;UCpV_X0VrL8-jg3t6wYGS-1g;UC66Ggxy8MHX9DCDohdRYDTA;UCXIa1dlKtpeCEBHObZFQgsA;UCR9j1jqqB5Rse69wjUnbYwA;UCNJ1Ymd5yFuUPtn21xtRbbw;UCbY9xX3_jW5c2fjlZVBI4cg;UChpleBmo18P08aKCIgti38g;UCn2RJFAA1ndipnVJsYAwWOw;UCDq7SjbgRKty5TgGafW8Clg;UCxRU9z5Jm-r11oQpYFtNQ8g;UCKelCK4ZaO6HeEI1KQjqzWA',
      },
   {
     title: 'crypto',
