@@ -264,9 +264,17 @@ class YouTubeService {
         })
       )
       .then((res) =>
-        // get youtube videos snippets
-        res.result.items.map((item) => item.snippet)
+        // get youtube videos Ids
+        res.result.items.map((item) => item.snippet.resourceId.videoId)
       )
+      .then((videoIds) =>
+        gapi.client.youtube.videos.list({
+          part: 'snippet, contentDetails',
+          id: videoIds.join(','),
+        })
+      )
+      .then((res) => res.result.items.map((item) => ({ ...item, ...item.snippet, ...item.contentDetails })))
+      .then((snippets) => snippets.filter((snippet) => !this.isShortDuration(snippet)))
       .then((snippets) => this.formatResults(snippets))
       .catch((err) => err);
 
@@ -274,6 +282,28 @@ class YouTubeService {
 
     // console.log('etags[channel]', etags[channel]);
     // etag = localStorage.getItem(`etag_${channel}`);
+  }
+
+  SHORT_LENGTH_IN_SEC = 60;
+
+  isShortDuration(snippetAndContentDetails) {
+    return this.getDurationInSec(snippetAndContentDetails.duration) <= this.SHORT_LENGTH_IN_SEC;
+  }
+
+  // e.g.
+  // PT16S
+  // PT1H27M11S
+  getDurationInSec(durationString) {
+    const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(\d+)S/;
+    const matches = durationString.match(regex);
+
+    const hours = parseInt(matches[1] || 0);
+    const minutes = parseInt(matches[2] || 0);
+    const seconds = parseInt(matches[3] || 0);
+
+    const totalSeconds = hours * 60 * 60 + minutes * 60 + seconds;
+
+    return totalSeconds;
   }
 
   formatResults(snippets) {
@@ -309,9 +339,9 @@ class YouTubeService {
 
     return videos.map((res) => ({
       // get the snippets video id
-      id: res.resourceId.videoId,
-      youtubeId: res.resourceId.videoId,
-      permalink: `https://www.youtube.com/watch?v=${res.resourceId.videoId}`,
+      id: res.id,
+      youtubeId: res.id,
+      permalink: `https://www.youtube.com/watch?v=${res.id}`,
       title: res.title,
       channelTitle: res.channelTitle,
       description: res.description,
@@ -351,7 +381,7 @@ function onYouTubeIframeAPIReady() {
     },
   });
 }
-var indexToPlay = 0;
+let indexToPlay = 0;
 function onPlayerReady() {
   // if we're playing a specific video (e.g. /general/b97ih5)
   appVideo.videoList[indexToPlay] && appVideo.play(indexToPlay);
@@ -367,7 +397,7 @@ Vue.config.unsafeDelimiters = ['{!!', '!!}'];
 Vue.config.debug = false;
 Vue.component('v-select', VueSelect.VueSelect);
 Vue.filter('maxChar', function (t) {
-  var e = t;
+  let e = t;
   return (
     void 0 != e && e.length > 90 && (e = jQuery.trim(e).substring(0, 80).split(' ').slice(0, -1).join(' ') + '...'), e
   );
