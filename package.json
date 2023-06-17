@@ -24,7 +24,7 @@
     "browser-sync": "2.29.3",
     "eslint": "8.42.0",
     "nodemon": "2.0.22",
-    "stylelint": "15.7.0",
+    "stylelint": "15.8.0",
     "stylelint-config-standard": "33.0.0",
     "yup": "1.2.0"
   },
