@@ -1,5 +1,10 @@
 const channels = [
 
+      {
+    title: 'curious',
+    subreddit: 'mealtimevideos;watchandlearn;biology;psychology;space;philosophy;physics',
+    minNumOfVotes: 3,
+  },
     {
     title: 'ai',
     sortBy: 'new',
@@ -23,11 +28,7 @@ const channels = [
     subreddit: 'documentaries',
     minNumOfVotes: 10,
   },
-  {
-    title: 'curious',
-    subreddit: 'mealtimevideos;watchandlearn;biology;psychology;space;philosophy;physics',
-    minNumOfVotes: 3,
-  },
+
  
 
   {
