@@ -1,34 +1,42 @@
 {
-  "name": "walnut.tv",
+  "name": "vue3-app",
   "version": "1.0.0",
-  "description": "Always Interesting Videos (webapp)",
-  "main": "index.js",
+  "description": "A Vue.js 3 web application",
+  "main": "src/main.js",
   "scripts": {
-    "start": "browser-sync start --server --files=\"*.html, js/*.js, css/*.css\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "node scripts/check-channels.js",
-    "build": "echo \"works\"",
-    "watch-prebuild": "nodemon scripts/check-channels.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gianpaj/walnut.tv.git"
-  },
-  "author": "Gianfranco Palumbo",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gianpaj/walnut.tv/issues"
-  },
-  "homepage": "https://walnut.tv",
-  "devDependencies": {
-    "browser-sync": "2.29.3",
-    "eslint": "8.43.0",
-    "nodemon": "2.0.22",
-    "stylelint": "15.8.0",
-    "stylelint-config-standard": "33.0.0",
-    "yup": "1.2.0"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@types/gapi": "^0.0.44"
-  }
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0",
+    "vuex": "^4.0.0"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.0.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
