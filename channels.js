@@ -1,5 +1,10 @@
 const channels = [
- 
+    {
+    title: 'reddit',
+    subreddit: 'videos',
+    minNumOfVotes: 100,
+    // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
+  },
       {
     title: 'hustle',
     sortBy: 'new',
@@ -29,12 +34,7 @@ const channels = [
     subreddit: 'documentaries',
     minNumOfVotes: 10,
   },
-   {
-    title: 'reddit',
-    subreddit: 'videos',
-    minNumOfVotes: 100,
-    // youtubeChannels: 'UCsvn_Po0SmunchJYOWpOxMg;UCzQUP1qoWDoEbmsQxvdjxgQ',
-  },
+
 
  
 
