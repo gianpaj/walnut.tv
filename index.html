@@ -1,15 +1,17 @@
 <!-- // -->
-<!-- Thanks for checking the code -->
+<!-- Check the code -->
 <!-- https://github.com/gianpaj/walnut.tv -->
 <!-- // -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Your dose of daily videos on AI, Crypto, Entrepreneurship, Reddit</title>
-    <meta name="description" content="Curated daily videos" />
+    <title>walnut.tv - Your dose of daily videos on AI, Crypto, Entrepreneurship, Reddit, Documentaries</title>
+    <meta
+      name="description"
+      content="Your dose of daily videos on AI, Crypto, Entrepreneurship, Reddit, Documentaries"
+    />
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -104,7 +106,7 @@
                 <span class="sr-only">Toggle navigation</span>
                 <span>{{ channel }}</span>
               </button>
-              <div class="collapse navbar-collapse" id="navbar-collapse-1">
+              <div class="navbar-collapse collapse" id="navbar-collapse-1">
                 <ul class="nav navbar-nav">
                   <li v-for="item in channels" v-bind:class="{ 'active': item.title == channel && !searchInput }">
                     <a v-on:click="changeChannel(item.title)">{{ item.title }}</a>
@@ -218,9 +220,7 @@
                 <div class="terms-container">
                   <a class="terms" target="_blank" href="https://telegra.ph/Terms-of-Use-10-20-2">Terms of Service</a>
                   &nbsp;&nbsp;&nbsp;
-                  <a class="terms" target="_blank" href="https://telegra.ph/Privacy-Policy-10-31-7">
-                    Privacy Policy
-                  </a>
+                  <a class="terms" target="_blank" href="https://telegra.ph/Privacy-Policy-10-31-7">Privacy Policy</a>
                   &nbsp;&nbsp;&nbsp;
                   <a class="terms" target="_blank" href="mailto:hi@walnut.tv">Contact Us</a>
                 </div>
@@ -263,9 +263,8 @@
     <script src="/channels.js"></script>
     <script src="/js/all.js"></script>
     <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js';
-      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js';
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js';
+      import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.2/firebase-analytics.js';
 
       // Your web app's Firebase configuration
       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
