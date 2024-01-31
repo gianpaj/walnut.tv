@@ -17,8 +17,8 @@ const Navbar = () => {
   return (
     <div className="flex w-full flex-col">
       <div className="flex w-full items-center justify-center border-b p-2">
-        <NavigationMenu className="space-x-4">
-          <NavigationMenuList>
+        <NavigationMenu>
+          <NavigationMenuList className="space-x-4">
             <NavigationMenuItem>
               <Link href="/reddit" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>

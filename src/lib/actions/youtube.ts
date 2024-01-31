@@ -1,43 +1,48 @@
-"use server";
-
-import { youtube } from "@googleapis/youtube";
+import type { youtube_v3 } from "@googleapis/youtube";
+import axios from "axios";
+import type { AxiosResponse } from "axios";
 
 import { channels } from "@/lib/data";
 import { isShortDuration } from "@/lib/utils";
 import type { VideoData } from "@/types";
 
-const youtubeApi = youtube({
-  version: "v3",
-  auth: process.env.YOUTUBE_API_KEY,
-});
-
-const getYouTubeChannelSearch = (channelId: string) => {
-  return youtubeApi.channels
-    .list({
-      id: [channelId],
-      part: ["contentDetails"],
+export const getYouTubeChannelSearch = async (channelId: string) => {
+  return axios
+    .get("https://www.googleapis.com/youtube/v3/channels", {
+      params: {
+        id: channelId,
+        key: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
+        part: "contentDetails",
+      },
     })
     .then(
-      (res) => res.data?.items?.[0]?.contentDetails?.relatedPlaylists?.uploads,
+      (res: AxiosResponse<youtube_v3.Schema$ChannelListResponse>) =>
+        res.data?.items?.[0]?.contentDetails?.relatedPlaylists?.uploads,
     )
-    .then((playlistId) =>
-      youtubeApi.playlistItems.list({
-        part: ["snippet"],
-        playlistId,
-        maxResults: 4,
+    .then((playlistId: string | undefined) =>
+      axios.get("https://www.googleapis.com/youtube/v3/playlistItems", {
+        params: {
+          part: "snippet",
+          key: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
+          playlistId,
+          maxResults: 4,
+        },
       }),
     )
-    .then((res) =>
-      res.data.items?.map((item) => item.snippet?.resourceId?.videoId),
-    )
-    .then((videoIDs) =>
-      youtubeApi.videos.list({
-        id: [videoIDs?.join(",") ?? ""],
-        part: ["snippet", "contentDetails"],
-      }),
-    )
-    .then(
-      (res) =>
+    .then((res: AxiosResponse<youtube_v3.Schema$PlaylistItemListResponse>) => {
+      return res.data.items?.map((item) => item.snippet?.resourceId?.videoId);
+    })
+    .then((videoIDs: (string | null | undefined)[] | undefined) => {
+      return axios.get("https://www.googleapis.com/youtube/v3/videos", {
+        params: {
+          id: videoIDs?.join(","),
+          key: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
+          part: "snippet,contentDetails",
+        },
+      });
+    })
+    .then((res: AxiosResponse<youtube_v3.Schema$VideoListResponse>) => {
+      return (
         res.data.items?.map((item) => {
           if (isShortDuration(item.contentDetails?.duration ?? "")) return null;
           return {
@@ -48,8 +53,9 @@ const getYouTubeChannelSearch = (channelId: string) => {
             thumbnail: item.snippet?.thumbnails?.maxres?.url,
             author: item.snippet?.channelTitle,
           };
-        }) ?? [],
-    )
+        }) ?? []
+      );
+    })
     .catch((err) => {
       console.error("Error fetching videos:", err);
       return [];
