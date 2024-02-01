@@ -45,7 +45,7 @@ const VideoDisplay = ({ videos }: Props) => {
   return (
     <>
       <ResizablePanelGroup
-        direction={"horizontal"}
+        direction="horizontal"
         className="min-h-[200px] rounded-lg border"
       >
         <div className="hidden md:flex">

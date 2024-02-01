@@ -17,20 +17,19 @@ const VideoPlayer = ({ video }: Props) => {
     const videoID = url.searchParams.get("v")
       ? url.searchParams.get("v")
       : url.pathname
-          .split("/")
-          [url.pathname.split("/").length - 1]?.split("?")[0];
+        .split("/")[url.pathname.split("/").length - 1]?.split("?")[0];
     setVideoID(videoID ?? "");
   }, [video]);
 
   if (!video) return null;
 
   return (
-          duration: 0.4,
 
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{
+        duration: 0.2,
         delay: 0.5,
         ease: [0, 0.71, 0.2, 1.01],
       }}
