@@ -14,7 +14,6 @@ interface VideoStore {
 }
 
 const useVideo = create(
-  // shared(
   persist<VideoStore>(
     (set, get) => ({
       watchedVideos: [],

@@ -19,7 +19,7 @@ const Logo = (props: Props) => {
         <TooltipTrigger asChild>
           <Image
             src="/img/icons/icon-384x384.png"
-            alt="Logo"
+            alt="Walnut.tv"
             width={48}
             height={48}
             {...props}

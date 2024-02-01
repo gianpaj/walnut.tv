@@ -67,6 +67,7 @@ export async function fetchYouTubeVideos({ title }: { title: string }) {
     (channel) => channel.title === title,
   )?.youtubeChannels;
   if (!channelString) return [];
+
   const channelIds = channelString.split(";").splice(0, 3);
 
   const allVideos = await Promise.all(

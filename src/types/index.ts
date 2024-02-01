@@ -160,4 +160,4 @@ export type VideoData = {
   thumbnail: string;
   url: string;
   author: string;
-}
+};

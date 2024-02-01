@@ -12,7 +12,7 @@ export default function NotFound() {
       <Card className="flex flex-col p-4 md:flex-row">
         <CardHeader className="p-4">
           <CardTitle>
-            <p className="text-center text-7xl font-bold ">404</p>
+            <p className="text-center text-7xl font-bold">404</p>
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col justify-between gap-y-4 p-4">

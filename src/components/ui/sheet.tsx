@@ -54,7 +54,7 @@ const sheetVariants = cva(
 
 interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
-    VariantProps<typeof sheetVariants> {
+  VariantProps<typeof sheetVariants> {
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -62,8 +62,7 @@ interface SheetContentProps
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
->(({ side = "right", className, children, open, setOpen, ...props }, ref) => (
+>(({ side = "right", className, children, setOpen, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
     <SheetPrimitive.Content
@@ -72,7 +71,7 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary" onClick={()=>{setOpen ? setOpen(false): null;}}>
+      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary" onClick={() => setOpen?.(false)}>
         <X className="h-4 w-4 dark:stroke-white" />
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>

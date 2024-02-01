@@ -22,8 +22,8 @@ export default function LinkItem({
     <SheetClose asChild>
       <Link href={href} className={className}>
         <Button
-          variant={"secondary"}
-          size={"sm"}
+          variant="secondary"
+          size="sm"
           className={cn(
             "w-full",
             pathname === `/${children?.toString().toLowerCase()}`

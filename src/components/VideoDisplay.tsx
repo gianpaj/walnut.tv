@@ -46,13 +46,14 @@ const VideoDisplay = ({ videos }: Props) => {
     <>
       <ResizablePanelGroup
         direction={"horizontal"}
-        className="min-h-[200px] rounded-lg border "
+        className="min-h-[200px] rounded-lg border"
       >
         <div className="hidden md:flex">
           <ResizablePanel defaultSize={25}>
             <ScrollArea className="h-screen">
               <div className="flex h-full flex-col space-y-4 p-2">
                 {videos.map((video) => {
+                  const isWatched = videoStore.watchedVideos.includes(video.id)
                   let thumbnail = video.thumbnail;
                   if (
                     !video.thumbnail ||
@@ -64,7 +65,7 @@ const VideoDisplay = ({ videos }: Props) => {
                   return (
                     <button
                       key={video.id}
-                      className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr]  "
+                      className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr]"
                       onClick={() => {
                         router.push(`${pathname}?v=${video.id}`);
                         setVideo(video);
@@ -98,8 +99,8 @@ const VideoDisplay = ({ videos }: Props) => {
                         <span className="line-clamp-2 text-start text-xs text-primary">
                           {video.author}
                         </span>
-                        {videoStore.watchedVideos.includes(video.id) && (
-                          <div className="text-start ">
+                        {isWatched && (
+                          <div className="text-start">
                             <Badge className="text-xs">Watched</Badge>
                           </div>
                         )}
@@ -153,7 +154,7 @@ const VideoDisplay = ({ videos }: Props) => {
                       return (
                         <button
                           key={video.id}
-                          className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr]  "
+                          className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr]"
                           onClick={() => {
                             router.push(`${pathname}?v=${video.id}`);
                             setVideo(video);
@@ -203,10 +204,8 @@ const VideoDisplay = ({ videos }: Props) => {
           </ResizablePanel>
         </div>
       </ResizablePanelGroup>
-      <div
-       className="md:hidden"
-      >
-      <Footer />
+      <div className="md:hidden">
+        <Footer />
       </div>
     </>
   );
