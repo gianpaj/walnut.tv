@@ -8,35 +8,19 @@ Your daily dose of AI, Crypto, Entrepreneurship and Reddit videos
 
 ## Getting Started
 
-```bash
-browser-sync start --server --files="*.html, js/*.js, css/*.css"
-```
 
-### Prerequisites
-
-- Node.JS
-- a browser
-- YouTube API key to search videos there
-
-### Installing
+First, run the development server:
 
 ```bash
-npm install browser-sync -g
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## Deployment
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Automatically on Netlify
-
-## Built With
-
-- [Vue.JS](http://vuejs.org/) v1.0 - we should upgrade to Vue.JS 3 or migrate to Next.js static build or even Astro
-- [vue-select](https://github.com/sagalbot/vue-select) v1.3
-- [reddit.js](https://github.com/sahilm/reddit.js)
-- [youtube-api-v3-search](https://github.com/LionRoar/youtube-api-v3-search)
-- jQuery v1.12
-
-<!-- ## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details -->
-
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
