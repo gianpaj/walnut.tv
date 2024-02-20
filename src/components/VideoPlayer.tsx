@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-
 type Props = {
   video: VideoData;
 };
@@ -16,14 +15,14 @@ const VideoPlayer = ({ video }: Props) => {
     const videoID = url.searchParams.get("v")
       ? url.searchParams.get("v")
       : url.pathname
-        .split("/")[url.pathname.split("/").length - 1]?.split("?")[0];
+          .split("/")
+          [url.pathname.split("/").length - 1]?.split("?")[0];
     setVideoID(videoID ?? "");
   }, [video]);
 
   if (!video) return null;
 
   return (
-
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
       whileInView={{ opacity: 1, scale: 1 }}
@@ -42,7 +41,6 @@ const VideoPlayer = ({ video }: Props) => {
         className="rounded-lg border"
       ></iframe>
     </motion.div>
-
   );
 };
 

@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import VideoDisplay from "@/components/VideoDisplay";
+import { fetchYouTubeVideos } from "@/lib/actions/youtube";
 import { channels } from "@/lib/data";
 import { interleaveArrays, isVideoObject } from "@/lib/videoService";
+
 import LoadingPage from "../loading";
-import { fetchYouTubeVideos } from "@/lib/actions/youtube";
 
 interface ChannelPageProps {
   params: {
@@ -25,14 +26,24 @@ const ChannelPage = ({ params }: ChannelPageProps) => {
     async function getRedditData() {
       try {
         const promises = subReddits.map((sub) =>
-          axios.get<RedditResponseData>(`https://www.reddit.com/r/${sub}/hot.json?limit=50`)
+          axios.get<RedditResponseData>(
+            `https://www.reddit.com/r/${sub}/hot.json?limit=50`,
+          ),
         );
-        const arrayOfArrayOfResponses = await Promise.all(promises)
+        const arrayOfArrayOfResponses = await Promise.all(promises);
         // filter only the videos and only the ones with more than min votes or 3
-        const videosArrayOfArrays = arrayOfArrayOfResponses.map((response) => response.data.data.children).map((posts) => posts.filter(isVideoObject).filter((item) => item.data.score >= (channel?.minNumOfVotes || 3)))
+        const videosArrayOfArrays = arrayOfArrayOfResponses
+          .map((response) => response.data.data.children)
+          .map((posts) =>
+            posts
+              .filter(isVideoObject)
+              .filter(
+                (item) => item.data.score >= (channel?.minNumOfVotes ?? 3),
+              ),
+          );
 
         // console.log({ flat: videosArrayOfArrays.flat().map(v => v.data).map(v => ({ subreddit: v.subreddit, id: v.id, url: v.url })) })
-        const flat = interleaveArrays(videosArrayOfArrays).flat()
+        const flat = interleaveArrays(videosArrayOfArrays).flat();
 
         const videosData = flat.map((video) => {
           return {
@@ -49,7 +60,9 @@ const ChannelPage = ({ params }: ChannelPageProps) => {
 
         const uniq = {} as Record<string, boolean>;
         // console.log({ flat });
-        const allVideosData = videosData.filter((v) => !uniq[v.url] && (uniq[v.url] = true));
+        const allVideosData = videosData.filter(
+          (v) => !uniq[v.url] && (uniq[v.url] = true),
+        );
         // console.log({ allVideosData });
         setAllVideos(allVideosData);
       } catch (error) {
@@ -73,12 +86,11 @@ const ChannelPage = ({ params }: ChannelPageProps) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       getYouTubeData();
     }
-    setIsLoading(false)
+    setIsLoading(false);
   }, []);
 
-
   if (isLoading) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
   return (

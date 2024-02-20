@@ -3,9 +3,9 @@ import { Poppins } from "next/font/google";
 
 import "./globals.css";
 
+import Header from "@/components/navbar/Header";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
-import Header from "@/components/navbar/Header";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function RootLayout({
   children,

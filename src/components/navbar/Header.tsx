@@ -8,7 +8,7 @@ import Route from "./Route";
 
 const Header = () => {
   return (
-    <div className="border-b md:border-b-0 p-4 md:p-0">
+    <div className="border-b p-4 md:border-b-0 md:p-0">
       <div className="hidden md:flex">
         <Navbar />
       </div>

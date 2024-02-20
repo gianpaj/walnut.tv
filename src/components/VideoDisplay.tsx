@@ -41,7 +41,6 @@ const VideoDisplay = ({ videos }: Props) => {
     }
   }, [video]);
 
-
   return (
     <>
       <ResizablePanelGroup
@@ -53,7 +52,7 @@ const VideoDisplay = ({ videos }: Props) => {
             <ScrollArea className="h-screen">
               <div className="flex h-full flex-col space-y-4 p-2">
                 {videos.map((video) => {
-                  const isWatched = videoStore.watchedVideos.includes(video.id)
+                  const isWatched = videoStore.watchedVideos.includes(video.id);
                   let thumbnail = video.thumbnail;
                   if (
                     !thumbnail ||
@@ -120,7 +119,9 @@ const VideoDisplay = ({ videos }: Props) => {
             <div className="flex w-full flex-col justify-center p-4">
               <VideoPlayer video={video} />
               <div className="mt-4">
-                <a className="text-2xl font-semibold" href={video.url}>{video.title}</a>
+                <a className="text-2xl font-semibold" href={video.url}>
+                  {video.title}
+                </a>
               </div>
             </div>
             <Footer />
@@ -133,7 +134,10 @@ const VideoDisplay = ({ videos }: Props) => {
                 <div className="flex w-full flex-col justify-center p-4">
                   <VideoPlayer video={video} />
                   <div className="mt-4">
-                    <a className="text-sm font-semibold md:text-base lg:text-lg" href={video.url}>
+                    <a
+                      className="text-sm font-semibold md:text-base lg:text-lg"
+                      href={video.url}
+                    >
                       {video.title}
                     </a>
                   </div>

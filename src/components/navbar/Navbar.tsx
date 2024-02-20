@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import Logo from "@/components/navbar/Logo";
+import { ModeToggle } from "@/components/theme/ModeToggle";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -10,8 +11,6 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-
-import { ModeToggle } from "@/components/theme/ModeToggle";
 
 const Navbar = () => {
   return (
@@ -67,7 +66,7 @@ const Navbar = () => {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        <ModeToggle className="justify-self-end ml-2" />
+        <ModeToggle className="ml-2 justify-self-end" />
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const Footer = () => {
   return (
-    <div className="flex flex-col md:flex-row justify-center border-t mt-6">
+    <div className="mt-6 flex flex-col justify-center border-t md:flex-row">
       <div>
         <Link href="https://telegra.ph/Terms-of-Use-10-20-2" target="_blank">
           <Button variant={"link"}>Terms of Service</Button>
