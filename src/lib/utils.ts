@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getDurationInSec(durationString: string) {
+function getDurationInSec(durationString: string) {
   const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(\d+)S/;
   const matches = durationString.match(regex) ?? [];
 

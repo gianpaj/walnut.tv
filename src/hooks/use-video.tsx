@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface VideoStore {
-  // Store all the list of videos seen, currently watching, has already watched has alreadty clicked and so on
+  // Store all the list of videos seen, currently watching, has already watched has already clicked and so on
   watchedVideos: string[];
   currentVideoWatching: string;
   clickedVideos: string[];

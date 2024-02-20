@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/resizable";
 import useVideo from "@/hooks/use-video";
 import { cn } from "@/lib/utils";
-import type { VideoData } from "@/types";
 
 import Footer from "./Footer";
 import { Badge } from "./ui/badge";
@@ -42,6 +41,7 @@ const VideoDisplay = ({ videos }: Props) => {
     }
   }, [video]);
 
+
   return (
     <>
       <ResizablePanelGroup
@@ -56,9 +56,9 @@ const VideoDisplay = ({ videos }: Props) => {
                   const isWatched = videoStore.watchedVideos.includes(video.id)
                   let thumbnail = video.thumbnail;
                   if (
-                    !video.thumbnail ||
-                    (!video.thumbnail.startsWith("http://") &&
-                      !video.thumbnail.startsWith("https://"))
+                    !thumbnail ||
+                    (!thumbnail.startsWith("http://") &&
+                      !thumbnail.startsWith("https://"))
                   ) {
                     thumbnail = "/img/notfound.jpg";
                   }
@@ -69,6 +69,7 @@ const VideoDisplay = ({ videos }: Props) => {
                       onClick={() => {
                         router.push(`${pathname}?v=${video.id}`);
                         setVideo(video);
+                        console.log(video);
                         videoStore.setCurrentVideoWatching(video.id);
                         videoStore.addToClickedVideos(video.id);
                         videoStore.addToWatchedVideos(video.id);
@@ -119,7 +120,7 @@ const VideoDisplay = ({ videos }: Props) => {
             <div className="flex w-full flex-col justify-center p-4">
               <VideoPlayer video={video} />
               <div className="mt-4">
-                <p className="text-2xl font-semibold">{video.title}</p>
+                <a className="text-2xl font-semibold" href={video.url}>{video.title}</a>
               </div>
             </div>
             <Footer />
@@ -132,9 +133,9 @@ const VideoDisplay = ({ videos }: Props) => {
                 <div className="flex w-full flex-col justify-center p-4">
                   <VideoPlayer video={video} />
                   <div className="mt-4">
-                    <p className="text-sm font-semibold md:text-base lg:text-lg">
+                    <a className="text-sm font-semibold md:text-base lg:text-lg" href={video.url}>
                       {video.title}
-                    </p>
+                    </a>
                   </div>
                 </div>
               </ResizablePanel>
@@ -143,11 +144,11 @@ const VideoDisplay = ({ videos }: Props) => {
                 <ScrollArea className="h-screen">
                   <div className="flex h-full flex-col space-y-4 p-2">
                     {videos.map((video) => {
-                      let thumbnail = video.thumbnail;
+                      let thumbnail = video.thumbnail || video.media?.oembed?.thumbnail_url;
                       if (
-                        !video.thumbnail ||
-                        (!video.thumbnail.startsWith("http://") &&
-                          !video.thumbnail.startsWith("https://"))
+                        !thumbnail ||
+                        (!thumbnail.startsWith("http://") &&
+                          !thumbnail.startsWith("https://"))
                       ) {
                         thumbnail = "/img/notfound.jpg";
                       }

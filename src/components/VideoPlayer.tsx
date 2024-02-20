@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-import type { VideoData } from "@/types";
 
 type Props = {
   video: VideoData;

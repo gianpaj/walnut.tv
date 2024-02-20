@@ -4,7 +4,6 @@ import type { AxiosResponse } from "axios";
 
 import { channels } from "@/lib/data";
 import { isShortDuration } from "@/lib/utils";
-import type { VideoData } from "@/types";
 
 export const getYouTubeChannelSearch = async (channelId: string) => {
   return axios
@@ -29,18 +28,18 @@ export const getYouTubeChannelSearch = async (channelId: string) => {
         },
       }),
     )
-    .then((res: AxiosResponse<youtube_v3.Schema$PlaylistItemListResponse>) => {
-      return res.data.items?.map((item) => item.snippet?.resourceId?.videoId);
-    })
-    .then((videoIDs: (string | null | undefined)[] | undefined) => {
-      return axios.get("https://www.googleapis.com/youtube/v3/videos", {
+    .then((res: AxiosResponse<youtube_v3.Schema$PlaylistItemListResponse>) =>
+      res.data.items?.map((item) => item.snippet?.resourceId?.videoId),
+    )
+    .then((videoIDs: (string | null | undefined)[] | undefined) =>
+      axios.get("https://www.googleapis.com/youtube/v3/videos", {
         params: {
           id: videoIDs?.join(","),
           key: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
           part: "snippet,contentDetails",
         },
-      });
-    })
+      }),
+    )
     .then((res: AxiosResponse<youtube_v3.Schema$VideoListResponse>) => {
       return (
         res.data.items?.map((item) => {
@@ -49,31 +48,30 @@ export const getYouTubeChannelSearch = async (channelId: string) => {
             id: item.id!,
             title: item.snippet?.title,
             url: `https://www.youtube.com/watch?v=${item.id}`,
-            duration: item.contentDetails?.duration,
+            // duration: item.contentDetails?.duration,
             thumbnail: item.snippet?.thumbnails?.maxres?.url,
+            // publishedAt: item.snippet?.publishedAt,
             author: item.snippet?.channelTitle,
-          };
+          } as VideoData;
         }) ?? []
       );
     })
     .catch((err) => {
-      console.error("Error fetching videos:", err);
+      console.error("Error fetching YouTube videos:", err);
       return [];
     });
 };
 
 export async function fetchYouTubeVideos({ title }: { title: string }) {
-  const channelString = channels.find(
+  const youtubeChannels = channels.find(
     (channel) => channel.title === title,
   )?.youtubeChannels;
-  if (!channelString) return [];
+  if (!youtubeChannels) return [];
 
-  const channelIds = channelString.split(";").splice(0, 3);
+  const channelIds = youtubeChannels.split(";").splice(0, 3);
 
   const allVideos = await Promise.all(
-    channelIds.map((channelId) => {
-      return getYouTubeChannelSearch(channelId) ?? [];
-    }),
+    channelIds.map((channelId) => getYouTubeChannelSearch(channelId) ?? []),
   )
     .then((res) => res.flat())
     .then((res) => res.filter((item) => item !== null));

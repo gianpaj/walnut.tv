@@ -16,9 +16,13 @@ import { ModeToggle } from "@/components/theme/ModeToggle";
 const Navbar = () => {
   return (
     <div className="flex w-full flex-col">
-      <div className="flex w-full items-center justify-center border-b p-2">
+      <div className="flex w-full items-center justify-center bg-neutral-900">
         <NavigationMenu>
-          <NavigationMenuList className="space-x-4">
+          <NavigationMenuList className="space-x-4 uppercase">
+            <div className="mx-4">
+              <Logo />
+            </div>
+
             <NavigationMenuItem>
               <Link href="/reddit" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -40,10 +44,6 @@ const Navbar = () => {
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
-
-            <div className="mx-16">
-              <Logo />
-            </div>
             <NavigationMenuItem>
               <Link href="/crypto" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>

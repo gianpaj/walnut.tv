@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import type { RedditPost, RedditResponseData } from "@/types";
-
 // This function won't work because reddit denies requests from the server
 export async function fetchRedditVideos({
   subreddit,
