@@ -38,7 +38,10 @@ const ChannelPage = ({ params }: ChannelPageProps) => {
           return {
             id: video.data.id,
             title: video.data.title,
-            thumbnail: video.data.thumbnail || video.data.media?.oembed?.thumbnail_url || '',
+            thumbnail:
+              video.data.thumbnail ??
+              video.data.media?.oembed?.thumbnail_url ??
+              "",
             url: video.data.url,
             author: video.data.author,
           };
@@ -63,9 +66,11 @@ const ChannelPage = ({ params }: ChannelPageProps) => {
     }
 
     if (subReddits.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       getRedditData();
     }
     if (youtubeChannels.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       getYouTubeData();
     }
     setIsLoading(false)

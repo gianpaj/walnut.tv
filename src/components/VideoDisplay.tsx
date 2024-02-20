@@ -144,7 +144,7 @@ const VideoDisplay = ({ videos }: Props) => {
                 <ScrollArea className="h-screen">
                   <div className="flex h-full flex-col space-y-4 p-2">
                     {videos.map((video) => {
-                      let thumbnail = video.thumbnail || video.media?.oembed?.thumbnail_url;
+                      let thumbnail = video.thumbnail;
                       if (
                         !thumbnail ||
                         (!thumbnail.startsWith("http://") &&

@@ -17,11 +17,11 @@ export function isVideoObject({ data }: RedditPost) {
  * output = [1, 4, 9, 2, 5, 10, 3, 6, 7, 8]
  */
 export function interleaveArrays<T>(arrayOfArrays: T[][]): T[] {
-  let result: any[] = [];
+  const result: T[] = [];
   while (arrayOfArrays.length > 0) {
     arrayOfArrays = arrayOfArrays.filter((subArray) => {
       if (subArray.length > 0) {
-        result.push(subArray.shift());
+        result.push(subArray.shift() as T);
         return true;
       }
       return false;
