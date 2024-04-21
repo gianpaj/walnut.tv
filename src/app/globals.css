@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    --navbar-background: #0e0e0e;
+    --negative: #4e4e4e;
     --background: 0 0% 100%;
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;

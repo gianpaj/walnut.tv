@@ -34,11 +34,10 @@ const VideoPlayer = ({ video }: Props) => {
       className="aspect-h-9 aspect-w-16 w-full"
     >
       <iframe
-        src={"https://www.youtube.com/embed/" + videoID}
+        src={`https://www.youtube.com/embed/${videoID}`}
         title={video.title}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
-        className="rounded-lg border"
       ></iframe>
     </motion.div>
   );

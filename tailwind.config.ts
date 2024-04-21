@@ -1,13 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { Config } from "tailwindcss";
+// import colors from "tailwindcss/colors";
+import { colors } from "tailwindcss/defaultTheme";
 
 const config = {
   darkMode: ["class"],
-  content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-  ],
+  content: ["./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
@@ -22,6 +20,8 @@ const config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        "navbar-background": "var(--navbar-background)",
+        negative: "var(--negative)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {

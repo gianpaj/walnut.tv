@@ -13,7 +13,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "walnut.tv",
+  title:
+    "walnut.tv - Your dose of daily videos on AI, Crypto, Entrepreneurship, Reddit, Documentaries",
   description:
     "walnut.tv - Your dose of daily videos on AI, Crypto, Entrepreneurship, Reddit, Documentaries",
   icons: [{ rel: "icon", url: "/favicon.ico" }],

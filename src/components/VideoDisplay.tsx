@@ -92,12 +92,9 @@ const VideoDisplay = ({ videos }: Props) => {
                           className="w-full"
                         />
                       </div>
-                      <div className="col-span-3 p-2">
+                      <div className="col-span-3 px-2">
                         <span className="line-clamp-2 text-start text-xs font-medium">
                           {video.title}
-                        </span>
-                        <span className="line-clamp-2 text-start text-xs text-primary">
-                          {video.author}
                         </span>
                         {isWatched && (
                           <div className="text-start">

@@ -1,6 +1,10 @@
+- favicon
+- fix yellow color for current video
+- watched video label should be on top of the video thumbnail
+  - title should be more opaque
 - add link under videos
 - render RedditVideos
-- where do we get the thumbnails from? e.g view-source:https://www.reddit.com/r/biology/comments/1atw0vu/scientists_merge_yeast_with_photosynthesis_genes/
+- where do we get the thumbnails from? e.g view-source:<https://www.reddit.com/r/biology/comments/1atw0vu/scientists_merge_yeast_with_photosynthesis_genes/>
 
 ```
 {
@@ -155,6 +159,5 @@
     "is_video": true
 }
 ```
-
 
 - state management <https://github.com/pmndrs/zustand>

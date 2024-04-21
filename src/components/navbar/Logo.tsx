@@ -17,13 +17,15 @@ const Logo = (props: Props) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Image
-            src="/img/icons/android-chrome-192x192.png"
-            alt="Walnut.tv"
-            width={48}
-            height={48}
-            {...props}
-          />
+          <Link href="/">
+            <Image
+              src="/img/icons/android-chrome-192x192.png"
+              alt="Walnut.tv"
+              width={48}
+              height={48}
+              {...props}
+            />
+          </Link>
         </TooltipTrigger>
         <TooltipContent>
           <Link href="mailto:hi@walnut.tv" className="text-primary underline">
