@@ -6,6 +6,32 @@
 - render RedditVideos
 - where do we get the thumbnails from? e.g view-source:<https://www.reddit.com/r/biology/comments/1atw0vu/scientists_merge_yeast_with_photosynthesis_genes/>
 
+# OLD TODOs
+
+# custom channels
+- add Youtube link
+- scroll channel on homepage
+- login, logout
+- order is important
+- don't the last channel and the last source
+
+Later:
+- search for YouTube channel
+
+
+
+
+To test:
+- [ ] google analytics is still working
+
+
+# DOING
+- navbar
+
+# TODO
+- share modal
+
+
 ```
 {
     "approved_at_utc": null,
