@@ -22,7 +22,7 @@
   "homepage": "https://walnut.tv",
   "devDependencies": {
     "browser-sync": "3.0.3",
-    "eslint": "9.15.0",
+    "eslint": "9.26.0",
     "nodemon": "3.1.7",
     "stylelint": "16.10.0",
     "stylelint-config-standard": "36.0.1",
