@@ -197,11 +197,11 @@ class YouTubeService {
           .init({
             apiKey: youtubeApiKey,
             discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
-            scope: 'https://www.googleapis.com/auth/youtube.readonly',
+            // scope: 'https://www.googleapis.com/auth/youtube.readonly',
           })
           .then(() => {
             this.initiated = true;
-            console.log('gapi.client initiated');
+            console.debug('gapi.client initiated');
             resolve();
           })
           .catch((reason) => {
@@ -352,7 +352,7 @@ class YouTubeService {
 
 const youtubeService = new YouTubeService();
 
-var youtubeId,
+var youtubeId = 'PEStHkA_6Bo',
   player,
   tag = document.createElement('script');
 tag.src = 'https://www.youtube.com/iframe_api';
@@ -399,7 +399,8 @@ Vue.component('v-select', VueSelect.VueSelect);
 Vue.filter('maxChar', function (t) {
   let e = t;
   return (
-    void 0 != e && e.length > 90 && (e = jQuery.trim(e).substring(0, 80).split(' ').slice(0, -1).join(' ') + '...'), e
+    void 0 != e && e.length > 90 && (e = jQuery.trim(e).substring(0, 80).split(' ').slice(0, -1).join(' ') + '...'),
+    e
   );
 });
 Vue.filter('toUrl', function (t) {
@@ -511,10 +512,10 @@ var appVideo = new Vue({
             );
           }
           if (redditVideos.length < 1 && youtubeVideos.length < 1) {
-            this.videoMessage = "Come back tomorrow, today's Youtube quota was used for /" + this.channel;
+            this.videoMessage = `Come back tomorrow, today's YouTube quota was used for /${this.channel}`;
 
             if (this.searchInput) {
-              this.videoMessage = `Come back tomorrow, today's Youtube quota was used for /r/${this.searchInput}`;
+              this.videoMessage = `Come back tomorrow, today's YouTube quota was used for /r/${this.searchInput}`;
             }
             return;
           }
@@ -632,8 +633,8 @@ var appVideo = new Vue({
       $('#url-text')[0].value = url;
     },
     storageAvailable: function () {
+      var n = '__storage_test__';
       try {
-        var n = '__storage_test__';
         window.localStorage.setItem(n, n);
         window.localStorage.removeItem(n);
         return true;
@@ -644,9 +645,9 @@ var appVideo = new Vue({
     changeChannel: function (channel) {
       this.searchInput = '';
       if (this.channel !== channel) {
-        player.stopVideo();
+        player?.stopVideo();
         this.channel = channel;
-        window.history.replaceState(null, null, '/' + channel);
+        window.history.replaceState(null, null, `/${channel}`);
         this.fetchAllVideos();
       }
       $('#navbar-collapse-1').collapse('hide');
