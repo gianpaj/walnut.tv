@@ -20,20 +20,21 @@ export default function LinkItem({
   const pathname = usePathname();
   return (
     <SheetClose asChild>
-      <Link href={href} className={className}>
-        <Button
-          variant="secondary"
-          size="sm"
-          className={cn(
-            "w-full",
-            pathname === `/${children?.toString().toLowerCase()}`
-              ? "bg-primary text-black"
-              : "",
-          )}
-        >
+      <Button
+        asChild
+        variant="secondary"
+        size="lg"
+        className={cn(
+          "w-full",
+          pathname === `/${children?.toString().toLowerCase()}`
+            ? "bg-primary text-black"
+            : "",
+        )}
+      >
+        <Link href={href} className={className}>
           {children}
-        </Button>
-      </Link>
+        </Link>
+      </Button>
     </SheetClose>
   );
 }

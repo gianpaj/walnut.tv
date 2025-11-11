@@ -1,7 +1,7 @@
 import React from "react";
 import { Menu } from "lucide-react";
 
-import { ModeToggle } from "@/components/theme/ModeToggle";
+// import { ModeToggle } from "@/components/theme/ModeToggle";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
@@ -13,28 +13,27 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
+import { Button } from "../ui/button";
 import LinkItem from "./LinkItem";
 
 const MobileNav = async () => {
   return (
     <Sheet>
-      <div className="flex p-1">
-        <SheetTrigger>
-          <div className={` rounded-md border p-2`}>
-            <Menu className="h-4 w-4 text-black dark:text-white" />
-          </div>
-        </SheetTrigger>
-      </div>
+      <SheetTrigger className="flex p-1">
+        <div className={` rounded-md border p-2`}>
+          <Menu className="h-4 w-4 text-black dark:text-white" />
+        </div>
+      </SheetTrigger>
       <SheetContent side={"left"} className="items-start">
         <SheetHeader>
           <SheetTitle className="font-display mt-4 flex items-center justify-between space-x-2 text-xl">
             <p>walnut.tv</p>
-            <ModeToggle />
+            {/*<ModeToggle />*/}
           </SheetTitle>
         </SheetHeader>
-        <ScrollArea className="h-full pr-4">
-          <div className="flex h-full flex-col justify-between">
-            <SheetDescription className="my-4 space-y-2">
+        <ScrollArea>
+          <div className="flex justify-center">
+            <SheetDescription className="my-4 grid h-[calc(100svh-46px-32px)] w-1/2 grid-flow-row grid-cols-1">
               <LinkItem href="/reddit" className="w-full">
                 Reddit
               </LinkItem>
@@ -54,10 +53,6 @@ const MobileNav = async () => {
                 Docus
               </LinkItem>
             </SheetDescription>
-
-            <SheetFooter className="my-8">
-              {/* <Button variant="outline">Close</Button> */}
-            </SheetFooter>
           </div>
         </ScrollArea>
       </SheetContent>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import Logo from "@/components/navbar/Logo";
-import { ModeToggle } from "@/components/theme/ModeToggle";
+// import { ModeToggle } from "@/components/theme/ModeToggle";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -18,7 +18,7 @@ const Navbar = () => {
 
   return (
     <div className="flex w-full flex-col">
-      <div className="bg-navbar-background flex w-full items-center justify-center">
+      <div className="flex w-full items-center justify-center bg-navbar-background">
         <NavigationMenu>
           <NavigationMenuList className="space-x-4 uppercase">
             <div className="mx-4">
@@ -87,7 +87,7 @@ const Navbar = () => {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        <ModeToggle className="ml-2 justify-self-end" />
+        {/*<ModeToggle className="ml-2 justify-self-end" />*/}
       </div>
     </div>
   );

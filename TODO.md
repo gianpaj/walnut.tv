@@ -9,6 +9,7 @@
 # OLD TODOs
 
 # custom channels
+
 - add Youtube link
 - scroll channel on homepage
 - login, logout
@@ -16,21 +17,22 @@
 - don't the last channel and the last source
 
 Later:
+
 - search for YouTube channel
 
 
-
-
 To test:
+
 - [ ] google analytics is still working
 
 
 # DOING
+
 - navbar
 
 # TODO
-- share modal
 
+- share modal
 
 ```
 {
