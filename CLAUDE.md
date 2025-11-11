@@ -38,6 +38,7 @@ The README notes that the project should consider upgrading to:
 - `channels.js` - Channel configuration (YouTube channel IDs and Reddit subreddits)
 - `scripts/check-channels.js` - Channel validation script (validates YouTube channel ID format)
 - `scripts/add-youtube-channel.js` - Script to add YouTube channels via API search
+- `.claude/skills/add-youtube-channel.md` - Claude skill for the add channel workflow
 
 ## Development
 
