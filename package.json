@@ -14,8 +14,8 @@
     "type": "git",
     "url": "git+https://github.com/gianpaj/walnut.tv.git"
   },
-  "author": "Gianfranco Palumbo",
-  "license": "ISC",
+  "author": "Gianfranco Palumbo, Alexander Kostinskyi",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/gianpaj/walnut.tv/issues"
   },
