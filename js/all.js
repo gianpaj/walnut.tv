@@ -213,13 +213,21 @@ class YouTubeService {
     });
   }
 
+  /**
+   * Load videos from YouTube channels
+   *
+   * @async
+   * @param {string} channel_s - One or more YouTube channel IDs separated by semicolons (e.g., 'UCxxx;UCyyy')
+   * @param {string} sortBy - Sort order for videos ('new' for newest first, otherwise by relevance)
+   * @returns {Promise<Array>} Array of video objects with metadata (id, title, channelTitle, description, publishedAt, permalink, youtubeId)
+   * @throws {Error} If gapi.client is not initiated
+   */
   async loadChannels(channel_s, sortBy) {
     if (!this.initiated) {
       console.error('gapi.client not initiated');
       return;
     }
-    channel_s = channel_s.split(';');
-    const searches = channel_s.map((channel) => this.getYouTubeChannelSearch(channel));
+    const searches = channel_s.split(';').map((channel) => this.getYouTubeChannelSearch(channel));
     const arrayOfArrayOfVideos = await Promise.all(searches);
 
     let videos = mixElementsFromArraysOfArrays(arrayOfArrayOfVideos);
@@ -230,6 +238,20 @@ class YouTubeService {
     return videos;
   }
 
+  /**
+   * Fetch and format YouTube videos from a given channel
+   *
+   * @async
+   * @param {string} channel - YouTube channel ID
+   * @returns {Promise<Array>} Array of formatted video objects filtered by duration
+   * @description Retrieves videos from a YouTube channel by:
+   *   1. Getting the channel's uploads playlist ID (1 quota unit)
+   *   2. Listing playlist items to get video IDs (1 quota unit)
+   *   3. Fetching video details (snippet and contentDetails)
+   *   4. Filtering out videos shorter than SHORT_LENGTH_IN_SEC
+   *   5. Formatting results with title, channel, description, etc.
+   * @throws {Error} If channel not found or API call fails
+   */
   getYouTubeChannelSearch(channel) {
     // const youtubeApiParams = {};
 
@@ -271,6 +293,7 @@ class YouTubeService {
         gapi.client.youtube.videos.list({
           part: 'snippet, contentDetails',
           id: videoIds.join(','),
+          publishedAfter: new Date(Date.now() - YOUTUBE_VIDEO_MAX_AGE_HOURS * 60 * 60 * 1000).toISOString(),
         })
       )
       .then((res) => res.result.items.map((item) => ({ ...item, ...item.snippet, ...item.contentDetails })))
@@ -328,16 +351,7 @@ class YouTubeService {
     // }
     if (!snippets) return null;
 
-    const now = new Date();
-
-    const videos = snippets.filter((snippet) => {
-      const publishedAt = new Date(snippet.publishedAt);
-      const diff = now - publishedAt;
-      const hours = diff / 1000 / 60 / 60;
-      return hours < YOUTUBE_VIDEO_MAX_AGE_HOURS;
-    });
-
-    return videos.map((res) => ({
+    return snippets.map((res) => ({
       // get the snippets video id
       id: res.id,
       youtubeId: res.id,
