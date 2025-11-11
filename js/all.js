@@ -1,6 +1,9 @@
-// eslint-disable-next-line no-console
-console.log('%c%s', 'color: green; background: yellow; font-size: 24px;', "Thanks for checking walnut source's code!");
-// eslint-disable-next-line no-console
+console.log(
+  '%c%s',
+  'color: green; background: yellow; font-size: 24px;',
+  "Thanks for checking Walnut.tv source's code!"
+);
+
 console.log("Walnut's code is open sourced at https://github.com/gianpaj/walnut.tv");
 
 const youtubeApiKey = 'AIzaSyD342vuWxFeyEMKANx58qKyECeNsxlv0f8';
@@ -506,7 +509,6 @@ var appVideo = new Vue({
           resolvers = resolvers.filter((i) => i.status === 'fulfilled').map((i) => i.value);
           const [redditVideos = [], youtubeVideos = []] = resolvers;
           if (window.location.search == '?debug') {
-            // eslint-disable-next-line no-console
             console.log(
               redditVideos.map((v) => ({
                 subreddit: v.permalink.split('/r/')[1].split('/')[0],
@@ -515,7 +517,7 @@ var appVideo = new Vue({
                 youtubeId: v.youtubeId,
               }))
             );
-            // eslint-disable-next-line no-console
+
             console.log(
               youtubeVideos.map((v) => ({
                 title: v.title,
@@ -559,7 +561,7 @@ var appVideo = new Vue({
           if (this.searchInput) {
             this.videoMessage = `Sorry, there was an error retrieving videos /r/${this.searchInput}`;
           }
-          // eslint-disable-next-line no-console
+
           console.error(error);
         });
     },
@@ -652,7 +654,7 @@ var appVideo = new Vue({
         window.localStorage.setItem(n, n);
         window.localStorage.removeItem(n);
         return true;
-      } catch (_) {
+      } catch {
         return false;
       }
     },
@@ -677,7 +679,6 @@ $('#shareModal button').click(function () {
   try {
     document.execCommand('copy');
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error(err);
   }
 });
