@@ -8,13 +8,15 @@
 
 Your dose of daily videos on AI, Crypto, Entrepreneurship, Reddit, Documentaries
 
-### Installing
+## Getting Started
+
+Install browser-sync to start the development server
 
 ```bash
 npm install browser-sync -g
 ```
 
-## Getting Started
+### Run development server
 
 ```bash
 browser-sync start --server --files="*.html, js/*.js, css/*.css"
