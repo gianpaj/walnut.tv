@@ -13,6 +13,7 @@ const embedLength = '/embed/'.length;
 
 const MAX_VIDEOS_PER_CHANNEL = 4;
 const YOUTUBE_VIDEO_MAX_AGE_HOURS = 24;
+const INITIAL_CHANNEL = 'reddit';
 
 function RedditVideoService() {
   function isVideoObject(obj) {
@@ -310,15 +311,25 @@ class YouTubeService {
     // etag = localStorage.getItem(`etag_${channel}`);
   }
 
-  SHORT_LENGTH_IN_SEC = 60;
+  SHORT_LENGTH_IN_SEC = 120;
 
   isShortDuration(snippetAndContentDetails) {
     return this.getDurationInSec(snippetAndContentDetails.duration) <= this.SHORT_LENGTH_IN_SEC;
   }
 
-  // e.g.
-  // PT16S
-  // PT1H27M11S
+  /**
+   * Convert ISO 8601 duration string to seconds
+   *
+   * @param {string} durationString - ISO 8601 duration format (e.g., 'PT16S', 'PT1H27M11S')
+   * @returns {number} Total duration in seconds
+   * @description Parses YouTube API duration format and converts to total seconds.
+   *   - PT16S = 16 seconds
+   *   - PT1H27M11S = 1 hour, 27 minutes, 11 seconds = 5231 seconds
+   *   - PT5M = 5 minutes = 300 seconds
+   * @example
+   *   getDurationInSec('PT16S') // returns 16
+   *   getDurationInSec('PT1H27M11S') // returns 5231
+   */
   getDurationInSec(durationString) {
     const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(\d+)S/;
     const matches = durationString.match(regex);
@@ -453,7 +464,7 @@ var appVideo = new Vue({
   },
   created: async function () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
-    this.channel || (this.channel = channels[0].title);
+    this.channel || (this.channel = INITIAL_CHANNEL);
 
     await youtubeService.init();
     // while (!youtubeService.initiated) {
