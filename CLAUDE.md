@@ -35,7 +35,9 @@ The README notes that the project should consider upgrading to:
 - `index.html` - Main entry point
 - `js/*.js` - JavaScript source files
 - `css/*.css` - Stylesheets
-- `scripts/check-channels.js` - Channel validation script
+- `channels.js` - Channel configuration (YouTube channel IDs and Reddit subreddits)
+- `scripts/check-channels.js` - Channel validation script (validates YouTube channel ID format)
+- `scripts/add-youtube-channel.js` - Script to add YouTube channels via API search
 
 ## Development
 
@@ -59,6 +61,7 @@ browser-sync start --server --files="*.html, js/*.js, css/*.css"
 - `npm run prebuild` - Run channel checks
 - `npm run build` - Build process (currently just echoes "works")
 - `npm run watch-prebuild` - Watch mode for channel validation
+- `node scripts/add-youtube-channel.js <channel-name> <category>` - Add a YouTube channel to channels.js
 
 ## Deployment
 
@@ -109,10 +112,54 @@ The project uses:
 - Reddit integration through reddit.js library
 - Video content is refreshed based on 24-hour cycles
 
+### Adding YouTube Channels
+
+The project has a custom workflow for adding YouTube channels to `channels.js`. Use the `add-youtube-channel` skill:
+
+```bash
+# Set your YouTube API key first
+export YOUTUBE_API_KEY="your-api-key-here"
+
+# Add a channel
+node scripts/add-youtube-channel.js "channel-name" "category"
+
+# Example
+node scripts/add-youtube-channel.js "Lex Fridman" "ai"
+```
+
+**Available categories**: `hustle`, `ai`, `crypto`
+
+The script will:
+1. Search YouTube for the channel name
+2. Display matching results
+3. Extract the 24-character YouTube channel ID
+4. Add it to the specified category in `channels.js`
+5. Validate the format
+
+**Always run validation after adding a channel:**
+
+```bash
+npm run prebuild
+```
+
+#### YouTube Channel ID Format
+
+- Must be exactly 24 characters
+- Format: alphanumeric string (usually starts with "UC")
+- Example: `UCbfYPyITQ-7l4upoX8nvctg`
+
+#### YouTube Search API
+
+The script uses YouTube Data API v3:
+
+```
+GET https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&q=<channel-name>&type=channel&key=<API_KEY>
+```
+
 ## Author
 
 Gianfranco Palumbo and Alexander Kostinskyi.
 
 ## License
 
-ISC
+MIT
