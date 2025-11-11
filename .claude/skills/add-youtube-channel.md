@@ -62,11 +62,20 @@ Execute the add-youtube-channel script:
 node scripts/add-youtube-channel.js "<channel-name>" "<category>"
 ```
 
-Example:
+Examples:
 
 ```bash
+# Add a channel to a category
 node scripts/add-youtube-channel.js "annacavalli" "ai"
+
+# Just search without adding (useful for previewing results)
+node scripts/add-youtube-channel.js "Lex Fridman" --justSearch
 ```
+
+**--justSearch flag**: Use this optional flag to search for a channel and display results without adding it to `channels.js`. This is useful when you want to:
+- Preview search results before committing to add a channel
+- Verify you found the correct channel
+- Get the channel ID for manual reference
 
 ### Step 4: Review Results
 

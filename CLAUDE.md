@@ -121,12 +121,20 @@ The project has a custom workflow for adding YouTube channels to `channels.js`. 
 # Set your YouTube API key first
 export YOUTUBE_API_KEY="your-api-key-here"
 
-# Add a channel
+# Add a channel to a category
 node scripts/add-youtube-channel.js "channel-name" "category"
 
-# Example
+# Examples
 node scripts/add-youtube-channel.js "Lex Fridman" "ai"
+
+# Just search without adding (preview mode)
+node scripts/add-youtube-channel.js "Y Combinator" --justSearch
 ```
+
+**Arguments:**
+- `channelName` - The YouTube channel name or search term
+- `category` - The category to add to: `hustle`, `ai`, or `crypto`
+- `--justSearch` - (Optional) Only search and display results without modifying `channels.js`
 
 **Available categories**: `hustle`, `ai`, `crypto`
 

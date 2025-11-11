@@ -2,8 +2,18 @@
 
 /**
  * Script to add a YouTube channel to channels.js
- * Usage: node scripts/add-youtube-channel.js <channelName> <channelTitle>
- * Example: node scripts/add-youtube-channel.js "annacavalli" "ai"
+ *
+ * Usage:
+ *   node scripts/add-youtube-channel.js <channelName> <channelTitle> [--justSearch]
+ *
+ * Arguments:
+ *   channelName   - The YouTube channel name or search term to find
+ *   channelTitle  - The category to add the channel to (hustle, ai, crypto)
+ *   --justSearch  - Optional flag to only search without adding to channels.js
+ *
+ * Examples:
+ *   node scripts/add-youtube-channel.js "annacavalli" "ai"
+ *   node scripts/add-youtube-channel.js "Lex Fridman" --justSearch
  */
 
 const fs = require('fs');
@@ -113,12 +123,12 @@ async function main() {
   const args = process.argv.slice(2);
 
   if (args.length < 2) {
-    log('Usage: node scripts/add-youtube-channel.js <channelName> <channelTitle>', 'yellow');
+    log('Usage: node scripts/add-youtube-channel.js <channelName> <channelTitle> [--justSearch]', 'yellow');
     log('Example: node scripts/add-youtube-channel.js "annacavalli" "ai"', 'blue');
     process.exit(1);
   }
 
-  const [channelName, channelTitle] = args;
+  const [channelName, channelTitle, justSearch] = args;
 
   log(`Searching for YouTube channel: ${channelName}`, 'blue');
 
@@ -142,6 +152,10 @@ async function main() {
     // Validate channel ID format (YouTube channel IDs are 24 characters)
     if (channelId.length !== 24) {
       log(`Warning: Channel ID has unusual length (${channelId.length} chars)`, 'yellow');
+    }
+
+    if (channelTitle === '--justSearch' || justSearch) {
+      process.exit(0);
     }
 
     // Add to channels.js
