@@ -4,10 +4,11 @@
  * Script to extract YouTube channel ID from either a video link or username
  *
  * Usage:
- *   node scripts/extract-youtube-channel-id.js <input>
+ *   node scripts/extract-youtube-channel-id.js <input> [--verbose]
  *
  * Arguments:
  *   input - Either a YouTube video URL or a channel username/handle
+ *   --verbose - (Optional) Output detailed information instead of just the channel ID
  *
  * Examples:
  *   node scripts/extract-youtube-channel-id.js "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
@@ -31,8 +32,16 @@ const colors = {
   blue: '\x1b[36m',
 };
 
+let verbose = false;
+
 function log(message, color = 'reset') {
-  console.log(`${colors[color]}${message}${colors.reset}`);
+  if (verbose) {
+    console.log(`${colors[color]}${message}${colors.reset}`);
+  }
+}
+
+function logChannelId(channelId) {
+  console.log(channelId);
 }
 
 /**
@@ -41,7 +50,7 @@ function log(message, color = 'reset') {
 function extractVideoId(url) {
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/)([^&\n?#]+)/,
-    /youtube\.com\/watch\?.*v=([^&\n?#]+)/
+    /youtube\.com\/watch\?.*v=([^&\n?#]+)/,
   ];
 
   for (const pattern of patterns) {
@@ -50,7 +59,7 @@ function extractVideoId(url) {
       return match[1];
     }
   }
-  
+
   return null;
 }
 
@@ -80,7 +89,7 @@ async function getChannelFromVideo(videoId) {
 
   try {
     const response = await fetch(url);
-    
+
     if (!response.ok) {
       throw new Error(`YouTube API HTTP Error: ${response.status} ${response.statusText}`);
     }
@@ -99,7 +108,7 @@ async function getChannelFromVideo(videoId) {
     return {
       channelId: video.snippet.channelId,
       channelTitle: video.snippet.channelTitle,
-      videoTitle: video.snippet.title
+      videoTitle: video.snippet.title,
     };
   } catch (error) {
     if (error.message.includes('YouTube API')) {
@@ -139,10 +148,10 @@ async function searchChannelByName(username) {
       throw new Error(`No channel found for username: ${username}`);
     }
 
-    return data.items.map(item => ({
+    return data.items.map((item) => ({
       channelId: item.id.channelId,
       channelTitle: item.snippet.title,
-      description: item.snippet.description
+      description: item.snippet.description,
     }));
   } catch (error) {
     if (error.message.includes('YouTube API')) {
@@ -183,7 +192,7 @@ async function getChannelById(channelId) {
     return {
       channelId: channel.id,
       channelTitle: channel.snippet.title,
-      description: channel.snippet.description
+      description: channel.snippet.description,
     };
   } catch (error) {
     if (error.message.includes('YouTube API')) {
@@ -197,7 +206,7 @@ async function main() {
   const args = process.argv.slice(2);
 
   if (args.length === 0) {
-    log('Usage: node scripts/extract-youtube-channel-id.js <input>', 'yellow');
+    log('Usage: node scripts/extract-youtube-channel-id.js <input> [--verbose]', 'yellow');
     log('', 'reset');
     log('Where <input> can be:', 'blue');
     log('  - YouTube video URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'blue');
@@ -205,10 +214,14 @@ async function main() {
     log('  - Channel username: lexfridman or @lexfridman', 'blue');
     log('  - Channel ID: UC2D6eRvCeMtcF5OGHf1-trw', 'blue');
     log('', 'reset');
+    log('Options:', 'blue');
+    log('  --verbose - Output detailed information instead of just the channel ID', 'blue');
+    log('', 'reset');
     log('Environment variable required: YOUTUBE_API_KEY', 'yellow');
     process.exit(1);
   }
 
+  verbose = args.includes('--verbose');
   const input = args[0].trim();
 
   try {
@@ -216,55 +229,59 @@ async function main() {
       // Input is already a channel ID, just validate it
       log(`Input appears to be a channel ID: ${input}`, 'blue');
       const channelInfo = await getChannelById(input);
-      
+
       log('\n✅ Channel found:', 'green');
       log(`   Channel ID: ${channelInfo.channelId}`, 'reset');
       log(`   Channel Title: ${channelInfo.channelTitle}`, 'reset');
       log(`   Description: ${channelInfo.description.substring(0, 100)}...`, 'reset');
-      
+      logChannelId(channelInfo.channelId);
     } else if (isVideoUrl(input)) {
       // Extract channel ID from video URL
       log(`Extracting channel ID from video URL: ${input}`, 'blue');
-      
+
       const videoId = extractVideoId(input);
       if (!videoId) {
         throw new Error('Could not extract video ID from URL');
       }
 
       log(`Extracted video ID: ${videoId}`, 'blue');
-      
+
       const videoInfo = await getChannelFromVideo(videoId);
-      
+
       log('\n✅ Channel found:', 'green');
       log(`   Video Title: ${videoInfo.videoTitle}`, 'reset');
       log(`   Channel ID: ${videoInfo.channelId}`, 'reset');
       log(`   Channel Title: ${videoInfo.channelTitle}`, 'reset');
-      
+      logChannelId(videoInfo.channelId);
     } else {
       // Treat as username/channel name
       log(`Searching for channel by name: ${input}`, 'blue');
-      
+
       const results = await searchChannelByName(input);
-      
+
       if (results.length === 1) {
         const channel = results[0];
         log('\n✅ Channel found:', 'green');
         log(`   Channel ID: ${channel.channelId}`, 'reset');
         log(`   Channel Title: ${channel.channelTitle}`, 'reset');
         log(`   Description: ${channel.description.substring(0, 100)}...`, 'reset');
+        logChannelId(channel.channelId);
       } else {
         log(`\n✅ Found ${results.length} channels:`, 'green');
-        
+
         results.forEach((channel, index) => {
           log(`\n${index + 1}. ${channel.channelTitle}`, 'blue');
           log(`   Channel ID: ${channel.channelId}`, 'reset');
           log(`   Description: ${channel.description.substring(0, 100)}...`, 'reset');
         });
-        
+
         log('\nTip: Use the exact channel ID for precise results', 'yellow');
+
+        if (!verbose && results.length > 0) {
+          logChannelId(results[0].channelId);
+        }
       }
     }
-    
   } catch (error) {
     log(`❌ Error: ${error.message}`, 'red');
     process.exit(1);
