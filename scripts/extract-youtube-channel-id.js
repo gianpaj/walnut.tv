@@ -44,6 +44,29 @@ function logChannelId(channelId) {
   console.log(channelId);
 }
 
+function logError(message) {
+  console.error(`${colors.red}❌ Error: ${message}${colors.reset}`);
+}
+
+/**
+ * Validate that YouTube API key is set
+ */
+function validateApiKey() {
+  if (!YOUTUBE_API_KEY) {
+    throw new Error('YOUTUBE_API_KEY environment variable is not set');
+  }
+}
+
+/**
+ * Safely get description text, with fallback for missing/invalid values
+ */
+function getDescription(description) {
+  if (typeof description === 'string' && description.length > 0) {
+    return description.substring(0, 100);
+  }
+  return '(No description available)';
+}
+
 /**
  * Extract video ID from various YouTube URL formats
  */
@@ -67,7 +90,7 @@ function extractVideoId(url) {
  * Check if input is already a YouTube channel ID (24 characters, alphanumeric)
  */
 function isChannelId(input) {
-  return /^UC[a-zA-Z0-9_-]{22}$/.test(input) && input.length === 24;
+  return /^UC[a-zA-Z0-9_-]{22}$/.test(input);
 }
 
 /**
@@ -81,10 +104,6 @@ function isVideoUrl(input) {
  * Get channel information from video ID
  */
 async function getChannelFromVideo(videoId) {
-  if (!YOUTUBE_API_KEY) {
-    throw new Error('YOUTUBE_API_KEY environment variable is not set');
-  }
-
   const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${YOUTUBE_API_KEY}`;
 
   try {
@@ -122,10 +141,6 @@ async function getChannelFromVideo(videoId) {
  * Search for channel by username/handle
  */
 async function searchChannelByName(username) {
-  if (!YOUTUBE_API_KEY) {
-    throw new Error('YOUTUBE_API_KEY environment variable is not set');
-  }
-
   // Remove @ symbol if present
   const cleanUsername = username.replace(/^@/, '');
 
@@ -165,10 +180,6 @@ async function searchChannelByName(username) {
  * Get channel information by channel ID (for validation)
  */
 async function getChannelById(channelId) {
-  if (!YOUTUBE_API_KEY) {
-    throw new Error('YOUTUBE_API_KEY environment variable is not set');
-  }
-
   const url = `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${channelId}&key=${YOUTUBE_API_KEY}`;
 
   try {
@@ -225,6 +236,7 @@ async function main() {
   const input = args[0].trim();
 
   try {
+    validateApiKey();
     if (isChannelId(input)) {
       // Input is already a channel ID, just validate it
       log(`Input appears to be a channel ID: ${input}`, 'blue');
@@ -233,7 +245,7 @@ async function main() {
       log('\n✅ Channel found:', 'green');
       log(`   Channel ID: ${channelInfo.channelId}`, 'reset');
       log(`   Channel Title: ${channelInfo.channelTitle}`, 'reset');
-      log(`   Description: ${channelInfo.description.substring(0, 100)}...`, 'reset');
+      log(`   Description: ${getDescription(channelInfo.description)}`, 'reset');
       logChannelId(channelInfo.channelId);
     } else if (isVideoUrl(input)) {
       // Extract channel ID from video URL
@@ -264,7 +276,7 @@ async function main() {
         log('\n✅ Channel found:', 'green');
         log(`   Channel ID: ${channel.channelId}`, 'reset');
         log(`   Channel Title: ${channel.channelTitle}`, 'reset');
-        log(`   Description: ${channel.description.substring(0, 100)}...`, 'reset');
+        log(`   Description: ${getDescription(channel.description)}`, 'reset');
         logChannelId(channel.channelId);
       } else {
         log(`\n✅ Found ${results.length} channels:`, 'green');
@@ -272,7 +284,7 @@ async function main() {
         results.forEach((channel, index) => {
           log(`\n${index + 1}. ${channel.channelTitle}`, 'blue');
           log(`   Channel ID: ${channel.channelId}`, 'reset');
-          log(`   Description: ${channel.description.substring(0, 100)}...`, 'reset');
+          log(`   Description: ${getDescription(channel.description)}`, 'reset');
         });
 
         log('\nTip: Use the exact channel ID for precise results', 'yellow');
@@ -283,7 +295,7 @@ async function main() {
       }
     }
   } catch (error) {
-    log(`❌ Error: ${error.message}`, 'red');
+    logError(error.message);
     process.exit(1);
   }
 }
