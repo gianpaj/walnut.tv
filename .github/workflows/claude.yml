@@ -33,8 +33,10 @@ jobs:
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@beta
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
           # Trigger when specific user is assigned to an issue
-          assignee_trigger: "claude-bot"
+          assignee_trigger: 'claude-bot'
