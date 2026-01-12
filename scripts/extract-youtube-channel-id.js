@@ -13,6 +13,8 @@
  * Examples:
  *   node scripts/extract-youtube-channel-id.js "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
  *   node scripts/extract-youtube-channel-id.js "https://youtu.be/dQw4w9WgXcQ"
+ *   node scripts/extract-youtube-channel-id.js "https://www.youtube.com/live/6V5DhkGkuvc"
+ *   node scripts/extract-youtube-channel-id.js "https://www.youtube.com/@gianpaj"
  *   node scripts/extract-youtube-channel-id.js "lexfridman"
  *   node scripts/extract-youtube-channel-id.js "@lexfridman"
  *   node scripts/extract-youtube-channel-id.js "UC2D6eRvCeMtcF5OGHf1-trw"
@@ -72,7 +74,7 @@ function getDescription(description) {
  */
 function extractVideoId(url) {
   const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/)([^&\n?#]+)/,
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/live\/)([^&\n?#]+)/,
     /youtube\.com\/watch\?.*v=([^&\n?#]+)/,
   ];
 
@@ -84,6 +86,21 @@ function extractVideoId(url) {
   }
 
   return null;
+}
+
+/**
+ * Extract username from YouTube channel URL (e.g., https://www.youtube.com/@username)
+ */
+function extractUsernameFromChannelUrl(url) {
+  const match = url.match(/youtube\.com\/@([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
+/**
+ * Check if input is a YouTube channel URL with @username format
+ */
+function isChannelUrl(input) {
+  return /youtube\.com\/@/.test(input);
 }
 
 /**
@@ -222,6 +239,8 @@ async function main() {
     log('Where <input> can be:', 'blue');
     log('  - YouTube video URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'blue');
     log('  - YouTube short URL: https://youtu.be/dQw4w9WgXcQ', 'blue');
+    log('  - YouTube live URL: https://www.youtube.com/live/dQw4w9WgXcQ', 'blue');
+    log('  - Channel URL: https://www.youtube.com/@gianpaj', 'blue');
     log('  - Channel username: lexfridman or @lexfridman', 'blue');
     log('  - Channel ID: UC2D6eRvCeMtcF5OGHf1-trw', 'blue');
     log('', 'reset');
@@ -247,6 +266,41 @@ async function main() {
       log(`   Channel Title: ${channelInfo.channelTitle}`, 'reset');
       log(`   Description: ${getDescription(channelInfo.description)}`, 'reset');
       logChannelId(channelInfo.channelId);
+    } else if (isChannelUrl(input)) {
+      // Extract username from channel URL
+      log(`Extracting username from channel URL: ${input}`, 'blue');
+
+      const username = extractUsernameFromChannelUrl(input);
+      if (!username) {
+        throw new Error('Could not extract username from channel URL');
+      }
+
+      log(`Extracted username: ${username}`, 'blue');
+
+      const results = await searchChannelByName(username);
+
+      if (results.length === 1) {
+        const channel = results[0];
+        log('\n✅ Channel found:', 'green');
+        log(`   Channel ID: ${channel.channelId}`, 'reset');
+        log(`   Channel Title: ${channel.channelTitle}`, 'reset');
+        log(`   Description: ${getDescription(channel.description)}`, 'reset');
+        logChannelId(channel.channelId);
+      } else {
+        log(`\n✅ Found ${results.length} channels:`, 'green');
+
+        results.forEach((channel, index) => {
+          log(`\n${index + 1}. ${channel.channelTitle}`, 'blue');
+          log(`   Channel ID: ${channel.channelId}`, 'reset');
+          log(`   Description: ${getDescription(channel.description)}`, 'reset');
+        });
+
+        log('\nTip: Use the exact channel ID for precise results', 'yellow');
+
+        if (!verbose && results.length > 0) {
+          logChannelId(results[0].channelId);
+        }
+      }
     } else if (isVideoUrl(input)) {
       // Extract channel ID from video URL
       log(`Extracting channel ID from video URL: ${input}`, 'blue');
