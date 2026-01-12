@@ -32,7 +32,7 @@ jobs:
 
       - name: Run Claude Code
         id: claude
-        uses: anthropics/claude-code-action@beta
+        uses: anthropics/claude-code-action@v1
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         with:
@@ -40,3 +40,6 @@ jobs:
 
           # Trigger when specific user is assigned to an issue
           assignee_trigger: 'claude-bot'
+
+          claude_args: |
+            --allowedTools "Read,Bash(npm*),Bash(gh*),Bash(git:*),Edit,Replace,NotebookEditCell"
