@@ -25,7 +25,7 @@
     "eslint": "9.39.2",
     "nodemon": "3.1.11",
     "stylelint": "17.5.0",
-    "stylelint-config-standard": "39.0.1",
+    "stylelint-config-standard": "40.0.0",
     "yup": "1.7.1"
   },
   "dependencies": {
