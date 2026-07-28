@@ -120,18 +120,29 @@ Three copies of the same list, one of which is the target of an automated workfl
 
 ~~Still open from Phase 0: unknown channels render the 404 page but still return 200.~~ Fixed in Phase 1 — see below.
 
-### Phase 1 — Behavioural parity (2–4 days)
+### Phase 1 — Behavioural parity ✅ code complete, not yet verified in a browser
 
-6. **Restore `/{channel}/{id}` URLs.** Keep `?v={id}` as an accepted alias so nothing breaks twice. Verify the legacy `?p=/...` SPA-shim URLs from `404.html` still land correctly, or add explicit redirects.
-7. **Real YouTube player.** Replace the raw `<iframe>` with the IFrame Player API (`react-youtube` or a small `useYouTubePlayer` hook) and restore `playerVars` parity (`rel: 0`, `iv_load_policy: 3`, `controls: 1`, `origin`), `onStateChange` → next-on-ENDED, `onError` → skip.
-8. **Navigation:** ← / → keyboard handlers, mobile prev/next buttons, and re-add the sidebar auto-scroll that keeps the active item in view.
-9. **Watched state:** read-and-migrate the legacy `videosWatched` key into the zustand store on first load; move the WATCHED badge on top of the thumbnail and dim the title (`TODO.md` 2–4).
-10. **Fetching parity:** interleave reddit × youtube, honour `sortBy: 'new'`, shorts threshold back to 120s, thumbnails from the YouTube ID, remove `.splice(0, 3)` (Phase 2 makes this safe — until then it can stay behind a constant).
-11. **States:** working loading spinner, empty state, quota-exhausted message, error message. `notFound()` for unknown channels.
-12. **`/r/[subreddit]` route.**
-13. **SEO / analytics / assets:** og:image, twitter card, canonical, manifest, full icon set, GA4 + Firebase, `robots.txt`, `sitemap.ts`.
+1. ✅ **`/{channel}/{id}` URLs restored.** `[channel]/page.tsx` is a server component that resolves the slug and calls `notFound()`; a client `ChannelView` fetches. New `[channel]/[videoId]` route for deep links, `?v={id}` still accepted and rewritten on load. Selection uses `history.replaceState`, not `router.replace`, so it does not remount and refetch.
+2. ✅ **Real YouTube player.** `YT.Player` via the IFrame API with the live site's `playerVars`; `onError` skips an unplayable video. `onStateChange` ENDED is wired but gated behind `AUTOPLAY_NEXT = false` — the live site has the same flag and never sets it true. `cueVideoById`, not `loadVideoById`.
+3. ✅ **Navigation.** ← / → keys, prev/next buttons with a position counter on both layouts, sidebar auto-scroll to the playing video.
+4. ✅ **Watched state.** The store seeds from the legacy `localStorage['videosWatched']` and unions it with its own, non-destructively. WATCHED badge over the thumbnail, watched rows dimmed.
+5. ✅ **Fetching parity.** Reddit × YouTube interleaved, `sortBy: "new"` honoured, YouTube interleaved across channels before sorting, shorts filter back to 120s, thumbnails from `img.youtube.com/vi/{id}/mqdefault.jpg`, titles link to the Reddit thread. `Promise.allSettled` so one dead source does not blank the page.
+6. ✅ **States.** Loading, error, and the "Come back tomorrow, today's YouTube quota was used" message; previously all three were a blank page.
+7. ✅ **`/r/{subreddit}`** and `/r/{subreddit}/{id}`, by synthesising a `Channel` so the whole pipeline is shared.
+8. ✅ **SEO / analytics / assets.** og:image, twitter card, per-page canonical, manifest, icon set, theme-color, GA4 + Firebase, `robots.ts`, `sitemap.ts`.
 
-_Exit criteria:_ a checklist walk-through of the live site vs a deploy preview, feature by feature, on desktop and mobile.
+**Real 404s** — the cause of the Phase 0 leftover was `src/app/loading.tsx`: a route-level loading file wraps the segment in Suspense, every response then streams, and Next cannot change the status once streaming has started (`not-found` "returns a 404 for non-streamed responses and a 200 for streamed responses"). `ChannelView` renders the spinner as component state, so the file moved to `src/components/LoadingPage.tsx`. Unknown channels now return a genuine 404. **Keep this in mind before adding any `loading.tsx` back.**
+
+Also rendered one layout at a time via a `matchMedia` hook instead of mounting desktop and mobile copies and CSS-hiding one — with the Player API the hidden copy would have built a second player and double-fired every event.
+
+**Still to do before Phase 1 can be called done:**
+
+- Browser verification against the live site, feature by feature, desktop and mobile. Nothing below has been exercised in a real browser yet: the machine this was built on gets 403s from Reddit and has no YouTube API key, so every channel lands on the empty state locally.
+- Confirm GA4 is receiving events (`TODO.md` flags this too).
+- Check the legacy `?p=/...` SPA-shim URLs that `404.html` produced still resolve, or add redirects.
+- Decide whether the resizable-panel layout is even wanted; the live site has a fixed sidebar.
+
+_Exit criteria:_ that walk-through passes.
 
 ### Phase 2 — Server-side fetching + caching (2–3 days) — the payoff
 
@@ -200,10 +211,10 @@ _Exit criteria:_ `/hustle` loads all 65 channels; the YouTube quota dashboard sh
 2. ✅ `chore: upgrade to Next.js 16, React 19 and ESLint 9 flat config`
 3. ✅ `ci: build, typecheck, lint and channel validation on every PR`
 4. ✅ `docs: AGENTS.md, CLAUDE.md, README.md, MIGRATION-PLAN.md`
-5. `feat: youtube iframe player api, keyboard + prev/next nav`
-6. `feat: restore /{channel}/{id} urls (+ ?v alias)`
-7. `feat: server component slug check → real 404, loading / empty / error states`
-8. `feat: fetching parity (interleave, sortBy, 120s shorts, thumbnails)`
-9. `feat: seo, icons, manifest, analytics`
+5. ✅ `feat: server-rendered channel routes, /{channel}/{id} URLs, fetching parity`
+6. ✅ `feat: carry over watch history from the live site`
+7. ✅ `feat: real YouTube player, keyboard and prev/next navigation`
+8. ✅ `feat: restore /r/{subreddit} ad-hoc browsing`
+9. ✅ `feat: restore SEO metadata, icons, manifest and analytics`
 10. `feat: server-side fetching + caching, drop the 3-channel cap`
 11. `chore: cutover`

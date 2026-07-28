@@ -40,19 +40,33 @@ and build on every PR. All four must pass.
 
 ```
 channels.js               the channel list — see below, this one is special
-src/app/                  App Router: layout, page (redirects to /reddit),
-                          [channel]/page.tsx, loading.tsx, not-found.tsx
-src/components/           VideoDisplay, VideoPlayer, navbar/, providers/, ui/
+src/app/                  App Router. Server components resolve the slug and
+                          call notFound(); fetching happens below them, in a
+                          client component. robots.ts, sitemap.ts.
+  [channel]/              /{channel} and /{channel}/{videoId}
+  r/[subreddit]/          ad-hoc subreddit browsing, same two shapes
+src/components/           ChannelView (fetch + states), VideoDisplay (list +
+                          player), VideoPlayer (YT.Player), Analytics, navbar/
 src/components/ui/        shadcn/ui primitives — regenerate, don't hand-edit
 src/hooks/use-video.tsx   zustand store for watched / clicked video ids
+src/hooks/use-media-query one layout is rendered at a time, not CSS-hidden
 src/lib/data.ts           typed accessors over channels.js
-src/lib/actions/          YouTube (and a dead Reddit) fetching
-src/lib/videoService.ts   filtering and interleaving helpers
-src/types/videos.d.ts     global VideoData / RedditPost / RedditResponseData
+src/lib/actions/          reddit.ts, youtube.ts, videos.ts (combines both)
+src/lib/videoService.ts   filtering, interleaving, thumbnail and id helpers
+src/lib/youtubeIframeApi  loads the IFrame API once per page
+src/types/                global VideoData / RedditPost / Window augmentation
 scripts/                  standalone CommonJS Node utilities, excluded from
                           tsconfig and eslint
 public/                   icons, manifest, logo, og-image
 ```
+
+### Do not add a route-level `loading.tsx`
+
+A `loading.tsx` wraps its segment in Suspense, which makes every response
+stream. Next cannot change an HTTP status once streaming has begun, so
+`notFound()` silently degrades to a 200 with the 404 page rendered inside it.
+The app had exactly that bug. The loading spinner lives in
+`src/components/LoadingPage.tsx` and is rendered as component state instead.
 
 ## channels.js is the single source of truth
 
