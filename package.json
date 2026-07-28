@@ -13,6 +13,7 @@
   },
   "author": "Gianfranco Palumbo, Alexander Kostinskyi",
   "license": "MIT",
+  "packageManager": "pnpm@10.27.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "sharp"
