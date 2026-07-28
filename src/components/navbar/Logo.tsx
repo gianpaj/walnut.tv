@@ -19,9 +19,9 @@ const Logo = (props: Props) => {
         <TooltipTrigger asChild>
           <Link href="/">
             <Image
-              src="/img/icons/android-chrome-192x192.png"
+              src="/img/walnut-logo.svg"
               alt="Walnut.tv"
-              width={48}
+              width={32}
               height={48}
               {...props}
             />

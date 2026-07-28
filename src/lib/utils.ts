@@ -5,6 +5,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Matches /{slug} and /{slug}/{videoId}, but not /{slug}foo.
+ * Phase 1 restores the /{channel}/{id} URLs the live site uses.
+ */
+export function isActiveChannel(pathname: string, slug: string) {
+  return pathname === `/${slug}` || pathname.startsWith(`/${slug}/`);
+}
+
 function getDurationInSec(durationString: string) {
   const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(\d+)S/;
   const matches = durationString.match(regex) ?? [];

@@ -38,5 +38,8 @@
     "**/*.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  // `scripts/` are standalone CommonJS Node utilities run with plain `node`,
+  // not part of the Next.js app. `channels.js` is deliberately not excluded —
+  // the app imports it via src/lib/data.ts.
+  "exclude": ["node_modules", "scripts"]
 }

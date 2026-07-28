@@ -2,11 +2,25 @@
   "name": "walnut.tv",
   "version": "2.0.0",
   "private": true,
+  "description": "Always Interesting Videos (webapp)",
+  "homepage": "https://walnut.tv",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gianpaj/walnut.tv.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gianpaj/walnut.tv/issues"
+  },
+  "author": "Gianfranco Palumbo, Alexander Kostinskyi",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm check-channels && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "check-channels": "node scripts/check-channels.js",
+    "watch-channels": "nodemon scripts/check-channels.js"
   },
   "dependencies": {
     "@googleapis/youtube": "^13.0.0",
@@ -47,10 +61,12 @@
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
+    "nodemon": "3.1.14",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "yup": "1.7.1"
   }
 }

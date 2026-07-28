@@ -12,6 +12,8 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { channelLabel, channels } from "@/lib/data";
+import { isActiveChannel } from "@/lib/utils";
 
 const Navbar = () => {
   const path = usePathname();
@@ -25,66 +27,18 @@ const Navbar = () => {
               <Logo />
             </div>
 
-            <NavigationMenuItem>
-              <Link href="/reddit" legacyBehavior passHref>
-                <NavigationMenuLink
-                  active={path.includes("/reddit")}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Reddit
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/hustle" legacyBehavior passHref>
-                <NavigationMenuLink
-                  active={path.includes("/hustle")}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Hustle
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/ai" legacyBehavior passHref>
-                <NavigationMenuLink
-                  active={path.includes("/ai")}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  AI
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/crypto" legacyBehavior passHref>
-                <NavigationMenuLink
-                  active={path.includes("/crypto")}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Crypto
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/curious" legacyBehavior passHref>
-                <NavigationMenuLink
-                  active={path.includes("/curious")}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Curious
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/docus" legacyBehavior passHref>
-                <NavigationMenuLink
-                  active={path.includes("/docus")}
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Docus
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
+            {channels.map((channel) => (
+              <NavigationMenuItem key={channel.title}>
+                <Link href={`/${channel.title}`} legacyBehavior passHref>
+                  <NavigationMenuLink
+                    active={isActiveChannel(path, channel.title)}
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    {channelLabel(channel)}
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            ))}
           </NavigationMenuList>
         </NavigationMenu>
         {/*<ModeToggle className="ml-2 justify-self-end" />*/}

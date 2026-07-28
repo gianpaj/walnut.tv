@@ -17,7 +17,7 @@ const Header = () => {
         <Link href="/" className="ml-2">
           <div className="flex items-center space-x-1">
             <Image
-              src="/img/icons/android-chrome-192x192.png"
+              src="/android-chrome-192x192.png"
               alt="Logo"
               width={35}
               height={35}

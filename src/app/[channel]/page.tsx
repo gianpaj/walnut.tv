@@ -5,7 +5,7 @@ import axios from "axios";
 
 import VideoDisplay from "@/components/VideoDisplay";
 import { fetchYouTubeVideos } from "@/lib/actions/youtube";
-import { channels } from "@/lib/data";
+import { getChannel, getSubreddits, getYouTubeChannelIds } from "@/lib/data";
 import { interleaveArrays, isVideoObject } from "@/lib/videoService";
 
 import LoadingPage from "../loading";
@@ -19,9 +19,9 @@ interface ChannelPageProps {
 const ChannelPage = ({ params }: ChannelPageProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [allVideos, setAllVideos] = useState<VideoData[]>([]);
-  const channel = channels.find((c) => c.title === params.channel);
-  const subReddits = channel?.subreddit?.split(";") ?? [];
-  const youtubeChannels = channel?.youtubeChannels?.split(";") ?? [];
+  const channel = getChannel(params.channel);
+  const subReddits = channel ? getSubreddits(channel) : [];
+  const youtubeChannels = channel ? getYouTubeChannelIds(channel) : [];
   useEffect(() => {
     async function getRedditData() {
       try {
