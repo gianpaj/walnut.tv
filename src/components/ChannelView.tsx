@@ -9,6 +9,8 @@ import type { Channel } from "@/lib/data";
 
 interface Props {
   channel: Channel;
+  /** Base path for deep links. Defaults to /{channel.title}. */
+  urlPrefix?: string;
   initialVideoId?: string;
 }
 
@@ -28,7 +30,7 @@ function Message({ children }: { children: React.ReactNode }) {
   );
 }
 
-const ChannelView = ({ channel, initialVideoId }: Props) => {
+const ChannelView = ({ channel, urlPrefix, initialVideoId }: Props) => {
   const [state, setState] = useState<State>({ status: "loading" });
 
   // Mount-only: the pages key this component by channel, so switching channels
@@ -76,7 +78,7 @@ const ChannelView = ({ channel, initialVideoId }: Props) => {
   return (
     <VideoDisplay
       videos={state.videos}
-      channelSlug={channel.title}
+      urlPrefix={urlPrefix ?? `/${channel.title}`}
       initialVideoId={initialVideoId}
     />
   );

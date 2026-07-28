@@ -22,7 +22,8 @@ import VideoPlayer from "./VideoPlayer";
 
 interface Props {
   videos: VideoData[];
-  channelSlug: string;
+  /** Base path for deep links, e.g. "/ai" or "/r/videos". */
+  urlPrefix: string;
   initialVideoId?: string;
 }
 
@@ -117,7 +118,7 @@ const VideoList = ({
   );
 };
 
-const VideoDisplay = ({ videos, channelSlug, initialVideoId }: Props) => {
+const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
   const isDesktop = useIsDesktop();
   const setCurrentVideoWatching = useVideo(
     (state) => state.setCurrentVideoWatching,
@@ -141,7 +142,7 @@ const VideoDisplay = ({ videos, channelSlug, initialVideoId }: Props) => {
       // replaceState rather than router.replace: this is the same URL shape the
       // live site produces, and a real navigation would remount the view and
       // refetch the whole listing.
-      window.history.replaceState(null, "", `/${channelSlug}/${next.id}`);
+      window.history.replaceState(null, "", `${urlPrefix}/${next.id}`);
 
       setCurrentVideoWatching(next.youtubeId);
       addToClickedVideos(next.youtubeId);
@@ -149,7 +150,7 @@ const VideoDisplay = ({ videos, channelSlug, initialVideoId }: Props) => {
     },
     [
       videos,
-      channelSlug,
+      urlPrefix,
       setCurrentVideoWatching,
       addToClickedVideos,
       addToWatchedVideos,
@@ -177,7 +178,7 @@ const VideoDisplay = ({ videos, channelSlug, initialVideoId }: Props) => {
   useEffect(() => {
     const first = videos[initialIndex];
     if (!first) return;
-    window.history.replaceState(null, "", `/${channelSlug}/${first.id}`);
+    window.history.replaceState(null, "", `${urlPrefix}/${first.id}`);
     setCurrentVideoWatching(first.youtubeId);
     addToClickedVideos(first.youtubeId);
     addToWatchedVideos(first.youtubeId);
