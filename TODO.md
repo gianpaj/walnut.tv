@@ -20,11 +20,9 @@ Later:
 
 - search for YouTube channel
 
-
 To test:
 
 - [ ] google analytics is still working
-
 
 # DOING
 
