@@ -1,115 +1,55 @@
-"use client";
-
-import { use, useEffect, useState } from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import axios from "axios";
 
-import VideoDisplay from "@/components/VideoDisplay";
-import { fetchYouTubeVideos } from "@/lib/actions/youtube";
-import {
-  getChannel,
-  getSubreddits,
-  getYouTubeChannelIds,
-  type Channel,
-} from "@/lib/data";
-import { interleaveArrays, isVideoObject } from "@/lib/videoService";
-
-import LoadingPage from "../loading";
+import ChannelView from "@/components/ChannelView";
+import { channelLabel, channels, getChannel } from "@/lib/data";
 
 interface ChannelPageProps {
-  // Next 16: params is a Promise in client components too, unwrapped with use().
   params: Promise<{ channel: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-async function fetchRedditVideos(channel: Channel): Promise<VideoData[]> {
-  // Fetched from the browser on purpose: reddit.com answers 403 to requests
-  // from datacenter IPs, so this cannot move server-side without an OAuth
-  // script app. See MIGRATION-PLAN.md phase 2.
-  const responses = await Promise.all(
-    getSubreddits(channel).map((sub) =>
-      axios.get<RedditResponseData>(
-        `https://www.reddit.com/r/${sub}/hot.json?limit=50`,
-      ),
-    ),
-  );
-
-  const videosArrayOfArrays = responses
-    .map((response) => response.data.data.children)
-    .map((posts) =>
-      posts
-        .filter(isVideoObject)
-        .filter((item) => item.data.score >= (channel.minNumOfVotes ?? 3)),
-    );
-
-  const videosData = interleaveArrays(videosArrayOfArrays)
-    .flat()
-    .map((video) => ({
-      id: video.data.id,
-      title: video.data.title,
-      thumbnail:
-        video.data.thumbnail ?? video.data.media?.oembed?.thumbnail_url ?? "",
-      url: video.data.url,
-      author: video.data.author,
-    }));
-
-  const seen = new Set<string>();
-  return videosData.filter((video) => {
-    if (seen.has(video.url)) return false;
-    seen.add(video.url);
-    return true;
-  });
+export function generateStaticParams() {
+  return channels.map((channel) => ({ channel: channel.title }));
 }
 
-const ChannelPage = ({ params }: ChannelPageProps) => {
-  const { channel: slug } = use(params);
+export async function generateMetadata({
+  params,
+}: ChannelPageProps): Promise<Metadata> {
+  const { channel: slug } = await params;
   const channel = getChannel(slug);
+  if (!channel) return {};
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [allVideos, setAllVideos] = useState<VideoData[]>([]);
+  const title = `${channelLabel(channel)} videos - walnut.tv`;
+  return {
+    title,
+    alternates: { canonical: `/${channel.title}` },
+    openGraph: { title, url: `/${channel.title}` },
+  };
+}
 
-  useEffect(() => {
-    if (!channel) return;
-
-    let cancelled = false;
-
-    async function load(current: Channel) {
-      try {
-        // TODO(phase 1): interleave the two sources and honour sortBy: "new",
-        // the way the live site does.
-        const [redditVideos, youtubeVideos] = await Promise.all([
-          getSubreddits(current).length > 0
-            ? fetchRedditVideos(current)
-            : Promise.resolve<VideoData[]>([]),
-          getYouTubeChannelIds(current).length > 0
-            ? fetchYouTubeVideos({ title: current.title })
-            : Promise.resolve<VideoData[]>([]),
-        ]);
-        if (!cancelled) setAllVideos([...redditVideos, ...youtubeVideos]);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        // TODO(phase 1): surface an error / "quota used up" message instead of
-        // falling through to an empty list.
-        if (!cancelled) setIsLoading(false);
-      }
-    }
-
-    void load(channel);
-
-    return () => {
-      cancelled = true;
-    };
-  }, [channel]);
-
+/**
+ * Server component so an unknown slug returns a real 404 status. The fetching
+ * below it has to stay client-side while Reddit blocks datacenter IPs.
+ */
+export default async function ChannelPage({
+  params,
+  searchParams,
+}: ChannelPageProps) {
+  const { channel: slug } = await params;
+  const channel = getChannel(slug);
   if (!channel) notFound();
 
-  if (isLoading) {
-    return <LoadingPage />;
-  }
+  // ?v={id} is the URL shape the first Next.js draft produced. Still accepted
+  // so links from it keep working; VideoDisplay rewrites them to /{slug}/{id}.
+  const v = (await searchParams).v;
+  const initialVideoId = typeof v === "string" ? v : undefined;
 
   return (
-    <div>{allVideos.length > 0 && <VideoDisplay videos={allVideos} />}</div>
+    <ChannelView
+      key={channel.title}
+      channel={channel}
+      initialVideoId={initialVideoId}
+    />
   );
-};
-
-export default ChannelPage;
+}

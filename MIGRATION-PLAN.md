@@ -118,7 +118,7 @@ Three copies of the same list, one of which is the target of an automated workfl
 5. ✅ **CI** (`.github/workflows/ci.yml`) runs all four on every PR. Note pnpm does not run `pre`/`post` scripts by default, so the old `prebuild` hook never fired; `build` now calls `check-channels` explicitly.
 6. ✅ **Docs**: `AGENTS.md` is the canonical guide, `CLAUDE.md` points at it, `README.md` describes the Next.js app.
 
-Still open from Phase 0, deliberately deferred: unknown channels render the 404 page but still return **200**. Fixing the status code means moving the slug check into a server component, which is the same restructure Phase 1 needs anyway.
+~~Still open from Phase 0: unknown channels render the 404 page but still return 200.~~ Fixed in Phase 1 — see below.
 
 ### Phase 1 — Behavioural parity (2–4 days)
 

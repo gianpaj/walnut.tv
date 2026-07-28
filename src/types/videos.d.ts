@@ -161,20 +161,17 @@ interface RedditResponseData {
   };
 }
 
-interface YouTubeVideo {
-  id: string;
-  title: string;
-  url: string;
-  duration: string;
-  thumbnail: string;
-  // publishedAt: string;
-  author: string;
-}
-
 interface VideoData {
+  /** Identifies the video in a /{channel}/{id} URL. Reddit post id, or the
+   *  YouTube video id when the video came straight from a YouTube channel. */
   id: string;
+  /** The id actually embedded in the player, and the thumbnail source. */
+  youtubeId: string;
   title: string;
   thumbnail: string;
+  /** Where the title links to: the Reddit thread, or the YouTube watch page. */
   url: string;
   author: string;
+  /** ISO 8601. Only set for YouTube-sourced videos; drives sortBy: "new". */
+  publishedAt?: string;
 }

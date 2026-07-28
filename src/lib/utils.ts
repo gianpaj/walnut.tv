@@ -26,6 +26,9 @@ function getDurationInSec(durationString: string) {
   return totalSeconds;
 }
 
+/** The live site treats anything up to 2 minutes as a Short and skips it. */
+const SHORT_LENGTH_IN_SEC = 120;
+
 export function isShortDuration(duration: string) {
-  return getDurationInSec(duration) <= 60;
+  return getDurationInSec(duration) <= SHORT_LENGTH_IN_SEC;
 }

@@ -6,26 +6,8 @@ type Props = {
   video: VideoData;
 };
 
-/** Pulls the YouTube video id out of a watch, youtu.be or embed URL. */
-function youtubeIdFromUrl(url: string) {
-  try {
-    const parsed = new URL(url);
-    return (
-      parsed.searchParams.get("v") ??
-      parsed.pathname.split("/").filter(Boolean).pop()?.split("?")[0] ??
-      ""
-    );
-  } catch {
-    return "";
-  }
-}
-
 const VideoPlayer = ({ video }: Props) => {
   if (!video) return null;
-
-  // Derived during render: an effect + state here only added a frame where the
-  // iframe pointed at an empty video id.
-  const videoID = youtubeIdFromUrl(video.url);
 
   return (
     <motion.div
@@ -39,7 +21,7 @@ const VideoPlayer = ({ video }: Props) => {
       className="aspect-h-9 aspect-w-16 w-full"
     >
       <iframe
-        src={`https://www.youtube.com/embed/${videoID}`}
+        src={`https://www.youtube.com/embed/${video.youtubeId}`}
         title={video.title}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
