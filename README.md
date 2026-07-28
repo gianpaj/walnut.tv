@@ -37,14 +37,15 @@ Open <http://localhost:3000>. It redirects to `/reddit`.
 
 ### Scripts
 
-| Command               | What it does                                    |
-| --------------------- | ----------------------------------------------- |
-| `pnpm dev`            | Development server                              |
-| `pnpm build`          | Validate channels, then build for production    |
-| `pnpm start`          | Serve the production build                      |
-| `pnpm lint`           | ESLint (`next lint` was removed in Next 16)     |
-| `pnpm typecheck`      | `tsc --noEmit`                                  |
-| `pnpm check-channels` | Check every YouTube channel ID in `channels.js` |
+| Command               | What it does                                        |
+| --------------------- | --------------------------------------------------- |
+| `pnpm dev`            | Development server                                  |
+| `pnpm build`          | Validate channels, then build for production        |
+| `pnpm start`          | Serve the production build                          |
+| `pnpm lint`           | ESLint (`next lint` was removed in Next 16)         |
+| `pnpm typecheck`      | `tsc --noEmit`                                      |
+| `pnpm test`           | Node's built-in test runner over `src/**/*.test.ts` |
+| `pnpm check-channels` | Check every YouTube channel ID in `channels.js`     |
 
 CI runs all of these on every pull request.
 

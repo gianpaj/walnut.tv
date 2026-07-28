@@ -6,6 +6,9 @@
     "target": "es2022",
     "allowJs": true,
     "resolveJsonModule": true,
+    // Tests run straight through `node --test` with type stripping, so their
+    // imports carry the .ts extension Node needs.
+    "allowImportingTsExtensions": true,
     "moduleDetection": "force",
     "isolatedModules": true,
     /* Strictness */

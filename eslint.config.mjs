@@ -53,4 +53,12 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ["**/*.test.ts", "**/*.test.tsx"],
+    rules: {
+      // node:test's describe/it return promises the runner owns; awaiting them
+      // is not the caller's job.
+      "@typescript-eslint/no-floating-promises": "off",
+    },
+  },
 );

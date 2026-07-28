@@ -30,11 +30,16 @@ pnpm build            # runs check-channels, then next build
 pnpm start            # serve the production build
 pnpm lint             # eslint . (next lint was removed in Next 16)
 pnpm typecheck        # tsc --noEmit
+pnpm test             # node --test over src/**/*.test.ts
 pnpm check-channels   # validate the YouTube channel IDs in channels.js
 ```
 
-CI (`.github/workflows/ci.yml`) runs install, check-channels, typecheck, lint
-and build on every PR. All four must pass.
+Tests use Node's built-in runner with native type stripping — no jest, vitest
+or transform step. That means test files import with an explicit `.ts`
+extension and can only use relative imports, not the `@/` alias.
+
+CI (`.github/workflows/ci.yml`) runs install, check-channels, typecheck, lint,
+test and build on every PR. All of them must pass.
 
 ## Layout
 

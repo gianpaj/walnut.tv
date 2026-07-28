@@ -25,6 +25,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "test": "node --test --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \"src/**/*.test.ts\"",
     "check-channels": "node scripts/check-channels.js",
     "watch-channels": "nodemon scripts/check-channels.js"
   },

@@ -12,10 +12,25 @@ export function isVideoObject({ data }: RedditPost) {
   return false;
 }
 
-/** Pulls the YouTube video id out of a watch, youtu.be or embed URL. */
+const YOUTUBE_HOSTS = new Set([
+  "youtube.com",
+  "www.youtube.com",
+  "m.youtube.com",
+  "music.youtube.com",
+  "youtu.be",
+  "www.youtu.be",
+]);
+
+/**
+ * Pulls the YouTube video id out of a watch, youtu.be, shorts or embed URL.
+ * Returns "" for anything else — without the host check this happily returned
+ * the last path segment of any URL at all, so a non-YouTube Reddit link
+ * produced a bogus id rather than being rejected.
+ */
 export function youtubeIdFromUrl(url: string) {
   try {
     const parsed = new URL(url);
+    if (!YOUTUBE_HOSTS.has(parsed.hostname)) return "";
     return (
       parsed.searchParams.get("v") ??
       parsed.pathname.split("/").filter(Boolean).pop()?.split("?")[0] ??
