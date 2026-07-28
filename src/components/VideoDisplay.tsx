@@ -191,7 +191,7 @@ const VideoDisplay = ({ videos }: Props) => {
                               {video.author}
                             </span>
                             {videoStore.watchedVideos.includes(video.id) && (
-                              <div className="text-start ">
+                              <div className="text-start">
                                 <Badge className="text-xs">Watched</Badge>
                               </div>
                             )}

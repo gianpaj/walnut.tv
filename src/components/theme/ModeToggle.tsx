@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -14,12 +12,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function ModeToggle({ className }: { className?: string }) {
-  const [mounted, setMounted] = useState(false);
+  // No mounted guard needed: nothing here renders the current theme value, the
+  // icons swap purely via `dark:` classes, so server and client markup match.
   const { setTheme } = useTheme();
-
-  useEffect(() => setMounted(true), []);
-
-  if (!mounted) return null;
 
   return (
     <DropdownMenu>

@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import aspectRatio from "@tailwindcss/aspect-ratio";
 import type { Config } from "tailwindcss";
-// import colors from "tailwindcss/colors";
-import { colors } from "tailwindcss/defaultTheme";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 const config = {
   darkMode: ["class"],
@@ -75,10 +74,7 @@ const config = {
       },
     },
   },
-  plugins: [
-    require("tailwindcss-animate"),
-    require("@tailwindcss/aspect-ratio"),
-  ],
+  plugins: [tailwindcssAnimate, aspectRatio],
 } satisfies Config;
 
 export default config;

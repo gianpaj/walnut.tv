@@ -29,14 +29,15 @@ const Navbar = () => {
 
             {channels.map((channel) => (
               <NavigationMenuItem key={channel.title}>
-                <Link href={`/${channel.title}`} legacyBehavior passHref>
-                  <NavigationMenuLink
-                    active={isActiveChannel(path, channel.title)}
-                    className={navigationMenuTriggerStyle()}
-                  >
+                <NavigationMenuLink
+                  asChild
+                  active={isActiveChannel(path, channel.title)}
+                  className={navigationMenuTriggerStyle()}
+                >
+                  <Link href={`/${channel.title}`}>
                     {channelLabel(channel)}
-                  </NavigationMenuLink>
-                </Link>
+                  </Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>

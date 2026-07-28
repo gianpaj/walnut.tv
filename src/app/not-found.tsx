@@ -19,14 +19,11 @@ export default function NotFound() {
           <p className="text-center">
             The page you are looking for does not exist.
           </p>
-          <div className="flex w-full space-x-2 ">
+          <div className="flex w-full space-x-2">
             <div className="w-1/2">
               <Link
                 href="/"
-                className={cn(
-                  buttonVariants({ variant: "default" }),
-                  "w-full ",
-                )}
+                className={cn(buttonVariants({ variant: "default" }), "w-full")}
               >
                 <Home className="mr-2 h-6 w-6" />
                 Go to home page

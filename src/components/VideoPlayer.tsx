@@ -1,26 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 type Props = {
   video: VideoData;
 };
 
+/** Pulls the YouTube video id out of a watch, youtu.be or embed URL. */
+function youtubeIdFromUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+    return (
+      parsed.searchParams.get("v") ??
+      parsed.pathname.split("/").filter(Boolean).pop()?.split("?")[0] ??
+      ""
+    );
+  } catch {
+    return "";
+  }
+}
+
 const VideoPlayer = ({ video }: Props) => {
-  const [videoID, setVideoID] = useState("");
-
-  useEffect(() => {
-    const url = new URL(video.url);
-    const videoID = url.searchParams.get("v")
-      ? url.searchParams.get("v")
-      : url.pathname
-          .split("/")
-          [url.pathname.split("/").length - 1]?.split("?")[0];
-    setVideoID(videoID ?? "");
-  }, [video]);
-
   if (!video) return null;
+
+  // Derived during render: an effect + state here only added a frame where the
+  // iframe pointed at an empty video id.
+  const videoID = youtubeIdFromUrl(video.url);
 
   return (
     <motion.div

@@ -1,102 +1,114 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
+import { notFound } from "next/navigation";
 import axios from "axios";
 
 import VideoDisplay from "@/components/VideoDisplay";
 import { fetchYouTubeVideos } from "@/lib/actions/youtube";
-import { getChannel, getSubreddits, getYouTubeChannelIds } from "@/lib/data";
+import {
+  getChannel,
+  getSubreddits,
+  getYouTubeChannelIds,
+  type Channel,
+} from "@/lib/data";
 import { interleaveArrays, isVideoObject } from "@/lib/videoService";
 
 import LoadingPage from "../loading";
 
 interface ChannelPageProps {
-  params: {
-    channel: string;
-  };
+  // Next 16: params is a Promise in client components too, unwrapped with use().
+  params: Promise<{ channel: string }>;
+}
+
+async function fetchRedditVideos(channel: Channel): Promise<VideoData[]> {
+  // Fetched from the browser on purpose: reddit.com answers 403 to requests
+  // from datacenter IPs, so this cannot move server-side without an OAuth
+  // script app. See MIGRATION-PLAN.md phase 2.
+  const responses = await Promise.all(
+    getSubreddits(channel).map((sub) =>
+      axios.get<RedditResponseData>(
+        `https://www.reddit.com/r/${sub}/hot.json?limit=50`,
+      ),
+    ),
+  );
+
+  const videosArrayOfArrays = responses
+    .map((response) => response.data.data.children)
+    .map((posts) =>
+      posts
+        .filter(isVideoObject)
+        .filter((item) => item.data.score >= (channel.minNumOfVotes ?? 3)),
+    );
+
+  const videosData = interleaveArrays(videosArrayOfArrays)
+    .flat()
+    .map((video) => ({
+      id: video.data.id,
+      title: video.data.title,
+      thumbnail:
+        video.data.thumbnail ?? video.data.media?.oembed?.thumbnail_url ?? "",
+      url: video.data.url,
+      author: video.data.author,
+    }));
+
+  const seen = new Set<string>();
+  return videosData.filter((video) => {
+    if (seen.has(video.url)) return false;
+    seen.add(video.url);
+    return true;
+  });
 }
 
 const ChannelPage = ({ params }: ChannelPageProps) => {
+  const { channel: slug } = use(params);
+  const channel = getChannel(slug);
+
   const [isLoading, setIsLoading] = useState(true);
   const [allVideos, setAllVideos] = useState<VideoData[]>([]);
-  const channel = getChannel(params.channel);
-  const subReddits = channel ? getSubreddits(channel) : [];
-  const youtubeChannels = channel ? getYouTubeChannelIds(channel) : [];
+
   useEffect(() => {
-    async function getRedditData() {
+    if (!channel) return;
+
+    let cancelled = false;
+
+    async function load(current: Channel) {
       try {
-        const promises = subReddits.map((sub) =>
-          axios.get<RedditResponseData>(
-            `https://www.reddit.com/r/${sub}/hot.json?limit=50`,
-          ),
-        );
-        const arrayOfArrayOfResponses = await Promise.all(promises);
-        // filter only the videos and only the ones with more than min votes or 3
-        const videosArrayOfArrays = arrayOfArrayOfResponses
-          .map((response) => response.data.data.children)
-          .map((posts) =>
-            posts
-              .filter(isVideoObject)
-              .filter(
-                (item) => item.data.score >= (channel?.minNumOfVotes ?? 3),
-              ),
-          );
-
-        // console.log({ flat: videosArrayOfArrays.flat().map(v => v.data).map(v => ({ subreddit: v.subreddit, id: v.id, url: v.url })) })
-        const flat = interleaveArrays(videosArrayOfArrays).flat();
-
-        const videosData = flat.map((video) => {
-          return {
-            id: video.data.id,
-            title: video.data.title,
-            thumbnail:
-              video.data.thumbnail ??
-              video.data.media?.oembed?.thumbnail_url ??
-              "",
-            url: video.data.url,
-            author: video.data.author,
-          };
-        });
-
-        const uniq = {} as Record<string, boolean>;
-        // console.log({ flat });
-        const allVideosData = videosData.filter(
-          (v) => !uniq[v.url] && (uniq[v.url] = true),
-        );
-        // console.log({ allVideosData });
-        setAllVideos(allVideosData);
+        // TODO(phase 1): interleave the two sources and honour sortBy: "new",
+        // the way the live site does.
+        const [redditVideos, youtubeVideos] = await Promise.all([
+          getSubreddits(current).length > 0
+            ? fetchRedditVideos(current)
+            : Promise.resolve<VideoData[]>([]),
+          getYouTubeChannelIds(current).length > 0
+            ? fetchYouTubeVideos({ title: current.title })
+            : Promise.resolve<VideoData[]>([]),
+        ]);
+        if (!cancelled) setAllVideos([...redditVideos, ...youtubeVideos]);
       } catch (error) {
         console.error(error);
-      }
-    }
-    async function getYouTubeData() {
-      try {
-        const videos = await fetchYouTubeVideos({ title: params.channel });
-        setAllVideos(videos ?? []);
-      } catch (error) {
-        console.error(error);
+      } finally {
+        // TODO(phase 1): surface an error / "quota used up" message instead of
+        // falling through to an empty list.
+        if (!cancelled) setIsLoading(false);
       }
     }
 
-    if (subReddits.length > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      getRedditData();
-    }
-    if (youtubeChannels.length > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      getYouTubeData();
-    }
-    setIsLoading(false);
-  }, []);
+    void load(channel);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [channel]);
+
+  if (!channel) notFound();
 
   if (isLoading) {
     return <LoadingPage />;
   }
 
   return (
-    <div className="">
-      {allVideos.length > 0 && <VideoDisplay videos={allVideos} />}
-    </div>
+    <div>{allVideos.length > 0 && <VideoDisplay videos={allVideos} />}</div>
   );
 };
 

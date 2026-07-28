@@ -26,7 +26,7 @@ export default function LinkItem({
         size="lg"
         className={cn(
           "w-full",
-          pathname === `/${children?.toString().toLowerCase()}`
+          pathname === href || pathname.startsWith(`${href}/`)
             ? "bg-primary text-black"
             : "",
         )}
