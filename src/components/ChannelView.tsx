@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 
 import LoadingPage from "@/components/LoadingPage";
 import VideoDisplay from "@/components/VideoDisplay";
-import { fetchChannelVideos } from "@/lib/actions/videos";
-import type { Channel } from "@/lib/data";
+import { fetchRedditVideos } from "@/lib/actions/reddit";
+import { mergeVideoSources } from "@/lib/actions/videos";
+import { getSubreddits, type Channel } from "@/lib/data";
 
 interface Props {
   channel: Channel;
+  /** Fetched and cached on the server. */
+  youtubeVideos: VideoData[];
   /** Base path for deep links. Defaults to /{channel.title}. */
   urlPrefix?: string;
   initialVideoId?: string;
@@ -17,7 +20,6 @@ interface Props {
 type State =
   | { status: "loading" }
   | { status: "error" }
-  | { status: "empty" }
   | { status: "ready"; videos: VideoData[] };
 
 function Message({ children }: { children: React.ReactNode }) {
@@ -30,22 +32,47 @@ function Message({ children }: { children: React.ReactNode }) {
   );
 }
 
-const ChannelView = ({ channel, urlPrefix, initialVideoId }: Props) => {
-  const [state, setState] = useState<State>({ status: "loading" });
+const ChannelView = ({
+  channel,
+  youtubeVideos,
+  urlPrefix,
+  initialVideoId,
+}: Props) => {
+  const hasReddit = getSubreddits(channel).length > 0;
+
+  // A YouTube-only channel is already complete when it arrives from the server,
+  // so it renders without a client fetch or a loading flash.
+  const [state, setState] = useState<State>(
+    hasReddit
+      ? { status: "loading" }
+      : { status: "ready", videos: youtubeVideos },
+  );
 
   // Mount-only: the pages key this component by channel, so switching channels
-  // remounts it and `state` starts at "loading" again on its own.
+  // remounts it and `state` starts over on its own.
   useEffect(() => {
+    if (!hasReddit) return;
     let cancelled = false;
 
-    void fetchChannelVideos(channel).then(({ videos, failed }) => {
-      if (cancelled) return;
-      if (videos.length > 0) {
-        setState({ status: "ready", videos });
-      } else {
-        setState({ status: failed ? "error" : "empty" });
-      }
-    });
+    fetchRedditVideos(channel)
+      .then((redditVideos) => {
+        if (cancelled) return;
+        setState({
+          status: "ready",
+          videos: mergeVideoSources(redditVideos, youtubeVideos),
+        });
+      })
+      .catch((error: unknown) => {
+        console.error(`Error fetching videos for /${channel.title}:`, error);
+        if (cancelled) return;
+        // Reddit is unreachable, but anything the server already fetched should
+        // still render rather than the whole channel failing.
+        setState(
+          youtubeVideos.length > 0
+            ? { status: "ready", videos: youtubeVideos }
+            : { status: "error" },
+        );
+      });
 
     return () => {
       cancelled = true;
@@ -66,7 +93,7 @@ const ChannelView = ({ channel, urlPrefix, initialVideoId }: Props) => {
   // Nothing came back and nothing threw: on the YouTube channels this is
   // almost always the daily API quota being spent, which is what the live site
   // tells people too.
-  if (state.status === "empty") {
+  if (state.videos.length === 0) {
     return (
       <Message>
         Come back tomorrow, today&apos;s YouTube quota was used for /

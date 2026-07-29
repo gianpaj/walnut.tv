@@ -37,6 +37,7 @@ export default async function SubredditVideoPage({
     <ChannelView
       key={subreddit}
       channel={channel}
+      youtubeVideos={[]}
       urlPrefix={`/r/${subreddit}`}
       initialVideoId={videoId}
     />
