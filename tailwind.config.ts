@@ -1,4 +1,3 @@
-import aspectRatio from "@tailwindcss/aspect-ratio";
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
@@ -74,7 +73,7 @@ const config = {
       },
     },
   },
-  plugins: [tailwindcssAnimate, aspectRatio],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;
 
 export default config;

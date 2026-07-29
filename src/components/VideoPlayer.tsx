@@ -41,6 +41,8 @@ const VideoPlayer = ({ video, onEnded, onError }: Props) => {
 
         playerRef.current = new YTApi.Player(containerRef.current, {
           videoId: wantedVideoId.current,
+          width: "100%",
+          height: "100%",
           playerVars: {
             autoplay: 0,
             controls: 1,
@@ -81,7 +83,9 @@ const VideoPlayer = ({ video, onEnded, onError }: Props) => {
         delay: 0.5,
         ease: [0, 0.71, 0.2, 1.01],
       }}
-      className="aspect-h-9 aspect-w-16 w-full"
+      /* The player swaps the child div for its own iframe, which carries none
+         of our classes — hence the child selector. */
+      className="aspect-video w-full [&>iframe]:h-full [&>iframe]:w-full"
     >
       {/* Replaced in place by the player's iframe. */}
       <div ref={containerRef} />

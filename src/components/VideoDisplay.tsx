@@ -39,6 +39,9 @@ interface VideoListProps {
   activeIndex: number;
   onSelect: (index: number) => void;
   showAuthor?: boolean;
+  /** Own scroll container (desktop sidebar) vs. scrolling with the page (mobile). */
+  scroll?: boolean;
+  className?: string;
 }
 
 const VideoList = ({
@@ -46,6 +49,8 @@ const VideoList = ({
   activeIndex,
   onSelect,
   showAuthor = false,
+  scroll = true,
+  className,
 }: VideoListProps) => {
   const watchedVideos = useVideo((state) => state.watchedVideos);
   const activeRef = useRef<HTMLButtonElement>(null);
@@ -56,66 +61,67 @@ const VideoList = ({
     activeRef.current?.scrollIntoView({ block: "nearest" });
   }, [activeIndex]);
 
-  return (
-    <ScrollArea className="h-screen">
-      <div id="video-list" className="flex h-full flex-col space-y-4 p-2">
-        {videos.map((video, index) => {
-          const isActive = index === activeIndex;
-          // The active video is never dimmed, even once it counts as watched.
-          const isWatched =
-            !isActive && watchedVideos.includes(video.youtubeId);
+  const items = (
+    <div id="video-list" className="flex h-full flex-col space-y-4 p-2">
+      {videos.map((video, index) => {
+        const isActive = index === activeIndex;
+        // The active video is never dimmed, even once it counts as watched.
+        const isWatched = !isActive && watchedVideos.includes(video.youtubeId);
 
-          return (
-            <button
-              key={video.id}
-              ref={isActive ? activeRef : undefined}
-              data-active={isActive || undefined}
-              className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr]"
-              onClick={() => onSelect(index)}
-            >
-              <motion.div
-                className={cn(
-                  "col-span-1",
-                  isActive ? "h-full w-[5px] rounded-lg bg-primary" : "",
-                )}
-                layoutId="underline"
+        return (
+          <button
+            key={video.id}
+            ref={isActive ? activeRef : undefined}
+            data-active={isActive || undefined}
+            className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr]"
+            onClick={() => onSelect(index)}
+          >
+            <motion.div
+              className={cn(
+                "col-span-1",
+                isActive ? "h-full w-[5px] rounded-lg bg-primary" : "",
+              )}
+              layoutId="underline"
+            />
+            <div className="relative col-span-2">
+              <Image
+                src={video.thumbnail}
+                alt=""
+                width={320}
+                height={180}
+                className={cn("w-full", isWatched && "opacity-50")}
+                unoptimized
               />
-              <div className="relative col-span-2">
-                <Image
-                  src={video.thumbnail}
-                  alt=""
-                  width={320}
-                  height={180}
-                  className={cn("w-full", isWatched && "opacity-50")}
-                  unoptimized
-                />
-                {isWatched && (
-                  <Badge className="absolute left-1 top-1 text-[10px] leading-none">
-                    WATCHED
-                  </Badge>
+              {isWatched && (
+                <Badge className="absolute left-1 top-1 text-[10px] leading-none">
+                  WATCHED
+                </Badge>
+              )}
+            </div>
+            <div className="col-span-3 px-2">
+              <span
+                className={cn(
+                  "line-clamp-2 text-start text-xs font-medium",
+                  isWatched && "opacity-60",
                 )}
-              </div>
-              <div className="col-span-3 px-2">
-                <span
-                  className={cn(
-                    "line-clamp-2 text-start text-xs font-medium",
-                    isWatched && "opacity-60",
-                  )}
-                >
-                  {video.title}
+              >
+                {video.title}
+              </span>
+              {showAuthor && (
+                <span className="line-clamp-2 text-start text-xs text-primary">
+                  {video.author}
                 </span>
-                {showAuthor && (
-                  <span className="line-clamp-2 text-start text-xs text-primary">
-                    {video.author}
-                  </span>
-                )}
-              </div>
-            </button>
-          );
-        })}
-      </div>
-    </ScrollArea>
+              )}
+            </div>
+          </button>
+        );
+      })}
+    </div>
   );
+
+  if (!scroll) return items;
+
+  return <ScrollArea className={cn("h-full", className)}>{items}</ScrollArea>;
 };
 
 const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
@@ -157,21 +163,15 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
     ],
   );
 
+  // select() writes history and the watched store, so it must not run inside a
+  // setIndex updater — those have to stay pure and can be re-invoked.
   const goNext = useCallback(() => {
-    setIndex((current) => {
-      if (current >= videos.length - 1) return current;
-      select(current + 1);
-      return current + 1;
-    });
-  }, [videos.length, select]);
+    if (index < videos.length - 1) select(index + 1);
+  }, [index, videos.length, select]);
 
   const goPrev = useCallback(() => {
-    setIndex((current) => {
-      if (current < 1) return current;
-      select(current - 1);
-      return current - 1;
-    });
-  }, [select]);
+    if (index > 0) select(index - 1);
+  }, [index, select]);
 
   // Mark the video the page opened on, and normalise a ?v= or bare /{channel}
   // URL to /{channel}/{id}. No setIndex here: useState already started there.
@@ -248,7 +248,11 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
   // a second YouTube player and every onEnded/onError would fire twice.
   const player = (
     <div className="flex w-full flex-col justify-center p-4">
-      <VideoPlayer video={video} onEnded={onVideoEnded} onError={goNext} />
+      {/* Capped by width so 16:9 leaves room for the title and controls; at
+          full width the player alone pushed both below the fold. */}
+      <div className="mx-auto w-full max-w-[calc((100dvh-18rem)*16/9)]">
+        <VideoPlayer video={video} onEnded={onVideoEnded} onError={goNext} />
+      </div>
       {details}
       {controls}
     </div>
@@ -261,7 +265,12 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
         className="min-h-[200px] rounded-lg border"
       >
         <ResizablePanel defaultSize={25}>
-          <VideoList videos={videos} activeIndex={index} onSelect={select} />
+          <VideoList
+            videos={videos}
+            activeIndex={index}
+            onSelect={select}
+            className="h-screen"
+          />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel
@@ -275,20 +284,19 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
     );
   }
 
+  // Mobile stacks and scrolls with the page. A vertical ResizablePanelGroup was
+  // tried here and computed to 1px tall — it never gets a definite height off a
+  // page that scrolls — which collapsed both the player and the list to nothing.
   return (
     <>
-      <ResizablePanelGroup direction="vertical" className="h-screen w-full">
-        <ResizablePanel defaultSize={55}>{player}</ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={45}>
-          <VideoList
-            videos={videos}
-            activeIndex={index}
-            onSelect={select}
-            showAuthor
-          />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+      {player}
+      <VideoList
+        videos={videos}
+        activeIndex={index}
+        onSelect={select}
+        showAuthor
+        scroll={false}
+      />
       <Footer />
     </>
   );
