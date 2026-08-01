@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import ChannelView from "@/components/ChannelView";
-import { fetchYouTubeVideos } from "@/lib/actions/youtube";
 import { channelLabel, getChannel } from "@/lib/data";
 
 interface VideoPageProps {
@@ -34,13 +33,10 @@ export default async function ChannelVideoPage({ params }: VideoPageProps) {
   const channel = getChannel(slug);
   if (!channel) notFound();
 
-  const youtubeVideos = await fetchYouTubeVideos(channel);
-
   return (
     <ChannelView
       key={channel.title}
       channel={channel}
-      youtubeVideos={youtubeVideos}
       initialVideoId={videoId}
     />
   );
