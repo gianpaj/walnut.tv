@@ -1,44 +1,64 @@
-import js from '@eslint/js';
+// @ts-check
+import next from "eslint-config-next";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypeScript from "eslint-config-next/typescript";
+import tseslint from "typescript-eslint";
 
-export default [
-  js.configs.recommended,
+export default tseslint.config(
+  {
+    ignores: [
+      ".next/**",
+      "out/**",
+      "build/**",
+      "node_modules/**",
+      // Standalone CommonJS Node utilities, not part of the Next.js app.
+      "scripts/**",
+      "channels.js",
+    ],
+  },
+  next,
+  nextCoreWebVitals,
+  nextTypeScript,
+  tseslint.configs.recommendedTypeChecked,
+  tseslint.configs.stylisticTypeChecked,
   {
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: {
-        // Browser globals
-        console: 'readonly',
-        document: 'readonly',
-        window: 'readonly',
-        navigator: 'readonly',
-        location: 'readonly',
-        fetch: 'readonly',
-        localStorage: 'readonly',
-
-        // Node.js globals
-        process: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        module: 'readonly',
-        require: 'readonly',
-        exports: 'readonly',
-        global: 'readonly',
-        Buffer: 'readonly',
-
-        // jQuery
-        $: 'readonly',
-        jQuery: 'readonly',
-
-        // Custom globals
-        channels: 'readonly',
-        ga: 'readonly',
-        gapi: 'readonly',
-        reddit: 'readonly',
-        YT: 'readonly',
-        Vue: 'readonly',
-        VueSelect: 'readonly',
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
+    rules: {
+      // These opinionated rules are enabled in stylistic-type-checked above.
+      "@typescript-eslint/array-type": "off",
+      "@typescript-eslint/consistent-type-definitions": "off",
+
+      "@typescript-eslint/consistent-type-imports": [
+        "warn",
+        {
+          prefer: "type-imports",
+          fixStyle: "inline-type-imports",
+        },
+      ],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_" },
+      ],
+      "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/no-misused-promises": [
+        "error",
+        {
+          checksVoidReturn: { attributes: false },
+        },
+      ],
+    },
   },
-];
+  {
+    files: ["**/*.test.ts", "**/*.test.tsx"],
+    rules: {
+      // node:test's describe/it return promises the runner owns; awaiting them
+      // is not the caller's job.
+      "@typescript-eslint/no-floating-promises": "off",
+    },
+  },
+);
