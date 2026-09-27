@@ -6,7 +6,9 @@ console.log(
 
 console.log("Walnut's code is open sourced at https://github.com/gianpaj/walnut.tv");
 
-const youtubeApiKey = 'AIzaSyD342vuWxFeyEMKANx58qKyECeNsxlv0f8';
+// The YouTube API key must not be committed to source control.
+// It is injected at runtime via /js/config.js (gitignored, not checked in).
+const youtubeApiKey = window.YOUTUBE_API_KEY || '';
 const youtubeURL = 'http://www.youtube.com/watch?v=';
 const youtubeURLLength = youtubeURL.length;
 const embedLength = '/embed/'.length;
