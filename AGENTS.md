@@ -68,8 +68,8 @@ src/lib/actions/          reddit.ts, youtube.ts, videos.ts (combines both)
 src/lib/videoService.ts   filtering, interleaving, thumbnail and id helpers
 src/lib/youtubeIframeApi  loads the IFrame API once per page
 src/types/                global VideoData / RedditPost / Window augmentation
-scripts/                  standalone CommonJS Node utilities, excluded from
-                          tsconfig and Oxlint
+scripts/                  channel utilities and browser-acceptance fixtures,
+                          excluded from tsconfig and Oxlint
 public/                   icons, manifest, logo, og-image
 ```
 
@@ -79,8 +79,9 @@ A `loading.tsx` wraps its segment in Suspense, which makes every response
 stream. Next cannot change an HTTP status once streaming has begun, so
 `notFound()` silently degrades to a 200 with the 404 page rendered inside it.
 Validate the route before any streaming boundary. `ChannelView` awaits
-server-side fetching; there is no loading component. Pending navigation
-feedback remains a migration checklist item.
+server-side fetching; there is no loading component. `NavigationProvider` uses
+client transitions to show pending navigation and pause the old player without
+starting a streaming response.
 
 ## channels.js is the single source of truth
 

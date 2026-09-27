@@ -8,6 +8,11 @@ Runtime conventions and environment variables belong in [AGENTS.md](./AGENTS.md)
 is not browser verification. Check off an open item only after its acceptance
 criteria pass, or record an explicit decision to accept the difference.
 
+The [September 27 verification note](./.agents/notes/implemented/migration/2026-09-27-parity-verification.md)
+records local production-feed/playback checks, fixture coverage, paired screenshots
+and remaining blockers. Five code-fix chunks are committed. The full browser
+confirmation is incomplete; neither hosted preview serves the reviewed code.
+
 ## Baseline
 
 The 2026-09-27 audit compares local `dev` (`b7281fa`) with `master` (`561d929`).
@@ -55,44 +60,42 @@ There is no Reddit browser fallback and no three-channel YouTube cap.
 - [x] **R1: Choose a working default destination.** The homepage redirects to
       `/hustle` (307). `/reddit`, `/curious`, `/docus` and their video links
       redirect permanently to `/` (308), without preserving the video destination.
-      Unknown categories still return 404. Rules live in `next.config.mjs`.
+      Unknown categories still return 404. The root rule lives in `src/proxy.ts`;
+      retired-category rules live in `next.config.mjs`.
       HTTP and browser routing checks passed; loaded-feed and logo-interaction
       acceptance remain part of B0/B1/B3. See the [routing verification note](./.agents/notes/implemented/migration/2026-09-27-home-and-retired-routes.md).
-- [ ] **R2: Handle legacy SPA-shim links.** `master:404.html` and
-      `master:index.html` encode/decode `/?p=/path&q=...` with `~and~` escaping.
-      The Next root ignores these parameters. Preserve supported channel/video
-      and `/r/{subreddit}/{id}` destinations, query and fragment semantics; reject
-      external redirect destinations. Test ordinary deep links, `?v=`, `?p=`,
-      malformed input and a removed category.
+- [x] **R2: Handle legacy SPA-shim links.** The root proxy decodes
+      `/?p=/path&q=...` and `~and~`, preserving supported paths, queries and
+      inherited fragments. Unsafe/malformed destinations fall back to Hustle;
+      retired-category and unknown-route policies remain intact. Unit, HTTP and
+      local browser checks cover deep links, `?v=`, `?p=`, malformed input and
+      retired categories. Video selection retains query/fragment data.
 
 ### P1 — User-visible behavior and correctness
 
-- [ ] **U1: Restore pending-navigation feedback.** Server-side `ChannelView`
-      awaits all fetching, while navbar links expose no explicit pending state.
-      Under throttled fetching, make the requested navigation apparent and decide
-      whether the old video stops immediately, as in the legacy app. Preserve real
-      404 responses; follow the streaming constraint in `AGENTS.md`.
-- [ ] **U2: Constrain automatic list scrolling.** `VideoList` calls
-      `scrollIntoView` on every selection even with mobile `scroll={false}`.
-      Keep desktop selection visible without dragging the mobile document away
-      from the player. Test initial deep links and next/previous past the fold.
-- [ ] **U3: Name the mobile menu control.** The `MobileNav` trigger is icon-only
-      without an accessible name. Give it a meaningful name and verify opening,
-      closing, focus return and category selection using the keyboard.
-- [ ] **D1: Distinguish empty, failed, quota-exhausted and partial feeds.**
-      `fetchChannelUploads` catches every error and returns `[]`; `ChannelView`
-      calls active non-failing empty results a YouTube quota failure. Disabled
-      Reddit-only channels have an explicit unavailable state; D1 remains open.
-      Preserve successful sources and enough failure information to show the
-      correct state. Test missing credentials, API denial, quota exhaustion,
-      network failure, one failed source, and a successful zero-video response.
-      The misleading empty/quota message also exists in legacy code; do not carry
-      it forward as a parity requirement.
-- [ ] **D2: Parse valid durations without a seconds field.** The regex in
-      `src/lib/utils.ts` treats `PT3M` and `PT1H` as zero, dropping long videos.
-      Cover optional components, malformed/missing duration, and the 120-second
-      boundary. The legacy parser also mishandles these inputs; preserve the
-      intended filter, not its bug.
+- [x] **U1: Restore pending-navigation feedback.** `NavigationProvider` names
+      the requested category and pauses the old player while the client transition
+      waits for server data. Slow-fetch fixtures verified feedback, pause and
+      completed navigation. No route-level Suspense was added; HTTP 404s pass.
+- [ ] **U2: Constrain automatic list scrolling.** Desktop selection scrolls
+      only the list viewport, sized below the header; mobile does not auto-scroll.
+      Initial deep links and Next past the fold passed on desktop/mobile, including
+      the desktop clipping regression. Confirm Previous past the fold and the
+      short-viewport/orientation matrix in a stable browser before sign-off.
+- [ ] **U3: Name the mobile menu control.** The trigger is named
+      “Open navigation menu.” Keyboard opening, Escape/focus return and category
+      selection passed in the initial batch. The confirmation run timed out at
+      menu-close/focus restoration; repeat it and capture a settled menu image.
+- [x] **D1: Distinguish empty, failed, quota-exhausted and partial feeds.**
+      Fetchers return successful videos plus allowlisted issue codes. Only explicit
+      quota reasons produce quota messages; no raw upstream errors reach the UI.
+      Actual-fetcher unit tests and browser fixtures cover missing configuration,
+      denial, quota, network failure, partial results and successful empty feeds.
+      A real partially available AI feed also retained playable videos.
+- [x] **D2: Parse valid durations without a seconds field.** The parser accepts
+      optional hours/minutes/seconds and rejects malformed or missing durations.
+      Unit tests cover optional components and 119/120/121 seconds; browser
+      fixtures retain `PT3M`/`PT1H` and exclude durations of 120 seconds or less.
 
 ## Differences requiring a decision
 
@@ -104,7 +107,7 @@ There is no Reddit browser fallback and no three-channel YouTube cap.
 - [ ] **P2: Reddit vote semantics.** Legacy filters `ups` only for a truthy
       threshold; the rewrite always checks `score >= minVotes`. At zero, negative
       scores are excluded rather than disabling the filter. Choose the rule and
-      cover it with fixtures.
+      cover it with fixtures. Paused while Reddit is disabled.
 - [ ] **P3: Responsive layout.** Decide whether the resizable desktop sidebar
       is wanted. Crossing 768px recreates the player; verify orientation changes
       and decide whether playback-position continuity is required.
@@ -135,21 +138,29 @@ revision, browser and result. Unit coverage does not establish browser parity.
       note. Note blocked comparisons rather than treating them as passes.
       Pixel-identical styling is not required; explain intentional differences.
       Screenshots complement the interaction checks below; they do not replace them.
+      Paired loaded screenshots were captured and inspected locally. The menu
+      capture is mid-animation, not a pass; final-build highlight/watched, menu,
+      theme and short-viewport comparisons remain open.
 
 - [ ] **B1: Routing.** Every configured category, both deep-link route shapes,
       `?v=`, reload, navbar changes, Back/Forward, and unknown-channel HTTP 404s.
       Test a requested video still in the feed and one absent from it. Falling
       back to the first video when it leaves the feed matches legacy behavior.
+      Local route/404 fixtures pass. Back/Forward restores the selected video
+      from the history URL rather than cached page props; confirmation passed.
+      Logo interaction and the reviewed deployment still need acceptance.
 - [ ] **B2: Player lifecycle.** Select before the IFrame API loads and between
       player construction and `onReady`; the latest selection must win without
-      throwing. `VideoPlayer` has no `onReady` synchronization and calls
-      `cueVideoById` whenever selection changes, so this needs a targeted test.
-      Also test rapid selection, route changes, unmount and API-load failure.
+      throwing. `VideoPlayer` gates cueing on readiness and synchronizes the latest
+      ID in `onReady`. Initial fixtures passed delayed readiness, rapid selections,
+      route changes, unmount and visible API-load failure. Repeat the complete
+      lifecycle suite on the final revision; browser confirmation was interrupted.
 - [ ] **B3: Playback and controls.** Play/pause, fullscreen, source links,
       keyboard arrows outside editable fields, prev/next boundaries and skipping
       removed/private/blocked videos. End-of-video must not advance automatically:
       autoplay-next is disabled in both implementations.
-- [ ] **B4: Watched history.** Seed legacy `videosWatched` only, new
+- [x] **B4: Watched history.** Local fixtures passed all four seeds, union,
+      duplicate suppression, reload and intact legacy storage. Seed legacy `videosWatched` only, new
       `video-storage` only, both keys and malformed legacy JSON. Verify the union
       survives reload, duplicate IDs do not grow, and the legacy key remains
       intact. Marking a video watched on selection, not playback/completion,
@@ -169,7 +180,9 @@ revision, browser and result. Unit coverage does not establish browser parity.
 
 ## Release gates
 
-- [ ] **L1: Working deployment preview.** Select Netlify or Vercel, configure
+- [ ] **L1: Working deployment preview.** Netlify's successful status serves
+      generic 404s; Vercel canceled the reviewed build via its Ignored Build Step.
+      Select Netlify or Vercel, configure
       Next.js runtime support and server-only credentials, and produce a preview
       of the revision being reviewed. A successful build is not API verification.
 - [ ] **L2: Upstream access and secrets.** Verify YouTube key restrictions and
@@ -184,10 +197,11 @@ revision, browser and result. Unit coverage does not establish browser parity.
       twelve two-hour refreshes, plus playlist-ID refreshes. These are estimates,
       not enforced limits. Add durable storage only if host behavior requires it;
       define failure/stale-data behavior before relying on caching for availability.
-- [ ] **L4: Metadata and assets.** Inspect rendered channel and deep-link HTML
-      for canonical URLs and Open Graph/Twitter images, not just layout exports.
-      Verify favicon/manifest asset URLs, sitemap categories and `/r/` indexing
-      policy. Nested page metadata must retain the intended social preview.
+- [x] **L4: Metadata and assets.** Local production HTML/browser checks verify
+      channel/deep-link and `?v=` canonicals, inherited Open Graph/Twitter images,
+      favicon/manifest/icon URLs and the category-only sitemap. Reddit pages set
+      `noindex, follow` while allowing crawling. Sixteen focused tests cover
+      metadata inheritance, canonical handling and asset files. Recheck on the host at cutover.
 - [ ] **L5: Analytics.** Verify initial loads and history-based navigation in
       GA4 realtime/debug reporting. Confirm which of the two configured properties
       is used and whether both integrations are wanted; avoid duplicate counting
@@ -195,7 +209,10 @@ revision, browser and result. Unit coverage does not establish browser parity.
 - [ ] **L6: Reproducible validation.** Frozen-lockfile install, channel check,
       typecheck, lint, tests and production build pass on the release revision.
       Add focused regression tests for the fixes above; helper tests alone do not
-      prove route, player, storage or fetcher behavior.
+      prove route, player, storage or fetcher behavior. Local frozen install,
+      channel validation, typecheck, lint, 137 tests and build passed. The browser
+      harness exists in `scripts/browser-acceptance/`; its full confirmation run
+      is incomplete, so this release gate remains open.
 - [ ] **L7: Cutover and rollback.** Review current `master` channel changes,
       finish or explicitly accept the open parity items, update the PR summary,
       and record the deployment target, redirect policy and rollback procedure.
