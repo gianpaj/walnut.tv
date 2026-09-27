@@ -49,12 +49,12 @@ There is no Reddit browser fallback and no three-channel YouTube cap.
 
 ### P0 — Landing route and link compatibility
 
-- [ ] **R1: Choose a working default destination.** `src/app/page.tsx` redirects
-      `/` to `/reddit`, which is absent from `channels.js` and therefore returns
-      `notFound()`. Choose a configured category or explicitly restore a Reddit
-      landing experience. Home and logo navigation must reach usable content.
-      Decide the fate of `/reddit`, `/curious`, `/docus` and their video links:
-      intentional 404s or documented redirects, not accidental breakage.
+- [x] **R1: Choose a working default destination.** The homepage redirects to
+      `/hustle` (307). `/reddit`, `/curious`, `/docus` and their video links
+      redirect permanently to `/` (308), without preserving the video destination.
+      Unknown categories still return 404. Rules live in `next.config.mjs`.
+      HTTP and browser routing checks passed; loaded-feed and logo-interaction
+      acceptance remain part of B0/B1/B3. See the [routing verification note](./.agents/notes/implemented/migration/2026-09-27-home-and-retired-routes.md).
 - [ ] **R2: Handle legacy SPA-shim links.** `master:404.html` and
       `master:index.html` encode/decode `/?p=/path&q=...` with `~and~` escaping.
       The Next root ignores these parameters. Preserve supported channel/video
@@ -199,7 +199,7 @@ revision, browser and result. The current unit suite only covers helpers.
 
 ## Suggested restart order
 
-1. Resolve R1's default/category policy and restore a usable preview (L1/L2).
+1. Restore a usable preview with working feeds (L1/L2).
 2. Fix R2, D1/D2 and U1–U3 in small tested changes; settle P1/P2 explicitly.
 3. Run the browser checklist, prioritizing player readiness and watched history.
 4. Collect cache, metadata and analytics evidence, then complete cutover gates.
