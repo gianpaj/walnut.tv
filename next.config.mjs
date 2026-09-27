@@ -1,5 +1,8 @@
 /** @satisfies {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    useTypeScriptCli: true,
+  },
   async redirects() {
     return [
       { source: "/", destination: "/hustle", permanent: false },

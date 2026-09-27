@@ -2,7 +2,7 @@
 /** @typedef {import("prettier-plugin-tailwindcss").PluginOptions} TailwindConfig */
 /** @typedef  {import("@ianvs/prettier-plugin-sort-imports").PluginConfig} SortImportsConfig */
 
-/** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').options} */
+/** @type {PrettierConfig & TailwindConfig & SortImportsConfig} */
 const config = {
   plugins: [
     "@ianvs/prettier-plugin-sort-imports",
