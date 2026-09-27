@@ -66,6 +66,7 @@
     "@types/react-dom": "^19",
     "@types/youtube": "^0.3.0",
     "autoprefixer": "^10.4.22",
+    "baseline-browser-mapping": "^2.11.26",
     "husky": "9.1.7",
     "lint-staged": "17.2.0",
     "nodemon": "^3.1.14",
