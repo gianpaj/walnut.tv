@@ -1,220 +1,193 @@
-# walnut.tv — Next.js migration plan (`dev` branch)
-
-Status as of 2026-07-28. Baseline = the live site on `master` (Vue 1 + jQuery + gapi, `index.html` / `js/all.js` / `channels.js`).
-
----
-
-## 1. State of the `dev` branch
-
-**Provenance.** Branched off `master` around Feb 2024 (PR #232, "feat: Migration to Next.js 14"), last commit `12c5edd navbar` on **2025-11-12**. It is **16 commits ahead / 155 commits behind** `master`. `master` is still actively receiving channel additions and dependency bumps, so the gap grows.
-
-**Stack.** Next 14.2.2 (App Router) · React 18 · TypeScript (strict, `noUncheckedIndexedAccess`) · Tailwind 3 · shadcn/ui + Radix · framer-motion · zustand (persisted) · pnpm · Node pinned to 24.9.0 via `.tool-versions`.
-
-**Does it work?** Yes, mostly.
-
-- `pnpm install --frozen-lockfile` — clean.
-- `next build` — **compiles successfully**, then fails the lint gate on exactly one error:
-  `src/lib/actions/youtube.ts:79` — `@typescript-eslint/no-unnecessary-type-assertion`, plus 2 unused-import warnings in `MobileNav.tsx`. Minutes to fix.
-- `pnpm dev` — serves. `/` redirects to `/reddit`, navbar and spinner render.
-- `/nonexistentchannel` returns **200 with a blank page** instead of 404.
-
-**Shape of the code.**
-
-```
-src/app/[channel]/page.tsx   "use client" — fetches reddit OR youtube, renders VideoDisplay
-src/app/page.tsx             redirect("/reddit")
-src/app/layout.tsx           fonts, ThemeProvider (dark default), ToastProvider, Header
-src/components/VideoDisplay  resizable 2-pane list + player (separate desktop/mobile trees)
-src/components/VideoPlayer   plain YouTube <iframe> embed
-src/hooks/use-video          zustand: watchedVideos / clickedVideos / currentVideoWatching
-src/lib/actions/youtube.ts   axios → YouTube Data API v3, key is NEXT_PUBLIC_
-src/lib/actions/reddit.ts    dead code (comment: "won't work because reddit denies server requests")
-src/lib/data.ts              a *copy* of channels.js
-```
-
----
-
-## 2. Two findings that should shape the plan
-
-### A. Reddit blocks server-side requests
-
-Verified from this machine: `GET https://www.reddit.com/r/videos/hot.json?limit=5` → **403**, with and without a browser `User-Agent` (it returns an HTML block page, not JSON). The live site works because `reddit.js` runs **in the visitor's browser** from a residential IP.
-
-`src/lib/actions/reddit.ts` already carries the comment _"This function won't work because reddit denies requests from the server"_ — which is why `[channel]/page.tsx` is a client component doing its own `axios.get`.
-
-Consequences:
-
-- Server-rendering the Reddit channels on Vercel/Netlify will 403 out of the box.
-- The proper fix is a Reddit OAuth **script app** (`client_credentials` → `oauth.reddit.com`), which _is_ allowed from datacenter IPs and unlocks server-side caching. Needs a Reddit app registration.
-- Until then, Reddit stays client-side.
-
-### B. YouTube quota is the real bottleneck, and the migration is the fix
-
-The live site has a hardcoded error string: _"Come back tomorrow, today's YouTube quota was used for /{channel}"_ — this is a recurring production failure, not a hypothetical.
-
-Per channel the code does 3 API calls (`channels.list` → `playlistItems.list` → `videos.list`). `hustle` has **65** YouTube channel IDs, so one visitor loading `/hustle` fires ~195 requests against a 10,000 unit/day quota. The key is public (`js/all.js` on master, `NEXT_PUBLIC_YOUTUBE_API_KEY` on dev), so it can also be scraped and burned by anyone.
-
-`dev` "solves" this with `.splice(0, 3)` in `fetchYouTubeVideos` — it only ever queries the first 3 channels of a category. That's a parity regression standing in for the real fix.
-
-**Moving fetching server-side with `revalidate` collapses N visitors × 195 requests into 195 requests per revalidation window.** This is the single biggest argument for finishing the migration, and it's what makes removing `.splice(0, 3)` affordable.
-
----
-
-## 3. Feature-parity gap list
-
-Ordered roughly by user impact.
-
-| #   | Live (`master`)                                                                                               | `dev` today                                                     | Notes                                                                                           |
-| --- | ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| 1   | **YouTube IFrame Player API** with `onStateChange` / `onError`                                                | plain `<iframe>`                                                | Loses autoplay-next-on-end, auto-skip on unplayable video, and all player events                |
-| 2   | Keyboard ← / → prev-next; mobile prev/next SVG buttons                                                        | none                                                            |                                                                                                 |
-| 3   | URLs `/{channel}/{id}` via `replaceState`                                                                     | `?v={id}` query param                                           | **Breaks every shared/indexed link.** Also `404.html` + the `?p=` SPA shim must keep resolving  |
-| 4   | `/r/{subreddit}` — browse any subreddit ad hoc                                                                | missing                                                         |                                                                                                 |
-| 5   | All YouTube channel IDs queried                                                                               | `.splice(0, 3)` — first 3 only                                  | Quota hack; fix properly in Phase 2                                                             |
-| 6   | Shorts filter ≤ **120s**                                                                                      | ≤ **60s**                                                       |                                                                                                 |
-| 7   | `sortBy: 'new'` → sort by `publishedAt` desc                                                                  | ignored                                                         | Affects hustle / ai / crypto                                                                    |
-| 8   | Reddit + YouTube results interleaved (`mixElementsFromArraysOfArrays`)                                        | interleave exists for subreddits only, never for reddit×youtube |                                                                                                 |
-| 9   | Thumbnail = `img.youtube.com/vi/{id}/mqdefault.jpg`                                                           | `snippet.thumbnails.maxres.url`                                 | `maxres` is frequently absent → falls through to `/img/notfound.jpg`                            |
-| 10  | `localStorage['videosWatched']`                                                                               | zustand `localStorage['video-storage']`                         | Existing users silently lose their watched history — migrate on first read                      |
-| 11  | WATCHED badge over the thumbnail + dimmed title                                                               | `<Badge>` below the title, no dimming                           | Already in `TODO.md` items 2–4                                                                  |
-| 12  | Loading message, empty state, quota-exhausted message, error message                                          | none — blank screen                                             | `setIsLoading(false)` fires immediately in the effect, so the spinner never covers the fetch    |
-| 13  | —                                                                                                             | unknown channel → 200 blank                                     | should call `notFound()`; `not-found.tsx` already exists and is unused                          |
-| 14  | GA4 (`G-LJ7B0PVNZL`) + Firebase Analytics                                                                     | none                                                            |                                                                                                 |
-| 15  | og:image, twitter card, canonical, `site.webmanifest`, full favicon set, `theme-color`, tippy tooltip on logo | `favicon.ico` + title/description only                          |                                                                                                 |
-| 16  | `?debug` console dump                                                                                         | none                                                            | nice-to-have                                                                                    |
-| 17  | share modal + copy-to-clipboard                                                                               | none                                                            | `share()` exists on master but has no UI trigger — arguably dead; `TODO.md` lists "share modal" |
-
-**Not a regression:** both versions filter out Reddit-native (`v.redd.it`) videos. Rendering those is a `TODO.md` enhancement, not parity.
-
-### The channels data problem (fix this first)
-
-- `master` maintains `channels.js` at the repo root, and it is written by `scripts/add-youtube-channel.js`, validated by `scripts/check-channels.js` (`npm run prebuild`), and driven by the `.claude/skills/add-youtube-channel.md` skill.
-- `dev` has a **fork** of it at `src/lib/data.ts`, which has already drifted:
-
-| channel | master IDs | dev IDs | missing in dev | stale in dev |
-| ------- | ---------- | ------- | -------------- | ------------ |
-| hustle  | 65         | 65      | 4              | 4            |
-| ai      | 33         | 31      | 2              | 0            |
-| crypto  | 27         | 23      | 4              | 0            |
-
-- On top of that, the channel list is **hardcoded a third time** in `components/navbar/Navbar.tsx` and `MobileNav.tsx`.
-
-Three copies of the same list, one of which is the target of an automated workflow. This must collapse to one source before anything else, or every subsequent PR re-introduces drift.
-
-### Not carried over from `master`
-
-`CLAUDE.md` · `.claude/skills/` · `scripts/` (check-channels, add-youtube-channel, extract-youtube-channel-id) · `eslint.config.mjs` (dev is on the old `.eslintrc.cjs` + eslint 8) · `renovate.json` · `LICENSE.md` · `.github/workflows/claude.yml` · `img/`, `public/walnut.tv-og-image.png`, `site.webmanifest`, `browserconfig.xml`, `safari-pinned-tab.svg`, `404.html`.
-
----
-
-## 4. The plan
-
-### Phase 0 — Unblock ✅ done
-
-1. ✅ **Merged `master` into `dev`** (merge, not rebase — 155 commits). Kept `dev`'s app code and `master`'s `channels.js`, `scripts/`, `.claude/`, `LICENSE.md`, `renovate.json` and assets (moved under `public/`). Dropped the Vue app, `package-lock.json` and the Vue-era eslint/stylelint configs.
-2. ✅ **Single source of truth for channels.** `channels.js` stays at the repo root as CommonJS — `scripts/` and the skill keep working verbatim — with the `typeof document` guard dropped so it exports unconditionally. `src/lib/data.ts` is now a typed wrapper (`Channel`, `getChannel`, `getSubreddits`, `getYouTubeChannelIds`, `channelLabel`) instead of a drifted copy, and the navbar renders from the list rather than hardcoding six links twice.
-3. ✅ **Upgraded to Next 16** (not 15 — 16 was already current, and doing it once is cheaper), React 19, ESLint 9 flat config with typescript-eslint 8. `next lint` was removed in 16, so linting is plain `eslint .`. Pins kept deliberately: react-resizable-panels v3 (v4 renamed its exports), Tailwind 3 (v4 is a CSS-first rewrite), tailwind-merge 2 (v3 targets Tailwind 4).
-4. ✅ **Green build.** `pnpm check-channels`, `pnpm typecheck`, `pnpm lint` and `pnpm build` all pass. The stricter ruleset also caught the broken loading state, the VideoPlayer effect, and LinkItem's stringify-the-children route matching — all fixed.
-5. ✅ **CI** (`.github/workflows/ci.yml`) runs all four on every PR. Note pnpm does not run `pre`/`post` scripts by default, so the old `prebuild` hook never fired; `build` now calls `check-channels` explicitly.
-6. ✅ **Docs**: `AGENTS.md` is the canonical guide, `CLAUDE.md` points at it, `README.md` describes the Next.js app.
-
-~~Still open from Phase 0: unknown channels render the 404 page but still return 200.~~ Fixed in Phase 1 — see below.
-
-### Phase 1 — Behavioural parity ✅ code complete, not yet verified in a browser
-
-1. ✅ **`/{channel}/{id}` URLs restored.** `[channel]/page.tsx` is a server component that resolves the slug and calls `notFound()`; a client `ChannelView` fetches. New `[channel]/[videoId]` route for deep links, `?v={id}` still accepted and rewritten on load. Selection uses `history.replaceState`, not `router.replace`, so it does not remount and refetch.
-2. ✅ **Real YouTube player.** `YT.Player` via the IFrame API with the live site's `playerVars`; `onError` skips an unplayable video. `onStateChange` ENDED is wired but gated behind `AUTOPLAY_NEXT = false` — the live site has the same flag and never sets it true. `cueVideoById`, not `loadVideoById`.
-3. ✅ **Navigation.** ← / → keys, prev/next buttons with a position counter on both layouts, sidebar auto-scroll to the playing video.
-4. ✅ **Watched state.** The store seeds from the legacy `localStorage['videosWatched']` and unions it with its own, non-destructively. WATCHED badge over the thumbnail, watched rows dimmed.
-5. ✅ **Fetching parity.** Reddit × YouTube interleaved, `sortBy: "new"` honoured, YouTube interleaved across channels before sorting, shorts filter back to 120s, thumbnails from `img.youtube.com/vi/{id}/mqdefault.jpg`, titles link to the Reddit thread. `Promise.allSettled` so one dead source does not blank the page.
-6. ✅ **States.** Loading, error, and the "Come back tomorrow, today's YouTube quota was used" message; previously all three were a blank page.
-7. ✅ **`/r/{subreddit}`** and `/r/{subreddit}/{id}`, by synthesising a `Channel` so the whole pipeline is shared.
-8. ✅ **SEO / analytics / assets.** og:image, twitter card, per-page canonical, manifest, icon set, theme-color, GA4 + Firebase, `robots.ts`, `sitemap.ts`.
-
-**Real 404s** — the cause of the Phase 0 leftover was `src/app/loading.tsx`: a route-level loading file wraps the segment in Suspense, every response then streams, and Next cannot change the status once streaming has started (`not-found` "returns a 404 for non-streamed responses and a 200 for streamed responses"). `ChannelView` renders the spinner as component state, so the file moved to `src/components/LoadingPage.tsx`. Unknown channels now return a genuine 404. **Keep this in mind before adding any `loading.tsx` back.**
-
-Also rendered one layout at a time via a `matchMedia` hook instead of mounting desktop and mobile copies and CSS-hiding one — with the Player API the hidden copy would have built a second player and double-fired every event.
-
-**Still to do before Phase 1 can be called done:**
-
-- Browser verification against the live site, feature by feature, desktop and mobile. Nothing below has been exercised in a real browser yet: the machine this was built on gets 403s from Reddit and has no YouTube API key, so every channel lands on the empty state locally.
-- Confirm GA4 is receiving events (`TODO.md` flags this too).
-- Check the legacy `?p=/...` SPA-shim URLs that `404.html` produced still resolve, or add redirects.
-- Decide whether the resizable-panel layout is even wanted; the live site has a fixed sidebar.
-
-_Exit criteria:_ that walk-through passes.
-
-### Phase 2 — Server-side fetching + caching (2–3 days) — the payoff
-
-14. Move YouTube fetching into server components / route handlers with `revalidate` (suggest 30–60 min; the source data is "last 4 uploads"). Key becomes server-only — drop `NEXT_PUBLIC_`.
-15. Register a **Reddit OAuth script app**, fetch via `client_credentials` → `oauth.reddit.com` server-side with `revalidate` ~10 min. Keep the existing client-side path as a fallback if the server call 403s.
-16. Add a durable cache (Vercel KV / Netlify Blobs / Upstash) in front of both so cold starts and redeploys don't re-burn quota.
-17. With caching in place, drop `.splice(0, 3)` and query all channel IDs.
-
-_Exit criteria:_ `/hustle` loads all 65 channels; the YouTube quota dashboard shows requests proportional to revalidations, not to traffic.
-
-### Phase 3 — Cutover (1 day)
-
-18. Deploy preview side-by-side with walnut.tv; verify the redirect map and that GA4 is still receiving events (`TODO.md` already flags this).
-19. Point Netlify at `dev` (or move to Vercel — `master`'s README lists Vercel as the plan; the Vercel MCP tools are available in this session if you want to go that way).
-20. Merge `dev` → `master`, delete the Vue app, update `CLAUDE.md` and `README.md`.
-
-### Phase 4 — Auth + personalization
-
-**Three things must be true before Phase 4 is cheap. Build them into Phases 1–2, not after:**
-
-- **Channels resolve at runtime, not at import time.** Replace every `channels.find(c => c.title === slug)` with a single `getChannel(slug, user?)` that reads the built-in list first, then the signed-in user's saved channels. If Phase 1 hardcodes the import everywhere, Phase 4 becomes a rewrite.
-- **Watched state sits behind an interface.** `useWatched()` with a localStorage adapter now, a Postgres adapter later, plus a merge-on-first-login path. Same for the URL/router state.
-- **Decide the route shape once.** `/[channel]` for built-ins and `/my/[channel]` (or `/u/[user]/[channel]`) for custom ones — pick it in Phase 1 so links don't break a second time.
-
-**Stack — decided**
-
-- **Auth: [Better Auth](https://www.better-auth.com/)**, starting with Google sign-in only. Add the Reddit provider later if per-user Reddit data (saved posts, subscribed subreddits) becomes interesting — Better Auth covers both, and it owns its own tables rather than a hosted user directory.
-- **DB: Supabase Postgres or Turso** — both fine, decide at the start of Phase 4:
-  - _Supabase_ — Postgres, generous free tier, RLS, and a dashboard. Heavier, but if personalization ever grows beyond a channel list (playlists, follows, comments) relational Postgres is the safer floor.
-  - _Turso_ — libSQL/SQLite at the edge, cheaper and lower-latency for what is basically a key-value-ish read of "this user's channels". Less to grow into.
-  - Lean Supabase if in doubt; the data model below is plain relational either way.
-- **ORM: Drizzle**, whichever DB is chosen — it targets both Postgres and libSQL, so the decision above stays reversible.
-- **Schema sketch**
-
-  ```
-  -- Better Auth owns user/session/account/verification tables; these are ours:
-  user_channels(id, user_id, slug, title, position,
-                subreddits[], youtube_channel_ids[], min_votes, sort_by)
-  watched_videos(user_id, youtube_id, watched_at)   -- PK (user_id, youtube_id)
-  ```
-
-  On Turso, `subreddits[]` / `youtube_channel_ids[]` become the same
-  semicolon-separated strings `channels.js` already uses, or a JSON column.
-
-- **Feature backlog** (this is `TODO.md`'s "custom channels" section, made concrete):
-  add a YouTube channel by URL · reorder channels (`position`) · guard against deleting the last channel or the last source in a channel · channel scroller on the homepage · login/logout UI · later: in-app YouTube channel search — `scripts/add-youtube-channel.js` already implements that search and can be lifted into a route handler.
-- Everything stays usable signed-out; auth is purely additive.
-
----
-
-## 5. Risks
-
-| Risk                                                 | Mitigation                                                                                                                 |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| YouTube quota exhaustion (already happening in prod) | Phase 2 server caching; consider a quota-aware fallback that serves the last good cached payload                           |
-| Reddit 403s / API policy changes                     | OAuth script app; keep the client-side path as fallback; the `is_video` path is already avoided                            |
-| SEO regression from URL change + client rendering    | Keep `/{channel}/{id}`, add redirects, server-render in Phase 2, add sitemap                                               |
-| `dev` keeps drifting from `master`                   | Merge in Phase 0 and keep merging weekly, or freeze channel edits on `master` during the migration                         |
-| Public API keys                                      | Phase 2 moves the YouTube key server-side; rotate it at cutover, since the current one has been in a public repo for years |
-
----
-
-## 6. Suggested PR sequence
-
-1. ✅ `Merge branch 'master' into dev` — reconciliation, channels source of truth, data-driven navbar, green build
-2. ✅ `chore: upgrade to Next.js 16, React 19 and ESLint 9 flat config`
-3. ✅ `ci: build, typecheck, lint and channel validation on every PR`
-4. ✅ `docs: AGENTS.md, CLAUDE.md, README.md, MIGRATION-PLAN.md`
-5. ✅ `feat: server-rendered channel routes, /{channel}/{id} URLs, fetching parity`
-6. ✅ `feat: carry over watch history from the live site`
-7. ✅ `feat: real YouTube player, keyboard and prev/next navigation`
-8. ✅ `feat: restore /r/{subreddit} ad-hoc browsing`
-9. ✅ `feat: restore SEO metadata, icons, manifest and analytics`
-10. `feat: server-side fetching + caching, drop the 3-channel cap`
-11. `chore: cutover`
+# Next.js migration: parity and release checklist
+
+This is the canonical checklist for replacing the Vue/jQuery app on `master`
+with the Next.js app on `dev`. Optional product work belongs in [TODO.md](./TODO.md).
+Runtime conventions and environment variables belong in [AGENTS.md](./AGENTS.md).
+
+**Status:** core migration implemented; not ready for cutover. Code inspection
+is not browser verification. Check off an open item only after its acceptance
+criteria pass, or record an explicit decision to accept the difference.
+
+## Baseline
+
+The 2026-09-27 audit compares local `dev` (`b7281fa`) with `master` (`561d929`).
+PR #325 has head `962fbcb`; its `src/` tree matches the local branch, but its
+channel configuration differs. See the [audit note](./.agents/notes/implemented/migration/2026-09-27-parity-audit.md)
+for evidence, validation results, and preview availability.
+
+`channels.js` contains three YouTube categories: `hustle`, `ai`, and `crypto`.
+Their source counts are 30, 36, and 27 entries respectively, with 91 unique
+YouTube channel IDs overall. Ad-hoc Reddit browsing uses `/r/{subreddit}`.
+The channel data matches current `master`; do not restore retired categories
+just to satisfy an outdated checklist.
+
+## Implemented in code
+
+These are present, not claims of end-to-end verification:
+
+| Capability                                                                                        | Implementation                                                       |
+| ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Next.js 16 / React 19, strict TypeScript, pnpm and CI                                             | `package.json`, `.github/workflows/ci.yml`                           |
+| One channel configuration for app, scripts and navigation                                         | `channels.js`, `src/lib/data.ts`, `src/components/navbar/`           |
+| Channel and video paths; `?v=` compatibility; unknown-channel validation                          | `src/app/[channel]/page.tsx`, `src/app/[channel]/[videoId]/page.tsx` |
+| Ad-hoc subreddit and video paths                                                                  | `src/app/r/[subreddit]/`                                             |
+| YouTube IFrame API, error-to-next, prev/next controls, arrow keys                                 | `src/components/VideoPlayer.tsx`, `src/components/VideoDisplay.tsx`  |
+| One responsive layout/player at a time                                                            | `src/hooks/use-media-query.tsx`, `src/components/VideoDisplay.tsx`   |
+| Legacy watched-ID import, persisted union, thumbnail badges and dimmed rows                       | `src/hooks/use-video.tsx`, `src/components/VideoDisplay.tsx`         |
+| Source-title links and predictable YouTube thumbnails                                             | `src/components/VideoDisplay.tsx`, `src/lib/videoService.ts`         |
+| All configured YouTube sources, four candidates each, duration filtering and newest-first sorting | `src/lib/actions/youtube.ts`, `src/lib/utils.ts`                     |
+| Server-side Reddit OAuth, hot listings, vote filtering                                            | `src/lib/actions/reddit.ts`                                          |
+| Cross-source interleaving, deduplication and Reddit/YouTube failure isolation                     | `src/lib/actions/videos.ts`, `src/lib/videoService.ts`               |
+| GA4/Firebase scripts, metadata, icons, manifest, sitemap and robots                               | `src/components/Analytics.tsx`, `src/app/layout.tsx`, `public/`      |
+
+Both fetchers use Next's Data Cache. YouTube playlist-ID lookups revalidate
+at 30 days; playlist items and video details at two hours. Reddit listings
+revalidate at ten minutes, with OAuth tokens reused per server instance.
+There is no Reddit browser fallback and no three-channel YouTube cap.
+
+## Confirmed gaps
+
+### P0 — Landing route and link compatibility
+
+- [ ] **R1: Choose a working default destination.** `src/app/page.tsx` redirects
+      `/` to `/reddit`, which is absent from `channels.js` and therefore returns
+      `notFound()`. Choose a configured category or explicitly restore a Reddit
+      landing experience. Home and logo navigation must reach usable content.
+      Decide the fate of `/reddit`, `/curious`, `/docus` and their video links:
+      intentional 404s or documented redirects, not accidental breakage.
+- [ ] **R2: Handle legacy SPA-shim links.** `master:404.html` and
+      `master:index.html` encode/decode `/?p=/path&q=...` with `~and~` escaping.
+      The Next root ignores these parameters. Preserve supported channel/video
+      and `/r/{subreddit}/{id}` destinations, query and fragment semantics; reject
+      external redirect destinations. Test ordinary deep links, `?v=`, `?p=`,
+      malformed input and a removed category.
+
+### P1 — User-visible behavior and correctness
+
+- [ ] **U1: Restore pending-navigation feedback.** Server-side `ChannelView`
+      awaits all fetching, while navbar links expose no explicit pending state.
+      Under throttled fetching, make the requested navigation apparent and decide
+      whether the old video stops immediately, as in the legacy app. Preserve real
+      404 responses; follow the streaming constraint in `AGENTS.md`.
+- [ ] **U2: Constrain automatic list scrolling.** `VideoList` calls
+      `scrollIntoView` on every selection even with mobile `scroll={false}`.
+      Keep desktop selection visible without dragging the mobile document away
+      from the player. Test initial deep links and next/previous past the fold.
+- [ ] **U3: Name the mobile menu control.** The `MobileNav` trigger is icon-only
+      without an accessible name. Give it a meaningful name and verify opening,
+      closing, focus return and category selection using the keyboard.
+- [ ] **D1: Distinguish empty, failed, quota-exhausted and partial feeds.**
+      `fetchChannelUploads` catches every error and returns `[]`; `ChannelView`
+      calls any non-failing empty result a YouTube quota failure, even for Reddit.
+      Preserve successful sources and enough failure information to show the
+      correct state. Test missing credentials, API denial, quota exhaustion,
+      network failure, one failed source, and a successful zero-video response.
+      The misleading empty/quota message also exists in legacy code; do not carry
+      it forward as a parity requirement.
+- [ ] **D2: Parse valid durations without a seconds field.** The regex in
+      `src/lib/utils.ts` treats `PT3M` and `PT1H` as zero, dropping long videos.
+      Cover optional components, malformed/missing duration, and the 120-second
+      boundary. The legacy parser also mishandles these inputs; preserve the
+      intended filter, not its bug.
+
+## Differences requiring a decision
+
+- [ ] **P1: Source ordering.** For `[[1,2,3,4],[5],[6,7,8]]`, legacy interleaving
+      produces `[1,5,6,2,3,4,7,8]`; `interleaveArrays` produces
+      `[1,5,6,2,7,3,8,4]`. Restore the legacy rule or accept round-robin and update
+      the helper's parity claim and tests. Newest-first sorting masks most of this
+      difference in the configured YouTube categories.
+- [ ] **P2: Reddit vote semantics.** Legacy filters `ups` only for a truthy
+      threshold; the rewrite always checks `score >= minVotes`. At zero, negative
+      scores are excluded rather than disabling the filter. Choose the rule and
+      cover it with fixtures.
+- [ ] **P3: Responsive layout.** Decide whether the resizable desktop sidebar
+      is wanted. Crossing 768px recreates the player; verify orientation changes
+      and decide whether playback-position continuity is required.
+
+Deduplicating the final combined feed is a useful difference from legacy, not
+an implementation gap. Acceptance should compare source coverage and order,
+not demand duplicate videos or four playable videos per source: both versions
+fetch four candidates before filtering and do not backfill.
+
+## Browser acceptance checklist
+
+Run against a functioning preview with real API access on desktop and mobile.
+Use controlled fixtures for failures and boundary cases; record the tested
+revision, browser and result. The current unit suite only covers helpers.
+
+- [ ] **B1: Routing.** Every configured category, both deep-link route shapes,
+      `?v=`, reload, navbar changes, Back/Forward, and unknown-channel HTTP 404s.
+      Test a requested video still in the feed and one absent from it. Falling
+      back to the first video when it leaves the feed matches legacy behavior.
+- [ ] **B2: Player lifecycle.** Select before the IFrame API loads and between
+      player construction and `onReady`; the latest selection must win without
+      throwing. `VideoPlayer` has no `onReady` synchronization and calls
+      `cueVideoById` whenever selection changes, so this needs a targeted test.
+      Also test rapid selection, route changes, unmount and API-load failure.
+- [ ] **B3: Playback and controls.** Play/pause, fullscreen, source links,
+      keyboard arrows outside editable fields, prev/next boundaries and skipping
+      removed/private/blocked videos. End-of-video must not advance automatically:
+      autoplay-next is disabled in both implementations.
+- [ ] **B4: Watched history.** Seed legacy `videosWatched` only, new
+      `video-storage` only, both keys and malformed legacy JSON. Verify the union
+      survives reload, duplicate IDs do not grow, and the legacy key remains
+      intact. Marking a video watched on selection, not playback/completion,
+      matches legacy. The active row stays distinct from watched rows. Use seeded
+      data on preview: localStorage does not cross origins.
+- [ ] **B5: Mobile and desktop presentation.** One player, visible title and
+      controls, active highlight, thumbnail badge/dimming, independent desktop
+      list scrolling, mobile menu and portrait/landscape behavior. Include short
+      viewports and both themes; visual styling need not be pixel-identical.
+- [ ] **B6: Feed fixtures.** All configured YouTube sources considered,
+      newest-first sorting, duration boundary, missing thumbnail variants,
+      Reddit hot/vote filters, multiple subreddits, mixed Reddit/YouTube results
+      and duplicates. Resolve P1/P2 before asserting exact ordering/filter parity.
+- [ ] **B7: Failure states.** Exercise D1 and slow-source navigation. A single
+      rejected subreddit currently rejects the whole Reddit source (`Promise.all`);
+      verify the consequence and decide whether finer isolation is needed.
+
+## Release gates
+
+- [ ] **L1: Working deployment preview.** Select Netlify or Vercel, configure
+      Next.js runtime support and server-only credentials, and produce a preview
+      of the revision being reviewed. A successful build is not API verification.
+- [ ] **L2: Upstream access and secrets.** Verify YouTube key restrictions and
+      Reddit OAuth from the deployment host. Check token renewal and API-denial
+      behavior. Use `YOUTUBE_API_KEY`, inspect client output for unintended secret
+      exposure, and rotate the key embedded in the legacy app at cutover.
+- [ ] **L3: Cache/quota evidence.** Measure repeated and concurrent visits,
+      cold starts, redeploys and preview/production isolation against API quota
+      usage. With 91 unique populated channels and one effective shared cache,
+      list-call estimates are 273 units for a cold fill and about 2,184/day for
+      twelve two-hour refreshes, plus playlist-ID refreshes. These are estimates,
+      not enforced limits. Add durable storage only if host behavior requires it;
+      define failure/stale-data behavior before relying on caching for availability.
+- [ ] **L4: Metadata and assets.** Inspect rendered channel and deep-link HTML
+      for canonical URLs and Open Graph/Twitter images, not just layout exports.
+      Verify favicon/manifest asset URLs, sitemap categories and `/r/` indexing
+      policy. Nested page metadata must retain the intended social preview.
+- [ ] **L5: Analytics.** Verify initial loads and history-based navigation in
+      GA4 realtime/debug reporting. Confirm which of the two configured properties
+      is used and whether both integrations are wanted; avoid duplicate counting
+      and decide how preview traffic is excluded.
+- [ ] **L6: Reproducible validation.** Frozen-lockfile install, channel check,
+      typecheck, lint, tests and production build pass on the release revision.
+      Add focused regression tests for the fixes above; helper tests alone do not
+      prove route, player, storage or fetcher behavior.
+- [ ] **L7: Cutover and rollback.** Review current `master` channel changes,
+      finish or explicitly accept the open parity items, update the PR summary,
+      and record the deployment target, redirect policy and rollback procedure.
+      Keep the public origin stable to preserve watched history. After cutover,
+      check home/deep links, both APIs, analytics and quota usage in production.
+
+## Suggested restart order
+
+1. Resolve R1's default/category policy and restore a usable preview (L1/L2).
+2. Fix R2, D1/D2 and U1–U3 in small tested changes; settle P1/P2 explicitly.
+3. Run the browser checklist, prioritizing player readiness and watched history.
+4. Collect cache, metadata and analytics evidence, then complete cutover gates.
+
+Auth, custom channels, native Reddit playback and sharing UI are not required
+to replace the working legacy feature set. Do not build adapters, databases or
+additional cache services merely to prepare for those enhancements.

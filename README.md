@@ -24,16 +24,21 @@ and plays them in a list-plus-player layout at <https://walnut.tv>.
 - Node.js 24 (see `.tool-versions`)
 - pnpm 10
 - A [YouTube Data API v3](https://developers.google.com/youtube/v3/getting-started) key
+- Reddit OAuth app credentials for `/r/{subreddit}` browsing
+
+See [Environment](./AGENTS.md#environment) for the server-side variable names.
 
 ### Run it
 
 ```bash
-cp .env.example .env.local   # then fill in your YouTube API key
+cp .env.example .env.local   # then fill in server-side API credentials
 pnpm install
 pnpm dev
 ```
 
-Open <http://localhost:3000>. It redirects to `/reddit`.
+Open <http://localhost:3000/hustle>. The root route redirects to `/reddit`,
+which is absent from the configured categories; fixing this is a
+[migration blocker](./MIGRATION-PLAN.md#confirmed-gaps).
 
 ### Scripts
 
@@ -47,7 +52,8 @@ Open <http://localhost:3000>. It redirects to `/reddit`.
 | `pnpm test`           | Node's built-in test runner over `src/**/*.test.ts` |
 | `pnpm check-channels` | Check every YouTube channel ID in `channels.js`     |
 
-CI runs all of these on every pull request.
+CI runs channel validation, typecheck, lint, tests, and the production build
+on every pull request.
 
 ## Channels
 
@@ -60,8 +66,8 @@ pnpm check-channels
 ```
 
 Pass `--justSearch` to preview the search results without editing the file.
-Categories that take YouTube channels are `hustle`, `ai` and `crypto`;
-`reddit`, `curious` and `docus` are sourced from subreddits.
+The configured categories are `hustle`, `ai`, and `crypto`. Browse an arbitrary
+subreddit at `/r/{subreddit}`; Reddit OAuth credentials are required.
 
 ## Built With
 
@@ -70,7 +76,8 @@ Categories that take YouTube channels are `hustle`, `ai` and `crypto`;
 - [Tailwind CSS](https://tailwindcss.com/) with [shadcn/ui](https://ui.shadcn.com/) on [Radix](https://www.radix-ui.com/)
 - [zustand](https://zustand.docs.pmnd.rs/) for watched-video state
 - [Framer Motion](https://motion.dev/)
-- YouTube Data API v3 and the public Reddit JSON API
+- YouTube Data API v3 and Reddit OAuth API, fetched server-side through Next's
+  Data Cache
 
 ## Deployment
 

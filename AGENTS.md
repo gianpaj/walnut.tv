@@ -11,9 +11,8 @@ layout. Live at <https://walnut.tv>.
 The repo is mid-migration. `master` still runs the original Vue 1 + jQuery
 single-page app and is what walnut.tv serves today. `dev` is the Next.js
 rewrite that will replace it. **Read `MIGRATION-PLAN.md` before starting
-anything substantial** — it records the current parity gaps, the phase
-ordering, and two constraints that shape most decisions here (Reddit blocks
-server-side requests; YouTube API quota is the binding limit).
+anything substantial** — it records the parity checklist and release gates.
+Reddit requires server-side OAuth; YouTube API quota limits fetching frequency.
 
 ## Stack
 
@@ -46,8 +45,8 @@ test and build on every PR. All of them must pass.
 ```
 channels.js               the channel list — see below, this one is special
 src/app/                  App Router. Server components resolve the slug and
-                          call notFound(); fetching happens below them, in a
-                          client component. robots.ts, sitemap.ts.
+                          call notFound(); ChannelView fetches on the server.
+                          robots.ts, sitemap.ts.
   [channel]/              /{channel} and /{channel}/{videoId}
   r/[subreddit]/          ad-hoc subreddit browsing, same two shapes
 src/components/           ChannelView (fetch + states), VideoDisplay (list +
@@ -70,8 +69,9 @@ public/                   icons, manifest, logo, og-image
 A `loading.tsx` wraps its segment in Suspense, which makes every response
 stream. Next cannot change an HTTP status once streaming has begun, so
 `notFound()` silently degrades to a 200 with the 404 page rendered inside it.
-The app had exactly that bug. The loading spinner lives in
-`src/components/LoadingPage.tsx` and is rendered as component state instead.
+Validate the route before any streaming boundary. `ChannelView` awaits
+server-side fetching; there is no loading component. Pending navigation
+feedback remains a migration checklist item.
 
 ## channels.js is the single source of truth
 
@@ -85,9 +85,9 @@ three things read or write it:
 
 The app reads it only through `src/lib/data.ts`, which adds the `Channel` type
 and the `getChannel` / `getSubreddits` / `getYouTubeChannelIds` /
-`channelLabel` accessors. **Do not copy the list into `src/`** — it was
-duplicated there once before and silently drifted by ten channel IDs. Do not
-hardcode channel names in components either; the navbar renders from the list.
+`channelLabel` accessors. **Do not copy the list into `src/`**; duplicate lists
+can drift. Do not hardcode channel names in components either; the navbar
+renders from the list.
 
 Each entry has a `title` (also the URL slug), and then either `subreddit`
 (semicolon-separated) with `minNumOfVotes`, or `youtubeChannels`
@@ -102,31 +102,37 @@ node scripts/add-youtube-channel.js "Y Combinator" --justSearch   # preview only
 pnpm check-channels
 ```
 
-Categories that take YouTube channels: `hustle`, `ai`, `crypto`. The others
-(`reddit`, `curious`, `docus`) are Reddit-sourced.
+The configured categories are `hustle`, `ai`, and `crypto`, all YouTube-sourced.
+Ad-hoc Reddit browsing uses `/r/{subreddit}`. Check `channels.js` for the current
+category list.
 
 ## Environment
 
 Copy `.env.example` to `.env.local`.
 
-- `NEXT_PUBLIC_YOUTUBE_API_KEY` — used by the browser today, because fetching
-  is still client-side. Phase 2 makes this a server-only `YOUTUBE_API_KEY`.
-- `YOUTUBE_API_KEY` — used by the scripts in `scripts/`.
+- `YOUTUBE_API_KEY` — server-side YouTube fetching and channel-management scripts.
+  The fetcher accepts `NEXT_PUBLIC_YOUTUBE_API_KEY` as a compatibility fallback;
+  prefer the server-only name.
+- `YOUTUBE_API_REFERER` — optional Referer header for a referrer-restricted key.
+- `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET` — required for Reddit OAuth fetching.
+- `REDDIT_USER_AGENT` — optional override for the app's Reddit User-Agent.
+
+Keep credentials in local or deployment environment configuration, not source.
 
 ## Two constraints worth knowing before you change data fetching
 
-**Reddit answers 403 to server-side requests.** Verified from a datacenter IP,
-with and without a browser User-Agent. That is why `src/app/[channel]/page.tsx`
-is a client component fetching `reddit.com/r/*/hot.json` from the browser, and
-why `src/lib/actions/reddit.ts` is dead code carrying a comment saying so.
-Moving this server-side requires a Reddit OAuth script app against
-`oauth.reddit.com`.
+**Reddit uses OAuth on the server.** `src/lib/actions/reddit.ts` obtains a
+`client_credentials` token, reuses it per server instance, and fetches hot
+listings from `oauth.reddit.com` with ten-minute Next Data Cache revalidation.
+There is no browser fallback. Public Reddit JSON endpoints can reject
+server requests; verify OAuth access from the deployment host.
 
-**YouTube quota is the binding limit.** Each channel costs 3 API calls and
-`hustle` alone has 65 channel IDs, against a 10,000 unit/day quota. That is why
-`fetchYouTubeVideos` caps itself at `MAX_CHANNELS_PER_CATEGORY = 3` — a
-deliberate parity regression that phase 2 removes once fetching is server-side
-and cached. Do not raise that cap without the cache.
+**YouTube quota is the binding limit.** `src/lib/actions/youtube.ts` fetches all
+configured channel IDs. Uploads-playlist lookups use thirty-day revalidation;
+playlist items and video details use two-hour revalidation. Four candidate
+uploads per channel are filtered by duration, then sorted when configured.
+Keep the cache when changing this pipeline. Verify its sharing and persistence
+on the deployment host before treating request volume as traffic-independent.
 
 ## Conventions
 
@@ -146,4 +152,4 @@ and cached. Do not raise that cap without the cache.
 ## Deployment
 
 Netlify today, from `master`. Vercel is under consideration for the cutover —
-see phase 3 of `MIGRATION-PLAN.md`.
+see the release gates in `MIGRATION-PLAN.md`.
