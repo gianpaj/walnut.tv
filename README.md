@@ -53,8 +53,8 @@ Open <http://localhost:3000>. The homepage redirects to `/hustle`.
 | `pnpm test`           | Node's built-in test runner over `src/**/*.test.ts` |
 | `pnpm check-channels` | Check every YouTube channel ID in `channels.js`     |
 
-CI runs formatting checks, channel validation, typecheck, lint, tests, and the
-production build on every pull request.
+CI runs channel validation, typecheck, tests, and the production build on every
+pull request. Formatting and linting run locally and in the pre-commit hook, not CI.
 
 ### Development tooling
 
@@ -71,7 +71,8 @@ production build on every pull request.
 `pnpm install` installs Husky's pre-commit hook. lint-staged formats staged
 code/config files, then runs whole-project lint without autofixes. Markdown-only
 commits run Prettier. Default backup and partial-staging protection remain enabled.
-Whole-project lint can fail on unrelated unstaged edits; CI checks a clean checkout.
+Whole-project lint can fail on unrelated unstaged edits. CI checks types, tests,
+and the build from a clean checkout; it does not repeat formatting or linting.
 
 Configure your editor to use Oxfmt for supported code/config languages, Oxlint
 for diagnostics, and Prettier for Markdown/MDX. Disable competing ESLint/Biome

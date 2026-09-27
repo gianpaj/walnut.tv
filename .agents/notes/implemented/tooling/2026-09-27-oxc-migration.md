@@ -23,8 +23,9 @@ Application UI remains linted. The untracked Biome configuration stays untouched
 Husky 9.1.7 runs lint-staged 17.2.0. String tasks receive filenames as native argv;
 the following function task runs filename-free whole-project lint without fixes.
 Markdown-only commits run Prettier. Default backups and partial-staging protection
-remain enabled. Whole-project lint can see unrelated unstaged-only edits; clean
-CI, not a pre-commit pass, validates the committed tree.
+remain enabled. Whole-project lint can see unrelated unstaged-only edits.
+The user chose local/pre-commit formatting and linting, not CI enforcement.
+CI validates channels, types, tests, and the build from a clean checkout.
 
 ## Verification
 

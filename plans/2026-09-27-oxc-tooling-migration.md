@@ -7,8 +7,9 @@ for coverage differences and the remaining manual Zed GUI check.
 ## Outcome
 
 Use Oxlint for linting, Oxfmt for code/config formatting, and Prettier for
-Markdown. Run staged-file checks through lint-staged and Husky. Keep whole-project
-checks in CI; hooks are developer feedback, not the enforcement boundary.
+Markdown. Run staged-file checks through lint-staged and Husky. The user chose
+local/pre-commit formatting and linting; CI runs channel validation, typecheck,
+tests, and the build.
 
 Reference: Holabrisa's `web/.oxlintrc.jsonc`, `web/.oxfmtrc.json`,
 `.lintstagedrc.js`, `.husky/pre-commit`, and root/web package scripts.
@@ -88,12 +89,12 @@ Do not copy monorepo paths, Supabase ignores, Vitest, Python hooks, or asdf setu
   add `git add .`, disable the stash, or run a build in the pre-commit hook.
 - Whole-project lint reads the working tree, not a pure staged snapshot: unrelated
   unstaged-only edits can change the result. Accept this Holabrisa trade-off for
-  local feedback; clean-checkout CI remains authoritative. Test this case too.
+  local feedback; CI checks types, tests, and the build, not lint. Test this case too.
 
 ## 5. CI, documentation, and verification
 
-- Add `pnpm format:check` to CI. Retain frozen install, channel validation,
-  typecheck, lint, tests, and production build. Set `HUSKY=0` for CI installation.
+- Keep formatting and linting out of CI at the user's request. Retain frozen
+  install, channel validation, typecheck, tests, and production build.
 - Update active tooling guidance in `AGENTS.md` and `README.md`; preserve
   historical validation evidence in audit notes. Keep exclusion documentation
   aligned with the linter and TypeScript configuration.
@@ -111,7 +112,7 @@ Do not copy monorepo paths, Supabase ignores, Vitest, Python hooks, or asdf setu
 
 1. Oxc packages, configs, scripts, and ESLint/Prettier-plugin removal.
 2. Mechanical formatting normalization, separate from behavioral fixes.
-3. lint-staged/Husky, CI format checks, active documentation, and verification.
+3. lint-staged/Husky, active documentation, and verification.
 
 If lint rules require behavioral fixes, make focused, tested commits before
 activating the hook. Do not disable checks just to get intermediate commits through.

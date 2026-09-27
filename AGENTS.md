@@ -40,8 +40,9 @@ Tests use Node's built-in runner with native type stripping — no jest, vitest
 or transform step. That means test files import with an explicit `.ts`
 extension and can only use relative imports, not the `@/` alias.
 
-CI (`.github/workflows/ci.yml`) runs install, format:check, check-channels,
-typecheck, lint, test and build on every PR. All of them must pass.
+CI (`.github/workflows/ci.yml`) runs install, check-channels, typecheck, test and
+build on every PR. Formatting and linting run locally and in the pre-commit hook,
+not CI.
 
 Next's `experimental.useTypeScriptCli` enables build-time checking with TS7.
 See [development tooling](./README.md#development-tooling) for formatter ownership
