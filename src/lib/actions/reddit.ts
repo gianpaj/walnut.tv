@@ -1,5 +1,6 @@
 import "server-only";
 import { getSubreddits, type Channel } from "@/lib/data";
+import { REDDIT_ENABLED } from "@/lib/features";
 import {
   dedupeByYouTubeId,
   interleaveArrays,
@@ -65,17 +66,13 @@ async function getAccessToken(): Promise<string> {
   return cachedToken.value;
 }
 
-/**
- * Server-side via OAuth. The public www.reddit.com/*.json endpoints answer 403
- * to anything Reddit does not like the look of — including this network, with
- * any User-Agent — whereas oauth.reddit.com works with a client_credentials
- * token. That is also what lets the listing be cached rather than re-fetched by
- * every visitor.
- */
+/** Fetch listings through server-side OAuth only when approved access is enabled. */
 export async function fetchSubredditVideos(
   subreddit: string,
   minVotes: number,
 ): Promise<VideoData[]> {
+  if (!REDDIT_ENABLED) return [];
+
   const token = await getAccessToken();
 
   const response = await fetch(`${API}/r/${subreddit}/hot?limit=${LISTING_LIMIT}&raw_json=1`, {
@@ -101,6 +98,8 @@ export async function fetchSubredditVideos(
 
 /** Fetches every subreddit of a channel and interleaves the results. */
 export async function fetchRedditVideos(channel: Channel): Promise<VideoData[]> {
+  if (!REDDIT_ENABLED) return [];
+
   const subreddits = getSubreddits(channel);
   if (subreddits.length === 0) return [];
 

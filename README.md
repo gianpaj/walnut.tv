@@ -24,7 +24,6 @@ and plays them in a list-plus-player layout at <https://walnut.tv>.
 - Node.js 24 (see `.tool-versions`)
 - pnpm 10
 - A [YouTube Data API v3](https://developers.google.com/youtube/v3/getting-started) key
-- Reddit OAuth app credentials for `/r/{subreddit}` browsing
 
 See [Environment](./AGENTS.md#environment) for the server-side variable names.
 
@@ -105,8 +104,11 @@ pnpm check-channels
 ```
 
 Pass `--justSearch` to preview the search results without editing the file.
-The configured categories are `hustle`, `ai`, and `crypto`. Browse an arbitrary
-subreddit at `/r/{subreddit}`; Reddit OAuth credentials are required.
+The configured categories are `hustle`, `ai`, and `crypto`, all YouTube-sourced.
+Reddit browsing is disabled pending API approval; `/r/{subreddit}` and its video
+links display an unavailable message without contacting Reddit. Credentials are
+not needed while disabled. See [Reddit access](./AGENTS.md#reddit-access) for the
+switch and re-enabling requirements.
 
 ## Built With
 
@@ -116,8 +118,8 @@ subreddit at `/r/{subreddit}`; Reddit OAuth credentials are required.
 - [Tailwind CSS](https://tailwindcss.com/) with [shadcn/ui](https://ui.shadcn.com/) on [Radix](https://www.radix-ui.com/)
 - [zustand](https://zustand.docs.pmnd.rs/) for watched-video state
 - [Framer Motion](https://motion.dev/)
-- YouTube Data API v3 and Reddit OAuth API, fetched server-side through Next's
-  Data Cache
+- YouTube Data API v3 with server-side Next Data Cache; Reddit OAuth integration
+  retained but disabled pending approval
 
 ## Deployment
 

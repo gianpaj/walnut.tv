@@ -1,6 +1,7 @@
 import VideoDisplay from "@/components/VideoDisplay";
 import { fetchChannelVideos } from "@/lib/actions/videos";
-import type { Channel } from "@/lib/data";
+import { getYouTubeChannelIds, type Channel } from "@/lib/data";
+import { REDDIT_ENABLED } from "@/lib/features";
 
 interface Props {
   channel: Channel;
@@ -17,12 +18,16 @@ function Message({ children }: { children: React.ReactNode }) {
   );
 }
 
-/**
- * A server component since phase 2: both Reddit and YouTube are fetched and
- * cached on the server, so the list arrives with the HTML and there is no
- * client-side loading state left to render.
- */
+/** Fetch enabled sources on the server so the video list arrives with the HTML. */
 const ChannelView = async ({ channel, urlPrefix, initialVideoId }: Props) => {
+  if (
+    !REDDIT_ENABLED &&
+    channel.subreddit !== undefined &&
+    getYouTubeChannelIds(channel).length === 0
+  ) {
+    return <Message>Reddit browsing is temporarily unavailable.</Message>;
+  }
+
   const { videos, failed } = await fetchChannelVideos(channel);
 
   if (videos.length === 0) {

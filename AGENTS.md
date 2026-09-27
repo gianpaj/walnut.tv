@@ -112,8 +112,8 @@ pnpm check-channels
 ```
 
 The configured categories are `hustle`, `ai`, and `crypto`, all YouTube-sourced.
-Ad-hoc Reddit browsing uses `/r/{subreddit}`. Check `channels.js` for the current
-category list.
+The `/r/{subreddit}` routes display an unavailable message while Reddit access
+is disabled. Check `channels.js` for the current category list.
 
 ## Environment
 
@@ -123,18 +123,29 @@ Copy `.env.example` to `.env.local`.
   The fetcher accepts `NEXT_PUBLIC_YOUTUBE_API_KEY` as a compatibility fallback;
   prefer the server-only name.
 - `YOUTUBE_API_REFERER` — optional Referer header for a referrer-restricted key.
-- `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET` — required for Reddit OAuth fetching.
-- `REDDIT_USER_AGENT` — optional override for the app's Reddit User-Agent.
+- `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET` — unused while Reddit is disabled;
+  required only after approved access is re-enabled.
+- `REDDIT_USER_AGENT` — optional override for the enabled integration's User-Agent.
 
 Keep credentials in local or deployment environment configuration, not source.
 
 ## Two constraints worth knowing before you change data fetching
 
-**Reddit uses OAuth on the server.** `src/lib/actions/reddit.ts` obtains a
-`client_credentials` token, reuses it per server instance, and fetches hot
-listings from `oauth.reddit.com` with ten-minute Next Data Cache revalidation.
-There is no browser fallback. Public Reddit JSON endpoints can reject
-server requests; verify OAuth access from the deployment host.
+### Reddit access
+
+`REDDIT_ENABLED` in `src/lib/features.ts` is `false`. Both exported fetchers in
+`src/lib/actions/reddit.ts` return before credentials, tokens, or listings are
+accessed. Reddit-only channels show an unavailable message; mixed channels can
+still fetch YouTube. Setting credentials does not enable Reddit.
+
+Re-enable only after explicit approval under Reddit's
+[Responsible Builder Policy](https://support.reddithelp.com/hc/en-us/articles/42728983564564-Responsible-Builder-Policy).
+Configure server-side credentials, update the disabled-mode tests, and verify
+OAuth access from the deployment host. The retained implementation uses
+`client_credentials` OAuth, per-instance token reuse, and ten-minute listing
+revalidation. There is no browser fallback or public-JSON bypass.
+
+### YouTube quota
 
 **YouTube quota is the binding limit.** `src/lib/actions/youtube.ts` fetches all
 configured channel IDs. Uploads-playlist lookups use thirty-day revalidation;

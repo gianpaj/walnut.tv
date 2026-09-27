@@ -17,7 +17,10 @@ for evidence, validation results, and preview availability.
 
 `channels.js` contains three YouTube categories: `hustle`, `ai`, and `crypto`.
 Their source counts are 30, 36, and 27 entries respectively, with 91 unique
-YouTube channel IDs overall. Ad-hoc Reddit browsing uses `/r/{subreddit}`.
+YouTube channel IDs overall. Ad-hoc Reddit routes use `/r/{subreddit}` but show
+an unavailable message: Reddit access is intentionally disabled pending approval.
+Reddit-only parity checks are paused, not passed. See [Reddit access](./AGENTS.md#reddit-access)
+for the switch and re-enabling requirements.
 The channel data matches current `master`; do not restore retired categories
 just to satisfy an outdated checklist.
 
@@ -36,13 +39,13 @@ These are present, not claims of end-to-end verification:
 | Legacy watched-ID import, persisted union, thumbnail badges and dimmed rows                       | `src/hooks/use-video.tsx`, `src/components/VideoDisplay.tsx`         |
 | Source-title links and predictable YouTube thumbnails                                             | `src/components/VideoDisplay.tsx`, `src/lib/videoService.ts`         |
 | All configured YouTube sources, four candidates each, duration filtering and newest-first sorting | `src/lib/actions/youtube.ts`, `src/lib/utils.ts`                     |
-| Server-side Reddit OAuth, hot listings, vote filtering                                            | `src/lib/actions/reddit.ts`                                          |
+| Server-side Reddit OAuth, hot listings, vote filtering (retained, disabled)                       | `src/lib/actions/reddit.ts`                                          |
 | Cross-source interleaving, deduplication and Reddit/YouTube failure isolation                     | `src/lib/actions/videos.ts`, `src/lib/videoService.ts`               |
 | GA4/Firebase scripts, metadata, icons, manifest, sitemap and robots                               | `src/components/Analytics.tsx`, `src/app/layout.tsx`, `public/`      |
 
-Both fetchers use Next's Data Cache. YouTube playlist-ID lookups revalidate
-at 30 days; playlist items and video details at two hours. Reddit listings
-revalidate at ten minutes, with OAuth tokens reused per server instance.
+YouTube uses Next's Data Cache: playlist-ID lookups revalidate at 30 days;
+playlist items and video details at two hours. The disabled Reddit implementation
+retains ten-minute listing revalidation and per-instance OAuth token reuse.
 There is no Reddit browser fallback and no three-channel YouTube cap.
 
 ## Confirmed gaps
@@ -78,7 +81,8 @@ There is no Reddit browser fallback and no three-channel YouTube cap.
       closing, focus return and category selection using the keyboard.
 - [ ] **D1: Distinguish empty, failed, quota-exhausted and partial feeds.**
       `fetchChannelUploads` catches every error and returns `[]`; `ChannelView`
-      calls any non-failing empty result a YouTube quota failure, even for Reddit.
+      calls active non-failing empty results a YouTube quota failure. Disabled
+      Reddit-only channels have an explicit unavailable state; D1 remains open.
       Preserve successful sources and enough failure information to show the
       correct state. Test missing credentials, API denial, quota exhaustion,
       network failure, one failed source, and a successful zero-video response.
@@ -116,7 +120,7 @@ Use the `agent-browser` CLI and its skill to verify migration work. Load the
 skill and run `agent-browser skills get core` before browser testing. Run against
 a functioning Next.js preview with real API access on desktop and mobile.
 Use controlled fixtures for failures and boundary cases; record the tested
-revision, browser and result. The current unit suite only covers helpers.
+revision, browser and result. Unit coverage does not establish browser parity.
 
 - [ ] **B0: Screenshot-based UI parity.** Compare the Next.js app with
       `http://walnut.tv` (follow any HTTPS redirect) or a running checkout of
@@ -169,9 +173,10 @@ revision, browser and result. The current unit suite only covers helpers.
       Next.js runtime support and server-only credentials, and produce a preview
       of the revision being reviewed. A successful build is not API verification.
 - [ ] **L2: Upstream access and secrets.** Verify YouTube key restrictions and
-      Reddit OAuth from the deployment host. Check token renewal and API-denial
-      behavior. Use `YOUTUBE_API_KEY`, inspect client output for unintended secret
-      exposure, and rotate the key embedded in the legacy app at cutover.
+      API-denial behavior from the deployment host. Confirm disabled Reddit paths
+      make no requests. Reddit OAuth and token-renewal verification require API
+      approval before re-enabling. Use `YOUTUBE_API_KEY`, inspect client output for
+      unintended secret exposure, and rotate the legacy app's embedded key at cutover.
 - [ ] **L3: Cache/quota evidence.** Measure repeated and concurrent visits,
       cold starts, redeploys and preview/production isolation against API quota
       usage. With 91 unique populated channels and one effective shared cache,
@@ -195,7 +200,8 @@ revision, browser and result. The current unit suite only covers helpers.
       finish or explicitly accept the open parity items, update the PR summary,
       and record the deployment target, redirect policy and rollback procedure.
       Keep the public origin stable to preserve watched history. After cutover,
-      check home/deep links, both APIs, analytics and quota usage in production.
+      check home/deep links, enabled APIs, Reddit's unavailable state, analytics
+      and quota usage in production.
 
 ## Suggested restart order
 
