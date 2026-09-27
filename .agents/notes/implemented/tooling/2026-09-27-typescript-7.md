@@ -22,6 +22,6 @@ Fresh and non-incremental checks passed; deleting the disposable
 `tsconfig.tsbuildinfo` resolved the ordinary incremental run. Keep incremental
 checking enabled; invalidate its cache if this configuration-change bug recurs.
 
-ESLint's typescript-eslint dependency rejects TS7. The Oxc migration replaces
-that dependency in the following tooling commit; this intermediate commit is
-not a standalone all-green lint baseline. Do not add a TS6 compatibility compiler.
+Oxlint supplies type-aware linting through tsgolint. typescript-eslint rejects
+TS7; do not add a TS6 compatibility compiler solely to retain that dependency.
+The TS7-only commit had a known lint failure until the Oxc replacement.

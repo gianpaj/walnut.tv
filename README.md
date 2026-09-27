@@ -36,9 +36,7 @@ pnpm install
 pnpm dev
 ```
 
-Open <http://localhost:3000/hustle>. The root route redirects to `/reddit`,
-which is absent from the configured categories; fixing this is a
-[migration blocker](./MIGRATION-PLAN.md#confirmed-gaps).
+Open <http://localhost:3000>. The homepage redirects to `/hustle`.
 
 ### Scripts
 
@@ -47,13 +45,39 @@ which is absent from the configured categories; fixing this is a
 | `pnpm dev`            | Development server                                  |
 | `pnpm build`          | Validate channels, then build for production        |
 | `pnpm start`          | Serve the production build                          |
-| `pnpm lint`           | ESLint (`next lint` was removed in Next 16)         |
+| `pnpm lint`           | Type-aware Oxlint checks                            |
+| `pnpm lint:fix`       | Apply lint fixes explicitly                         |
+| `pnpm format`         | Format code/config and Markdown                     |
+| `pnpm format:check`   | Check formatting without changes                    |
 | `pnpm typecheck`      | `tsc --noEmit`                                      |
 | `pnpm test`           | Node's built-in test runner over `src/**/*.test.ts` |
 | `pnpm check-channels` | Check every YouTube channel ID in `channels.js`     |
 
-CI runs channel validation, typecheck, lint, tests, and the production build
-on every pull request.
+CI runs formatting checks, channel validation, typecheck, lint, tests, and the
+production build on every pull request.
+
+### Development tooling
+
+- **TypeScript 7:** `tsc --noEmit` checks types. Next.js uses
+  `experimental.useTypeScriptCli` for build-time checking.
+- **Oxlint:** `.oxlintrc.jsonc` configures native React, Next.js, accessibility,
+  and type-aware rules. ESLint is not required.
+- **Oxfmt:** `.oxfmtrc.json` configures 100-column code/config formatting,
+  import grouping, and Tailwind 3 class sorting. Generated shadcn components,
+  script-managed `channels.js`, and vendored/local tooling are excluded.
+- **Prettier:** formats Markdown/MDX, including plans and agent notes, without
+  code-formatting plugins. Oxfmt excludes these files.
+
+`pnpm install` installs Husky's pre-commit hook. lint-staged formats staged
+code/config files, then runs whole-project lint without autofixes. Markdown-only
+commits run Prettier. Default backup and partial-staging protection remain enabled.
+Whole-project lint can fail on unrelated unstaged edits; CI checks a clean checkout.
+
+Configure your editor to use Oxfmt for supported code/config languages, Oxlint
+for diagnostics, and Prettier for Markdown/MDX. Disable competing ESLint/Biome
+format-on-save for this workspace. GUI Git clients need Node and pnpm on their
+PATH; use Husky's user-level initialization if needed, not machine-specific paths
+in the repository hook.
 
 ## Channels
 
@@ -73,6 +97,7 @@ subreddit at `/r/{subreddit}`; Reddit OAuth credentials are required.
 
 - [Next.js 16](https://nextjs.org/) — App Router, Turbopack
 - [React 19](https://react.dev/)
+- [TypeScript 7](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/) with [shadcn/ui](https://ui.shadcn.com/) on [Radix](https://www.radix-ui.com/)
 - [zustand](https://zustand.docs.pmnd.rs/) for watched-video state
 - [Framer Motion](https://motion.dev/)

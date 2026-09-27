@@ -1,7 +1,8 @@
 # Oxc tooling migration
 
-Status: approved and in progress. TypeScript 7 compatibility and Oxc linting pass;
-formatting normalization and staged-hook verification remain open.
+Status: implemented. TypeScript 7, Oxc, formatting normalization, and staged-hook
+verification pass. See the [verification note](../.agents/notes/implemented/tooling/2026-09-27-oxc-migration.md)
+for coverage differences and the remaining manual Zed GUI check.
 
 ## Outcome
 
@@ -80,9 +81,9 @@ Do not copy monorepo paths, Supabase ignores, Vitest, Python hooks, or asdf setu
 - Use non-overlapping file groups: Markdown → Prettier; supported code/config
   files → Oxfmt, then one whole-project `pnpm lint`. Lint is read-only in the
   hook; do not run repository-wide autofixes during a partial commit.
-- Match Holabrisa's function-returned sequence so lint-staged does not append
-  filenames to `pnpm lint`. Safely quote formatter filenames; do not copy the
-  reference's bare `files.join(" ")`. Handle all-ignored inputs gracefully.
+- Use a string formatter task followed by a function-returned `pnpm lint` task.
+  lint-staged passes formatter filenames as native argv and omits them for lint.
+  No manual quoting or bare `files.join(" ")`; handle all-ignored inputs gracefully.
 - Retain lint-staged's default backup and partial-staging protection. Do not
   add `git add .`, disable the stash, or run a build in the pre-commit hook.
 - Whole-project lint reads the working tree, not a pure staged snapshot: unrelated
@@ -116,7 +117,7 @@ If lint rules require behavioral fixes, make focused, tested commits before
 activating the hook. Do not disable checks just to get intermediate commits through.
 
 Treat the series as one migration: validate it together before pushing for review.
-Move the tooling note to `implemented` only after verification passes.
+The tooling note lives under `implemented` with the verification results.
 
 ## Sources
 

@@ -16,7 +16,7 @@ Reddit requires server-side OAuth; YouTube API quota limits fetching frequency.
 
 ## Stack
 
-Next.js 16 (App Router, Turbopack) · React 19 · TypeScript in strict mode with
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript 7 in strict mode with
 `noUncheckedIndexedAccess` · Tailwind 3 · shadcn/ui on Radix · zustand ·
 framer-motion · pnpm · Node 24 (pinned in `.tool-versions`).
 
@@ -27,7 +27,10 @@ pnpm install
 pnpm dev              # http://localhost:3000
 pnpm build            # runs check-channels, then next build
 pnpm start            # serve the production build
-pnpm lint             # eslint . (next lint was removed in Next 16)
+pnpm lint             # type-aware Oxlint
+pnpm lint:fix         # apply lint fixes explicitly
+pnpm format           # Oxfmt for code/config, Prettier for Markdown
+pnpm format:check     # read-only formatting checks
 pnpm typecheck        # tsc --noEmit
 pnpm test             # node --test over src/**/*.test.ts
 pnpm check-channels   # validate the YouTube channel IDs in channels.js
@@ -37,8 +40,12 @@ Tests use Node's built-in runner with native type stripping — no jest, vitest
 or transform step. That means test files import with an explicit `.ts`
 extension and can only use relative imports, not the `@/` alias.
 
-CI (`.github/workflows/ci.yml`) runs install, check-channels, typecheck, lint,
-test and build on every PR. All of them must pass.
+CI (`.github/workflows/ci.yml`) runs install, format:check, check-channels,
+typecheck, lint, test and build on every PR. All of them must pass.
+
+Next's `experimental.useTypeScriptCli` enables build-time checking with TS7.
+See [development tooling](./README.md#development-tooling) for formatter ownership
+and the Husky/lint-staged workflow.
 
 ## Layout
 
@@ -60,7 +67,7 @@ src/lib/videoService.ts   filtering, interleaving, thumbnail and id helpers
 src/lib/youtubeIframeApi  loads the IFrame API once per page
 src/types/                global VideoData / RedditPost / Window augmentation
 scripts/                  standalone CommonJS Node utilities, excluded from
-                          tsconfig and eslint
+                          tsconfig and Oxlint
 public/                   icons, manifest, logo, og-image
 ```
 
@@ -136,12 +143,12 @@ on the deployment host before treating request volume as traffic-independent.
 
 ## Conventions
 
-- Prettier with `@ianvs/prettier-plugin-sort-imports` and
-  `prettier-plugin-tailwindcss` — let it decide import order and class order.
+- Oxfmt owns code/config formatting, import order, and Tailwind class order.
+  Prettier owns Markdown/MDX. Configs define generated/vendor exclusions.
 - Import from `@/*` (mapped to `src/*`), except `channels.js`, which
   `src/lib/data.ts` reaches by relative path.
 - Derive values during render; the lint config rejects `setState` inside an
-  effect (`react-hooks/set-state-in-effect`).
+  effect (`react/set-state-in-effect`).
 - `src/components/ui/*` comes from shadcn/ui (`components.json`, base colour
   slate). Prefer regenerating over hand-editing.
 - Deliberate version pins, with reasons, in the Next 16 upgrade commit:
