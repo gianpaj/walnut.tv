@@ -30,6 +30,15 @@ interface Props {
  */
 const AUTOPLAY_NEXT = false;
 
+function replaceVideoUrl(urlPrefix: string, videoId: string) {
+  const url = new URL(window.location.href);
+  // A departing route can remain mounted while Next commits its replacement.
+  if (url.pathname !== urlPrefix && !url.pathname.startsWith(`${urlPrefix}/`)) return;
+  url.pathname = `${urlPrefix}/${encodeURIComponent(videoId)}`;
+  if (url.searchParams.has("v")) url.searchParams.set("v", videoId);
+  if (url.href !== window.location.href) window.history.replaceState(null, "", url);
+}
+
 interface VideoListProps {
   videos: VideoData[];
   activeIndex: number;
@@ -54,8 +63,14 @@ const VideoList = ({
   // Keep the playing video visible when arrow keys or prev/next move the
   // selection past the edge of the scroll area.
   useEffect(() => {
-    activeRef.current?.scrollIntoView({ block: "nearest" });
-  }, [activeIndex]);
+    if (!scroll || !activeRef.current) return;
+    const viewport = activeRef.current.closest<HTMLElement>("[data-radix-scroll-area-viewport]");
+    if (!viewport) return;
+    const item = activeRef.current.getBoundingClientRect();
+    const bounds = viewport.getBoundingClientRect();
+    if (item.top < bounds.top) viewport.scrollTop -= bounds.top - item.top;
+    else if (item.bottom > bounds.bottom) viewport.scrollTop += item.bottom - bounds.bottom;
+  }, [activeIndex, scroll]);
 
   const items = (
     <div id="video-list" className="flex h-full flex-col space-y-4 p-2">
@@ -119,11 +134,25 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
   const addToClickedVideos = useVideo((state) => state.addToClickedVideos);
   const addToWatchedVideos = useVideo((state) => state.addToWatchedVideos);
 
-  const initialIndex = Math.max(
-    0,
-    videos.findIndex((video) => video.id === initialVideoId),
-  );
-  const [index, setIndex] = useState(initialIndex);
+  const readIndex = useCallback(() => {
+    let requestedId = initialVideoId;
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      if (url.pathname.startsWith(`${urlPrefix}/`)) {
+        requestedId = videos.find(
+          (item) => url.pathname === `${urlPrefix}/${encodeURIComponent(item.id)}`,
+        )?.id;
+      } else if (url.pathname === urlPrefix) {
+        requestedId = url.searchParams.get("v") ?? initialVideoId;
+      }
+    }
+    return Math.max(
+      0,
+      videos.findIndex((item) => item.id === requestedId),
+    );
+  }, [videos, urlPrefix, initialVideoId]);
+  // A restored history entry can differ from Next's cached page props.
+  const [index, setIndex] = useState(readIndex);
   const video = videos[index] ?? videos[0];
 
   const select = useCallback(
@@ -135,7 +164,7 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
       // replaceState rather than router.replace: this is the same URL shape the
       // live site produces, and a real navigation would remount the view and
       // refetch the whole listing.
-      window.history.replaceState(null, "", `${urlPrefix}/${next.id}`);
+      replaceVideoUrl(urlPrefix, next.id);
 
       setCurrentVideoWatching(next.youtubeId);
       addToClickedVideos(next.youtubeId);
@@ -144,8 +173,6 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
     [videos, urlPrefix, setCurrentVideoWatching, addToClickedVideos, addToWatchedVideos],
   );
 
-  // select() writes history and the watched store, so it must not run inside a
-  // setIndex updater — those have to stay pure and can be re-invoked.
   const goNext = useCallback(() => {
     if (index < videos.length - 1) select(index + 1);
   }, [index, videos.length, select]);
@@ -154,17 +181,22 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
     if (index > 0) select(index - 1);
   }, [index, select]);
 
-  // Mark the video the page opened on, and normalise a ?v= or bare /{channel}
-  // URL to /{channel}/{id}. No setIndex here: useState already started there.
   useEffect(() => {
-    const first = videos[initialIndex];
-    if (!first) return;
-    window.history.replaceState(null, "", `${urlPrefix}/${first.id}`);
-    setCurrentVideoWatching(first.youtubeId);
-    addToClickedVideos(first.youtubeId);
-    addToWatchedVideos(first.youtubeId);
-    // oxlint-disable-next-line react/exhaustive-deps
-  }, []);
+    if (!video) return;
+    replaceVideoUrl(urlPrefix, video.id);
+    setCurrentVideoWatching(video.youtubeId);
+    addToClickedVideos(video.youtubeId);
+    addToWatchedVideos(video.youtubeId);
+  }, [video, urlPrefix, setCurrentVideoWatching, addToClickedVideos, addToWatchedVideos]);
+
+  useEffect(() => {
+    const restore = () => {
+      const path = window.location.pathname;
+      if (path === urlPrefix || path.startsWith(`${urlPrefix}/`)) setIndex(readIndex());
+    };
+    window.addEventListener("popstate", restore);
+    return () => window.removeEventListener("popstate", restore);
+  }, [readIndex, urlPrefix]);
 
   const onVideoEnded = useCallback(() => {
     if (AUTOPLAY_NEXT) goNext();
@@ -241,12 +273,12 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
 
   if (isDesktop) {
     return (
-      <ResizablePanelGroup direction="horizontal" className="min-h-[200px] rounded-lg border">
+      <ResizablePanelGroup direction="horizontal" className="min-h-0 flex-1 rounded-lg border">
         <ResizablePanel defaultSize={25}>
-          <VideoList videos={videos} activeIndex={index} onSelect={select} className="h-screen" />
+          <VideoList videos={videos} activeIndex={index} onSelect={select} />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={75} className="flex flex-col justify-between">
+        <ResizablePanel defaultSize={75} className="flex flex-col justify-between overflow-y-auto">
           {player}
           <Footer />
         </ResizablePanel>

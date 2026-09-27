@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+
+import { NavigationLink } from "@/components/providers/NavigationProvider";
 
 import MobileNav from "./MobileNav";
 import Navbar from "./Navbar";
@@ -8,13 +9,13 @@ import Route from "./Route";
 
 const Header = () => {
   return (
-    <div className="border-b p-4 md:border-b-0 md:p-0">
+    <div className="shrink-0 border-b p-4 md:border-b-0 md:p-0">
       <div className="hidden md:flex">
         <Navbar />
       </div>
       <div className="flex items-center md:hidden">
         <MobileNav />
-        <Link href="/" className="ml-2">
+        <NavigationLink href="/" label="home" className="ml-2">
           <div className="flex items-center space-x-1">
             <Image
               src="/android-chrome-192x192.png"
@@ -28,7 +29,7 @@ const Header = () => {
               <Route />
             </div>
           </div>
-        </Link>
+        </NavigationLink>
       </div>
     </div>
   );

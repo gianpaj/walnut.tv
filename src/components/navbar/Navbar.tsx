@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import Logo from "@/components/navbar/Logo";
+import { NavigationLink } from "@/components/providers/NavigationProvider";
 // import { ModeToggle } from "@/components/theme/ModeToggle";
 import {
   NavigationMenu,
@@ -34,7 +34,9 @@ const Navbar = () => {
                   active={isActiveChannel(path, channel.title)}
                   className={navigationMenuTriggerStyle()}
                 >
-                  <Link href={`/${channel.title}`}>{channelLabel(channel)}</Link>
+                  <NavigationLink href={`/${channel.title}`} label={channelLabel(channel)}>
+                    {channelLabel(channel)}
+                  </NavigationLink>
                 </NavigationMenuLink>
               </NavigationMenuItem>
             ))}

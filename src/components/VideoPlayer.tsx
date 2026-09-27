@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
+import { useNavigationPending } from "@/components/providers/NavigationProvider";
 import { loadYouTubeIframeApi } from "@/lib/youtubeIframeApi";
 
 type Props = {
@@ -19,8 +20,11 @@ type Props = {
  * knowing when one finishes. A plain embed reports neither.
  */
 const VideoPlayer = ({ video, onEnded, onError }: Props) => {
+  const navigationPending = useNavigationPending();
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YT.Player | null>(null);
+  const readyRef = useRef(false);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   // Kept in refs so the player is created once, but always calls the latest
   // handlers and shows the latest video even if it finishes loading late.
@@ -39,7 +43,10 @@ const VideoPlayer = ({ video, onEnded, onError }: Props) => {
       .then((YTApi) => {
         if (cancelled || !containerRef.current) return;
 
-        playerRef.current = new YTApi.Player(containerRef.current, {
+        // YouTube replaces its target. Keep React's host intact across effect cleanup.
+        const target = document.createElement("div");
+        containerRef.current.replaceChildren(target);
+        playerRef.current = new YTApi.Player(target, {
           videoId: wantedVideoId.current,
           width: "100%",
           height: "100%",
@@ -50,19 +57,29 @@ const VideoPlayer = ({ video, onEnded, onError }: Props) => {
             iv_load_policy: 3,
           },
           events: {
+            onReady: (event) => {
+              if (cancelled) return;
+              readyRef.current = true;
+              event.target.cueVideoById(wantedVideoId.current);
+            },
             onStateChange: (event) => {
-              if (event.data === YTApi.PlayerState.ENDED) {
+              if (!cancelled && event.data === YTApi.PlayerState.ENDED) {
                 handlers.current.onEnded?.();
               }
             },
-            onError: () => handlers.current.onError?.(),
+            onError: () => {
+              if (!cancelled) handlers.current.onError?.();
+            },
           },
         });
       })
-      .catch((error: unknown) => console.error(error));
+      .catch(() => {
+        if (!cancelled) setLoadFailed(true);
+      });
 
     return () => {
       cancelled = true;
+      readyRef.current = false;
       playerRef.current?.destroy();
       playerRef.current = null;
     };
@@ -71,8 +88,12 @@ const VideoPlayer = ({ video, onEnded, onError }: Props) => {
   useEffect(() => {
     // cueVideoById, not loadVideoById: the live site loads the next video
     // without starting playback on its own.
-    playerRef.current?.cueVideoById(video.youtubeId);
+    if (readyRef.current) playerRef.current?.cueVideoById(video.youtubeId);
   }, [video.youtubeId]);
+
+  useEffect(() => {
+    if (navigationPending && readyRef.current) playerRef.current?.pauseVideo();
+  }, [navigationPending]);
 
   return (
     <motion.div
@@ -83,12 +104,19 @@ const VideoPlayer = ({ video, onEnded, onError }: Props) => {
         delay: 0.5,
         ease: [0, 0.71, 0.2, 1.01],
       }}
-      /* The player swaps the child div for its own iframe, which carries none
-         of our classes — hence the child selector. */
-      className="aspect-video w-full [&>iframe]:h-full [&>iframe]:w-full"
+      className="aspect-video w-full"
     >
-      {/* Replaced in place by the player's iframe. */}
-      <div ref={containerRef} />
+      {loadFailed && (
+        <p role="status" className="p-4 text-sm text-muted-foreground">
+          The YouTube player could not load. Reload the page or open the video using its title
+          below.
+        </p>
+      )}
+      <div
+        ref={containerRef}
+        className="h-full w-full [&>iframe]:h-full [&>iframe]:w-full"
+        hidden={loadFailed}
+      />
     </motion.div>
   );
 };

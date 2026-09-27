@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { NavigationLink } from "@/components/providers/NavigationProvider";
 import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
@@ -29,9 +29,13 @@ export default function LinkItem({
           pathname === href || pathname.startsWith(`${href}/`) ? "bg-primary text-black" : "",
         )}
       >
-        <Link href={href} className={className}>
+        <NavigationLink
+          href={href}
+          label={typeof children === "string" ? children : "channel"}
+          className={className}
+        >
           {children}
-        </Link>
+        </NavigationLink>
       </Button>
     </SheetClose>
   );

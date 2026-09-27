@@ -5,6 +5,7 @@ import "./globals.css";
 
 import Analytics from "@/components/Analytics";
 import Header from "@/components/navbar/Header";
+import { NavigationProvider } from "@/components/providers/NavigationProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 
@@ -70,8 +71,12 @@ export default function RootLayout({
       <body className={poppins.className} suppressHydrationWarning={true}>
         <ToastProvider>
           <ThemeProvider attribute="class" defaultTheme="dark">
-            <Header />
-            {children}
+            <NavigationProvider>
+              <div className="flex min-h-dvh flex-col md:h-dvh md:overflow-hidden">
+                <Header />
+                {children}
+              </div>
+            </NavigationProvider>
           </ThemeProvider>
         </ToastProvider>
         <Analytics />

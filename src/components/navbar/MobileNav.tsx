@@ -18,7 +18,7 @@ import LinkItem from "./LinkItem";
 const MobileNav = () => {
   return (
     <Sheet>
-      <SheetTrigger className="flex p-1">
+      <SheetTrigger aria-label="Open navigation menu" className="flex p-1">
         <div className={`rounded-md border p-2`}>
           <Menu className="h-4 w-4 text-black dark:text-white" />
         </div>
