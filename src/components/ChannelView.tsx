@@ -1,4 +1,5 @@
 import VideoDisplay from "@/components/VideoDisplay";
+import type { FeedIssue } from "@/lib/actions/feed";
 import { fetchChannelVideos } from "@/lib/actions/videos";
 import { getYouTubeChannelIds, type Channel } from "@/lib/data";
 import { REDDIT_ENABLED } from "@/lib/features";
@@ -18,6 +19,13 @@ function Message({ children }: { children: React.ReactNode }) {
   );
 }
 
+const YOUTUBE_ISSUE_MESSAGES: Record<FeedIssue["reason"], string> = {
+  "missing-config": "YouTube browsing is unavailable because it is not configured.",
+  "api-denied": "YouTube denied access to the requested videos.",
+  "quota-exceeded": "YouTube's API quota has been reached. Please try again later.",
+  "fetch-failed": "Some YouTube videos could not be retrieved. Please try again later.",
+};
+
 /** Fetch enabled sources on the server so the video list arrives with the HTML. */
 const ChannelView = async ({ channel, urlPrefix, initialVideoId }: Props) => {
   if (
@@ -28,27 +36,38 @@ const ChannelView = async ({ channel, urlPrefix, initialVideoId }: Props) => {
     return <Message>Reddit browsing is temporarily unavailable.</Message>;
   }
 
-  const { videos, failed } = await fetchChannelVideos(channel);
+  const { videos, issues } = await fetchChannelVideos(channel);
+  const issueMessages = [
+    ...new Set(
+      issues.map((issue) =>
+        issue.source === "youtube"
+          ? YOUTUBE_ISSUE_MESSAGES[issue.reason]
+          : "Reddit videos could not be retrieved. Please try again later.",
+      ),
+    ),
+  ].join(" ");
 
   if (videos.length === 0) {
-    return failed ? (
-      <Message>Sorry, there was an error retrieving videos in /{channel.title}</Message>
-    ) : (
-      // Nothing came back and nothing threw: on the YouTube channels this is
-      // almost always the daily API quota being spent, which is what the live
-      // site tells people too.
+    return (
       <Message>
-        Come back tomorrow, today&apos;s YouTube quota was used for /{channel.title}
+        {issueMessages || `No videos are available in /${channel.title}. Try another channel.`}
       </Message>
     );
   }
 
   return (
-    <VideoDisplay
-      videos={videos}
-      urlPrefix={urlPrefix ?? `/${channel.title}`}
-      initialVideoId={initialVideoId}
-    />
+    <>
+      {issues.length > 0 && (
+        <p role="status" className="px-6 py-3 text-sm text-muted-foreground">
+          Showing available videos. {issueMessages}
+        </p>
+      )}
+      <VideoDisplay
+        videos={videos}
+        urlPrefix={urlPrefix ?? `/${channel.title}`}
+        initialVideoId={initialVideoId}
+      />
+    </>
   );
 };
 
