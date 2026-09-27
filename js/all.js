@@ -13,7 +13,7 @@ const embedLength = '/embed/'.length;
 
 const MAX_VIDEOS_PER_CHANNEL = 4;
 const YOUTUBE_VIDEO_MAX_AGE_HOURS = 24;
-const INITIAL_CHANNEL = 'reddit';
+const INITIAL_CHANNEL = channels[0].title;
 
 function RedditVideoService() {
   function isVideoObject(obj) {
@@ -464,7 +464,7 @@ var appVideo = new Vue({
   },
   created: async function () {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) this.mobile = true;
-    this.channel || (this.channel = INITIAL_CHANNEL);
+    if (!channels.some((c) => c.title === this.channel)) this.channel = INITIAL_CHANNEL;
 
     await youtubeService.init();
     // while (!youtubeService.initiated) {
