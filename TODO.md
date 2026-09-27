@@ -31,3 +31,7 @@ up-front changes to the migration's routing or watched-store architecture.
 - [ ] Homepage channel scroller.
 - [ ] In-app YouTube channel search; reuse the channel-management script's
       search behavior where appropriate and protect server credentials/quota.
+
+## DX
+
+- [x] Portless development URL via `pnpm dev`; see [Run it](./README.md#run-it).

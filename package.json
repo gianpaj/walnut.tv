@@ -20,7 +20,8 @@
     ]
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "PORTLESS_TLD=localhost PORTLESS_LAN=0 portless walnut next dev --hostname 127.0.0.1",
+    "dev:direct": "next dev",
     "build": "pnpm check-channels && next build",
     "start": "next start",
     "lint": "oxlint --type-aware",
@@ -71,6 +72,7 @@
     "oxfmt": "0.70.0",
     "oxlint": "1.85.0",
     "oxlint-tsgolint": "7.0.2003",
+    "portless": "0.15.6",
     "postcss": "^8.5.25",
     "prettier": "^3.6.2",
     "tailwindcss": "^3.4.18",

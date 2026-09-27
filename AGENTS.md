@@ -24,7 +24,8 @@ framer-motion · pnpm · Node 24 (pinned in `.tool-versions`).
 
 ```bash
 pnpm install
-pnpm dev              # http://localhost:3000
+pnpm dev              # Portless: https://walnut.localhost (use printed URL)
+pnpm dev:direct       # plain Next.js: http://localhost:3000
 pnpm build            # runs check-channels, then next build
 pnpm start            # serve the production build
 pnpm lint             # type-aware Oxlint

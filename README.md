@@ -36,13 +36,27 @@ pnpm install
 pnpm dev
 ```
 
-Open <http://localhost:3000>. The homepage redirects to `/hustle`.
+Open the URL printed by Portless, normally <https://walnut.localhost>.
+The homepage redirects to `/hustle`. Saved proxy settings can add a port, such as
+`https://walnut.localhost:1355`.
+
+Portless 0.15.6 is a dev dependency; no global installation is required. The dev
+script selects `.localhost` and loopback-only mode. `.local` is reserved for
+Bonjour/mDNS and is not used for this local-only setup. The first HTTPS proxy
+startup can request permission to bind port 443, trust its local CA, or sync hosts.
+If an existing proxy uses incompatible TLD/LAN settings, Portless reports the
+conflict; do not stop another project's proxy without checking it first.
+
+Use `pnpm dev:direct` for plain Next.js at <http://localhost:3000> without Portless.
+These are different browser origins, so their cookies and watched-history storage
+are separate.
 
 ### Scripts
 
 | Command               | What it does                                        |
 | --------------------- | --------------------------------------------------- |
-| `pnpm dev`            | Development server                                  |
+| `pnpm dev`            | Portless development server at `walnut.localhost`   |
+| `pnpm dev:direct`     | Plain Next.js development server                    |
 | `pnpm build`          | Validate channels, then build for production        |
 | `pnpm start`          | Serve the production build                          |
 | `pnpm lint`           | Type-aware Oxlint checks                            |
