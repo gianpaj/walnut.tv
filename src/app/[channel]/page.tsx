@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 
 import ChannelView from "@/components/ChannelView";
 import { channelLabel, channels, getChannel } from "@/lib/data";
+import { createRouteMetadata } from "@/lib/metadata";
 
 interface ChannelPageProps {
   params: Promise<{ channel: string }>;
@@ -13,23 +14,26 @@ export function generateStaticParams() {
   return channels.map((channel) => ({ channel: channel.title }));
 }
 
-export async function generateMetadata({ params }: ChannelPageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params, searchParams }: ChannelPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { channel: slug } = await params;
   const channel = getChannel(slug);
   if (!channel) return {};
 
-  const title = `${channelLabel(channel)} videos - walnut.tv`;
-  return {
-    title,
-    alternates: { canonical: `/${channel.title}` },
-    openGraph: { title, url: `/${channel.title}` },
-  };
+  const v = (await searchParams).v;
+  return createRouteMetadata(
+    {
+      title: `${channelLabel(channel)} videos - walnut.tv`,
+      segments: [channel.title],
+      videoId: v,
+    },
+    await parent,
+  );
 }
 
-/**
- * Server component so an unknown slug returns a real 404 status. The fetching
- * below it has to stay client-side while Reddit blocks datacenter IPs.
- */
+/** Validate before fetching or streaming so unknown channels return HTTP 404. */
 export default async function ChannelPage({ params, searchParams }: ChannelPageProps) {
   const { channel: slug } = await params;
   const channel = getChannel(slug);

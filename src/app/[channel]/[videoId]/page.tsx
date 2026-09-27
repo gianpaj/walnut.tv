@@ -1,24 +1,30 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 
 import ChannelView from "@/components/ChannelView";
 import { channelLabel, getChannel } from "@/lib/data";
+import { createRouteMetadata } from "@/lib/metadata";
 
 interface VideoPageProps {
   params: Promise<{ channel: string; videoId: string }>;
 }
 
-export async function generateMetadata({ params }: VideoPageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: VideoPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { channel: slug, videoId } = await params;
   const channel = getChannel(slug);
   if (!channel) return {};
 
-  const title = `${channelLabel(channel)} videos - walnut.tv`;
-  return {
-    title,
-    alternates: { canonical: `/${channel.title}/${videoId}` },
-    openGraph: { title, url: `/${channel.title}/${videoId}` },
-  };
+  return createRouteMetadata(
+    {
+      title: `${channelLabel(channel)} videos - walnut.tv`,
+      segments: [channel.title],
+      videoId,
+    },
+    await parent,
+  );
 }
 
 /**

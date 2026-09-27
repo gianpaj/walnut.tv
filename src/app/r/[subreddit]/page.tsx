@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 
 import ChannelView from "@/components/ChannelView";
 import type { Channel } from "@/lib/data";
+import { createRouteMetadata } from "@/lib/metadata";
 
 interface SubredditPageProps {
   params: Promise<{ subreddit: string }>;
@@ -11,16 +12,21 @@ interface SubredditPageProps {
 /** Reddit allows letters, digits and underscores, 3-21 characters. */
 const SUBREDDIT_PATTERN = /^\w{2,21}$/;
 
-export async function generateMetadata({ params }: SubredditPageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params, searchParams }: SubredditPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { subreddit } = await params;
-  const title = `r/${subreddit} videos - walnut.tv`;
-  return {
-    title,
-    alternates: { canonical: `/r/${subreddit}` },
-    openGraph: { title, url: `/r/${subreddit}` },
-    // Ad-hoc listings are not content we want indexed.
-    robots: { index: false, follow: true },
-  };
+  const v = (await searchParams).v;
+  return createRouteMetadata(
+    {
+      title: `r/${subreddit} videos - walnut.tv`,
+      segments: ["r", subreddit],
+      videoId: v,
+      noindex: true,
+    },
+    await parent,
+  );
 }
 
 /**

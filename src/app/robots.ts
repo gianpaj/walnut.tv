@@ -4,9 +4,8 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
+      // Crawlers must reach /r/ pages to see their noindex directive.
       allow: "/",
-      // Ad-hoc subreddit listings are unbounded and not worth crawling.
-      disallow: "/r/",
     },
     sitemap: "https://walnut.tv/sitemap.xml",
   };

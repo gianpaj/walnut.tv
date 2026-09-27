@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 
 import ChannelView from "@/components/ChannelView";
 import type { Channel } from "@/lib/data";
+import { createRouteMetadata } from "@/lib/metadata";
 
 interface SubredditVideoPageProps {
   params: Promise<{ subreddit: string; videoId: string }>;
@@ -9,15 +10,20 @@ interface SubredditVideoPageProps {
 
 const SUBREDDIT_PATTERN = /^\w{2,21}$/;
 
-export async function generateMetadata({ params }: SubredditVideoPageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: SubredditVideoPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { subreddit, videoId } = await params;
-  const title = `r/${subreddit} videos - walnut.tv`;
-  return {
-    title,
-    alternates: { canonical: `/r/${subreddit}/${videoId}` },
-    openGraph: { title, url: `/r/${subreddit}/${videoId}` },
-    robots: { index: false, follow: true },
-  };
+  return createRouteMetadata(
+    {
+      title: `r/${subreddit} videos - walnut.tv`,
+      segments: ["r", subreddit],
+      videoId,
+      noindex: true,
+    },
+    await parent,
+  );
 }
 
 export default async function SubredditVideoPage({ params }: SubredditVideoPageProps) {
