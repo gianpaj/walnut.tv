@@ -14,8 +14,9 @@ export function isActiveChannel(pathname: string, slug: string) {
 }
 
 function getDurationInSec(durationString: string) {
-  const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(\d+)S/;
-  const matches = regex.exec(durationString) ?? [];
+  const regex = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+  const matches = regex.exec(durationString);
+  if (!matches || matches[0] !== durationString) return 0;
 
   const hours = parseInt(matches[1] ?? "0");
   const minutes = parseInt(matches[2] ?? "0");

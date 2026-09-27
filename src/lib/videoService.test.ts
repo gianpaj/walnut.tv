@@ -61,11 +61,49 @@ describe("youtubeIdFromUrl", () => {
 });
 
 describe("isShortDuration", () => {
-  it("treats anything up to two minutes as a Short, like the live site", () => {
-    assert.equal(isShortDuration("PT16S"), true);
-    assert.equal(isShortDuration("PT2M0S"), true);
-    assert.equal(isShortDuration("PT2M1S"), false);
-    assert.equal(isShortDuration("PT1H27M11S"), false);
+  it("handles optional hours, minutes and seconds", () => {
+    for (const duration of ["PT3M", "PT1H", "PT1H3M", "PT1H1S", "PT3M1S", "PT1H27M11S"]) {
+      assert.equal(isShortDuration(duration), false, duration);
+    }
+    for (const duration of ["PT0S", "PT0M", "PT0H", "PT16S", "PT1M", "PT0H1M1S"]) {
+      assert.equal(isShortDuration(duration), true, duration);
+    }
+  });
+
+  it("excludes durations at or below 120 seconds and keeps longer videos", () => {
+    for (const duration of ["PT119S", "PT1M59S", "PT120S", "PT2M", "PT2M0S", "PT0H2M"]) {
+      assert.equal(isShortDuration(duration), true, duration);
+    }
+    for (const duration of ["PT121S", "PT2M1S", "PT0H2M1S"]) {
+      assert.equal(isShortDuration(duration), false, duration);
+    }
+  });
+
+  it("excludes missing durations using the caller's empty-string fallback", () => {
+    for (const duration of [undefined, null, ""]) {
+      assert.equal(isShortDuration(duration ?? ""), true);
+    }
+  });
+
+  it("excludes malformed durations rather than accepting partial matches", () => {
+    for (const duration of [
+      "invalid",
+      "P",
+      "PT",
+      "PTM",
+      "PT3",
+      "PT-3M",
+      "PT3M1H",
+      "PT3M3M",
+      "PT180S1M",
+      "prefixPT180S",
+      "PT180Ssuffix",
+      " PT180S",
+      "PT180S ",
+      "PT180S\n",
+    ]) {
+      assert.equal(isShortDuration(duration), true, JSON.stringify(duration));
+    }
   });
 });
 
