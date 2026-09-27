@@ -112,9 +112,25 @@ fetch four candidates before filtering and do not backfill.
 
 ## Browser acceptance checklist
 
-Run against a functioning preview with real API access on desktop and mobile.
+Use the `agent-browser` CLI and its skill to verify migration work. Load the
+skill and run `agent-browser skills get core` before browser testing. Run against
+a functioning Next.js preview with real API access on desktop and mobile.
 Use controlled fixtures for failures and boundary cases; record the tested
 revision, browser and result. The current unit suite only covers helpers.
+
+- [ ] **B0: Screenshot-based UI parity.** Compare the Next.js app with
+      `http://walnut.tv` (follow any HTTPS redirect) or a running checkout of
+      `master`, this repository's main branch. Use `agent-browser` to capture
+      paired screenshots at matching desktop and mobile viewport sizes, routes
+      and interaction states. Cover the loaded list/player, selected and watched
+      rows, mobile menu, and loading/empty/error states where reproducible.
+      Use matching videos or fixtures when possible; distinguish live-feed changes
+      from UI regressions. Inspect the images, not just accessibility snapshots.
+      Record baseline URL or commit, Next.js revision, viewport, state, screenshot
+      paths and unresolved differences in a short `.agents/notes` verification
+      note. Note blocked comparisons rather than treating them as passes.
+      Pixel-identical styling is not required; explain intentional differences.
+      Screenshots complement the interaction checks below; they do not replace them.
 
 - [ ] **B1: Routing.** Every configured category, both deep-link route shapes,
       `?v=`, reload, navbar changes, Back/Forward, and unknown-channel HTTP 404s.
