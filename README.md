@@ -69,6 +69,15 @@ are separate.
 CI runs channel validation, typecheck, tests, and the production build on every
 pull request. Formatting and linting run locally and in the pre-commit hook, not CI.
 
+### Browser acceptance
+
+After `pnpm build`, run `python3 scripts/browser-acceptance/fixtures.py` with
+Python 3 and the `agent-browser` CLI/Chrome installed. The bounded suite uses
+synthetic feeds and an instrumented player; it does not verify real API access,
+playback, or deployment caching. See [the harness guide](./scripts/browser-acceptance/README.md)
+for prerequisites, output, and known browser-runner limits. Real-feed and
+screenshot-parity requirements remain in [MIGRATION-PLAN.md](./MIGRATION-PLAN.md).
+
 ### Development tooling
 
 - **TypeScript 7:** `tsc --noEmit` checks types. Next.js uses
