@@ -1,6 +1,7 @@
 # Oxc tooling migration
 
-Status: proposed; no packages or runtime configuration changed.
+Status: approved and in progress. TypeScript 7 compatibility and Oxc linting pass;
+formatting normalization and staged-hook verification remain open.
 
 ## Outcome
 
@@ -21,12 +22,10 @@ Do not copy monorepo paths, Supabase ignores, Vitest, Python hooks, or asdf setu
 - Candidate versions verified in npm on 2026-09-27: `oxlint@1.85.0`,
   `oxlint-tsgolint@7.0.2003`, and `oxfmt@0.70.0`. Pin the chosen versions.
   Oxfmt is pre-1.0; do not assume semver protects formatting output.
-- The current type-aware backend uses TypeScript 7 semantics. Check this repo's
-  TypeScript 5 setup, Next-generated types, and `baseUrl` compatibility first.
-  Try removing `baseUrl` while retaining the explicit `@/*` → `./src/*` mapping;
-  prove resolution with both tools. Keep `tsc --noEmit` as the compiler check.
-- If adopting the backend requires a compiler upgrade or broad source changes,
-  stop and propose that work separately. Do not silently drop typed lint rules.
+- The user approved upgrading to stable TypeScript 7 before Oxc. Use Next's
+  `experimental.useTypeScriptCli`, explicit ambient types, and the relative
+  `@/*` → `./src/*` mapping without `baseUrl`. Keep `tsc --noEmit` as the
+  compiler check. Typecheck, tests, and the production build pass with 7.0.2.
 
 ## 2. Replace the linter
 

@@ -1,0 +1,65 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "sortImports": {
+    "customGroups": [
+      {
+        "groupName": "react",
+        "elementNamePattern": ["react", "react/**"]
+      },
+      {
+        "groupName": "next",
+        "elementNamePattern": ["next", "next/**"]
+      }
+    ],
+    "groups": [
+      "react",
+      "next",
+      ["builtin", "external"],
+      {
+        "newlinesBetween": true
+      },
+      ["internal", "subpath"],
+      {
+        "newlinesBetween": true
+      },
+      ["parent", "sibling", "index"],
+      "style",
+      "unknown"
+    ],
+    "internalPattern": ["@/", "~/"],
+    "newlinesBetween": false,
+    "sortSideEffects": false
+  },
+  "sortPackageJson": false,
+  "sortTailwindcss": {
+    "config": "./tailwind.config.ts",
+    "functions": ["cn", "clsx", "cva"]
+  },
+  "ignorePatterns": [
+    "**/*.md",
+    "**/*.mdx",
+    "node_modules/",
+    ".pnp/",
+    ".pnpm-store/",
+    ".yarn/",
+    ".next/",
+    "out/",
+    "build/",
+    "dist/",
+    "coverage/",
+    ".cache/",
+    ".turbo/",
+    ".vercel/",
+    ".netlify/",
+    ".agents/skills/",
+    ".opencode/",
+    ".vscode/",
+    ".zed/",
+    "src/components/ui/",
+    "*.tsbuildinfo",
+    "next-env.d.ts",
+    "biome.jsonc",
+    "channels.js"
+  ]
+}

@@ -182,7 +182,7 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
     setCurrentVideoWatching(first.youtubeId);
     addToClickedVideos(first.youtubeId);
     addToWatchedVideos(first.youtubeId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, []);
 
   const onVideoEnded = useCallback(() => {
