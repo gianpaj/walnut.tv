@@ -1,0 +1,155 @@
+# AGENTS.md
+
+Guidance for coding agents working in this repository.
+
+## What this is
+
+**walnut.tv** curates videos by topic — Reddit's hottest video posts and recent
+uploads from curated YouTube channels — and plays them in a list-plus-player
+layout. Live at <https://walnut.tv>.
+
+The repo is mid-migration. `master` still runs the original Vue 1 + jQuery
+single-page app and is what walnut.tv serves today. `dev` is the Next.js
+rewrite that will replace it. **Read `MIGRATION-PLAN.md` before starting
+anything substantial** — it records the parity checklist and release gates.
+Reddit requires server-side OAuth; YouTube API quota limits fetching frequency.
+
+## Stack
+
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript in strict mode with
+`noUncheckedIndexedAccess` · Tailwind 3 · shadcn/ui on Radix · zustand ·
+framer-motion · pnpm · Node 24 (pinned in `.tool-versions`).
+
+## Commands
+
+```bash
+pnpm install
+pnpm dev              # http://localhost:3000
+pnpm build            # runs check-channels, then next build
+pnpm start            # serve the production build
+pnpm lint             # eslint . (next lint was removed in Next 16)
+pnpm typecheck        # tsc --noEmit
+pnpm test             # node --test over src/**/*.test.ts
+pnpm check-channels   # validate the YouTube channel IDs in channels.js
+```
+
+Tests use Node's built-in runner with native type stripping — no jest, vitest
+or transform step. That means test files import with an explicit `.ts`
+extension and can only use relative imports, not the `@/` alias.
+
+CI (`.github/workflows/ci.yml`) runs install, check-channels, typecheck, lint,
+test and build on every PR. All of them must pass.
+
+## Layout
+
+```
+channels.js               the channel list — see below, this one is special
+src/app/                  App Router. Server components resolve the slug and
+                          call notFound(); ChannelView fetches on the server.
+                          robots.ts, sitemap.ts.
+  [channel]/              /{channel} and /{channel}/{videoId}
+  r/[subreddit]/          ad-hoc subreddit browsing, same two shapes
+src/components/           ChannelView (fetch + states), VideoDisplay (list +
+                          player), VideoPlayer (YT.Player), Analytics, navbar/
+src/components/ui/        shadcn/ui primitives — regenerate, don't hand-edit
+src/hooks/use-video.tsx   zustand store for watched / clicked video ids
+src/hooks/use-media-query one layout is rendered at a time, not CSS-hidden
+src/lib/data.ts           typed accessors over channels.js
+src/lib/actions/          reddit.ts, youtube.ts, videos.ts (combines both)
+src/lib/videoService.ts   filtering, interleaving, thumbnail and id helpers
+src/lib/youtubeIframeApi  loads the IFrame API once per page
+src/types/                global VideoData / RedditPost / Window augmentation
+scripts/                  standalone CommonJS Node utilities, excluded from
+                          tsconfig and eslint
+public/                   icons, manifest, logo, og-image
+```
+
+### Do not add a route-level `loading.tsx`
+
+A `loading.tsx` wraps its segment in Suspense, which makes every response
+stream. Next cannot change an HTTP status once streaming has begun, so
+`notFound()` silently degrades to a 200 with the 404 page rendered inside it.
+Validate the route before any streaming boundary. `ChannelView` awaits
+server-side fetching; there is no loading component. Pending navigation
+feedback remains a migration checklist item.
+
+## channels.js is the single source of truth
+
+The channel list lives at the repo root as **CommonJS**, not in `src/`, because
+three things read or write it:
+
+- `scripts/check-channels.js` validates every YouTube channel ID is exactly 24
+  characters
+- `scripts/add-youtube-channel.js` rewrites the file by regex
+- the `add-youtube-channel` skill in `.claude/skills/` drives that script
+
+The app reads it only through `src/lib/data.ts`, which adds the `Channel` type
+and the `getChannel` / `getSubreddits` / `getYouTubeChannelIds` /
+`channelLabel` accessors. **Do not copy the list into `src/`**; duplicate lists
+can drift. Do not hardcode channel names in components either; the navbar
+renders from the list.
+
+Each entry has a `title` (also the URL slug), and then either `subreddit`
+(semicolon-separated) with `minNumOfVotes`, or `youtubeChannels`
+(semicolon-separated 24-character IDs) with an optional `sortBy: "new"`.
+
+### Adding a YouTube channel
+
+```bash
+export YOUTUBE_API_KEY="..."
+node scripts/add-youtube-channel.js "Lex Fridman" ai
+node scripts/add-youtube-channel.js "Y Combinator" --justSearch   # preview only
+pnpm check-channels
+```
+
+The configured categories are `hustle`, `ai`, and `crypto`, all YouTube-sourced.
+Ad-hoc Reddit browsing uses `/r/{subreddit}`. Check `channels.js` for the current
+category list.
+
+## Environment
+
+Copy `.env.example` to `.env.local`.
+
+- `YOUTUBE_API_KEY` — server-side YouTube fetching and channel-management scripts.
+  The fetcher accepts `NEXT_PUBLIC_YOUTUBE_API_KEY` as a compatibility fallback;
+  prefer the server-only name.
+- `YOUTUBE_API_REFERER` — optional Referer header for a referrer-restricted key.
+- `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET` — required for Reddit OAuth fetching.
+- `REDDIT_USER_AGENT` — optional override for the app's Reddit User-Agent.
+
+Keep credentials in local or deployment environment configuration, not source.
+
+## Two constraints worth knowing before you change data fetching
+
+**Reddit uses OAuth on the server.** `src/lib/actions/reddit.ts` obtains a
+`client_credentials` token, reuses it per server instance, and fetches hot
+listings from `oauth.reddit.com` with ten-minute Next Data Cache revalidation.
+There is no browser fallback. Public Reddit JSON endpoints can reject
+server requests; verify OAuth access from the deployment host.
+
+**YouTube quota is the binding limit.** `src/lib/actions/youtube.ts` fetches all
+configured channel IDs. Uploads-playlist lookups use thirty-day revalidation;
+playlist items and video details use two-hour revalidation. Four candidate
+uploads per channel are filtered by duration, then sorted when configured.
+Keep the cache when changing this pipeline. Verify its sharing and persistence
+on the deployment host before treating request volume as traffic-independent.
+
+## Conventions
+
+- Prettier with `@ianvs/prettier-plugin-sort-imports` and
+  `prettier-plugin-tailwindcss` — let it decide import order and class order.
+- Import from `@/*` (mapped to `src/*`), except `channels.js`, which
+  `src/lib/data.ts` reaches by relative path.
+- Derive values during render; the lint config rejects `setState` inside an
+  effect (`react-hooks/set-state-in-effect`).
+- `src/components/ui/*` comes from shadcn/ui (`components.json`, base colour
+  slate). Prefer regenerating over hand-editing.
+- Deliberate version pins, with reasons, in the Next 16 upgrade commit:
+  react-resizable-panels stays on v3 (v4 renamed its exports), Tailwind stays
+  on 3 (v4 is a CSS-first rewrite), tailwind-merge stays on 2 (v3 targets
+  Tailwind 4).
+
+## Deployment
+
+Netlify today, from `master`. Vercel is under consideration for the cutover —
+see the release gates in `MIGRATION-PLAN.md`.
