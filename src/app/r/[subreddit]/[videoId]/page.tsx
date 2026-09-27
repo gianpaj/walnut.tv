@@ -9,9 +9,7 @@ interface SubredditVideoPageProps {
 
 const SUBREDDIT_PATTERN = /^\w{2,21}$/;
 
-export async function generateMetadata({
-  params,
-}: SubredditVideoPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: SubredditVideoPageProps): Promise<Metadata> {
   const { subreddit, videoId } = await params;
   const title = `r/${subreddit} videos - walnut.tv`;
   return {
@@ -22,9 +20,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function SubredditVideoPage({
-  params,
-}: SubredditVideoPageProps) {
+export default async function SubredditVideoPage({ params }: SubredditVideoPageProps) {
   const { subreddit, videoId } = await params;
 
   const channel: Channel = {

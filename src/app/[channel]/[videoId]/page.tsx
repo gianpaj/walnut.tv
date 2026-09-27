@@ -8,9 +8,7 @@ interface VideoPageProps {
   params: Promise<{ channel: string; videoId: string }>;
 }
 
-export async function generateMetadata({
-  params,
-}: VideoPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: VideoPageProps): Promise<Metadata> {
   const { channel: slug, videoId } = await params;
   const channel = getChannel(slug);
   if (!channel) return {};
@@ -33,11 +31,5 @@ export default async function ChannelVideoPage({ params }: VideoPageProps) {
   const channel = getChannel(slug);
   if (!channel) notFound();
 
-  return (
-    <ChannelView
-      key={channel.title}
-      channel={channel}
-      initialVideoId={videoId}
-    />
-  );
+  return <ChannelView key={channel.title} channel={channel} initialVideoId={videoId} />;
 }

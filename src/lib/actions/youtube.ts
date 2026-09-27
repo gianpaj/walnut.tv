@@ -1,5 +1,4 @@
 import "server-only";
-
 import type { youtube_v3 } from "@googleapis/youtube";
 
 import { getYouTubeChannelIds, type Channel } from "@/lib/data";
@@ -63,17 +62,13 @@ async function callApi<T>(
     error?: { message: string };
   };
   if (!response.ok || body.error) {
-    throw new Error(
-      body.error?.message ?? `${path} failed with ${response.status}`,
-    );
+    throw new Error(body.error?.message ?? `${path} failed with ${response.status}`);
   }
   return body;
 }
 
 /** The 3-call dance: channel -> uploads playlist -> video details. */
-export async function fetchChannelUploads(
-  channelId: string,
-): Promise<VideoData[]> {
+export async function fetchChannelUploads(channelId: string): Promise<VideoData[]> {
   try {
     const channelRes = await callApi<youtube_v3.Schema$ChannelListResponse>(
       "channels",
@@ -81,20 +76,18 @@ export async function fetchChannelUploads(
       PLAYLIST_ID_REVALIDATE_SECONDS,
     );
 
-    const playlistId =
-      channelRes.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+    const playlistId = channelRes.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
     if (!playlistId) return [];
 
-    const playlistRes =
-      await callApi<youtube_v3.Schema$PlaylistItemListResponse>(
-        "playlistItems",
-        {
-          part: "snippet",
-          playlistId,
-          maxResults: String(MAX_VIDEOS_PER_CHANNEL),
-        },
-        REVALIDATE_SECONDS,
-      );
+    const playlistRes = await callApi<youtube_v3.Schema$PlaylistItemListResponse>(
+      "playlistItems",
+      {
+        part: "snippet",
+        playlistId,
+        maxResults: String(MAX_VIDEOS_PER_CHANNEL),
+      },
+      REVALIDATE_SECONDS,
+    );
 
     const videoIds =
       playlistRes.items
@@ -131,9 +124,7 @@ export async function fetchChannelUploads(
   }
 }
 
-export async function fetchYouTubeVideos(
-  channel: Channel,
-): Promise<VideoData[]> {
+export async function fetchYouTubeVideos(channel: Channel): Promise<VideoData[]> {
   const channelIds = getYouTubeChannelIds(channel);
   if (channelIds.length === 0) return [];
 
@@ -144,9 +135,7 @@ export async function fetchYouTubeVideos(
 
   if (channel.sortBy === "new") {
     return [...videos].sort(
-      (a, b) =>
-        new Date(b.publishedAt ?? 0).getTime() -
-        new Date(a.publishedAt ?? 0).getTime(),
+      (a, b) => new Date(b.publishedAt ?? 0).getTime() - new Date(a.publishedAt ?? 0).getTime(),
     );
   }
 

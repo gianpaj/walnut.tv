@@ -1,12 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type Props = {
   className?: string;
@@ -18,13 +13,7 @@ const Logo = (props: Props) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <Link href="/">
-            <Image
-              src="/img/walnut-logo.svg"
-              alt="Walnut.tv"
-              width={32}
-              height={48}
-              {...props}
-            />
+            <Image src="/img/walnut-logo.svg" alt="Walnut.tv" width={32} height={48} {...props} />
           </Link>
         </TooltipTrigger>
         <TooltipContent>

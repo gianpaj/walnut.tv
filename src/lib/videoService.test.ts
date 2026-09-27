@@ -41,26 +41,11 @@ describe("interleaveArrays", () => {
 
 describe("youtubeIdFromUrl", () => {
   it("reads watch, youtu.be, shorts and embed URLs", () => {
-    assert.equal(
-      youtubeIdFromUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
-      "dQw4w9WgXcQ",
-    );
-    assert.equal(
-      youtubeIdFromUrl("https://youtu.be/dQw4w9WgXcQ"),
-      "dQw4w9WgXcQ",
-    );
-    assert.equal(
-      youtubeIdFromUrl("https://www.youtube.com/embed/dQw4w9WgXcQ"),
-      "dQw4w9WgXcQ",
-    );
-    assert.equal(
-      youtubeIdFromUrl("https://www.youtube.com/shorts/dQw4w9WgXcQ"),
-      "dQw4w9WgXcQ",
-    );
-    assert.equal(
-      youtubeIdFromUrl("https://www.youtube.com/watch?v=abc123&t=30s"),
-      "abc123",
-    );
+    assert.equal(youtubeIdFromUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ"), "dQw4w9WgXcQ");
+    assert.equal(youtubeIdFromUrl("https://youtu.be/dQw4w9WgXcQ"), "dQw4w9WgXcQ");
+    assert.equal(youtubeIdFromUrl("https://www.youtube.com/embed/dQw4w9WgXcQ"), "dQw4w9WgXcQ");
+    assert.equal(youtubeIdFromUrl("https://www.youtube.com/shorts/dQw4w9WgXcQ"), "dQw4w9WgXcQ");
+    assert.equal(youtubeIdFromUrl("https://www.youtube.com/watch?v=abc123&t=30s"), "abc123");
   });
 
   it("rejects non-YouTube hosts rather than returning the last path segment", () => {
@@ -116,17 +101,11 @@ describe("redditPostToVideo", () => {
   });
 
   it("derives the thumbnail from the youtube id", () => {
-    assert.equal(
-      redditPostToVideo(redditPost())?.thumbnail,
-      youtubeThumbnail("dQw4w9WgXcQ"),
-    );
+    assert.equal(redditPostToVideo(redditPost())?.thumbnail, youtubeThumbnail("dQw4w9WgXcQ"));
   });
 
   it("drops a post whose link is not a youtube video", () => {
-    assert.equal(
-      redditPostToVideo(redditPost({ url: "https://example.com/x" })),
-      null,
-    );
+    assert.equal(redditPostToVideo(redditPost({ url: "https://example.com/x" })), null);
   });
 });
 

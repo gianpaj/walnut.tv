@@ -12,9 +12,7 @@ interface Props {
 function Message({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-[60vh] items-center justify-center px-6">
-      <h2 className="text-center text-xl font-medium text-muted-foreground">
-        {children}
-      </h2>
+      <h2 className="text-center text-xl font-medium text-muted-foreground">{children}</h2>
     </div>
   );
 }
@@ -29,16 +27,13 @@ const ChannelView = async ({ channel, urlPrefix, initialVideoId }: Props) => {
 
   if (videos.length === 0) {
     return failed ? (
-      <Message>
-        Sorry, there was an error retrieving videos in /{channel.title}
-      </Message>
+      <Message>Sorry, there was an error retrieving videos in /{channel.title}</Message>
     ) : (
       // Nothing came back and nothing threw: on the YouTube channels this is
       // almost always the daily API quota being spent, which is what the live
       // site tells people too.
       <Message>
-        Come back tomorrow, today&apos;s YouTube quota was used for /
-        {channel.title}
+        Come back tomorrow, today&apos;s YouTube quota was used for /{channel.title}
       </Message>
     );
   }

@@ -34,11 +34,7 @@ const MobileNav = () => {
           <div className="flex justify-center">
             <SheetDescription className="my-4 grid h-[calc(100svh-46px-32px)] w-1/2 grid-flow-row grid-cols-1">
               {channels.map((channel) => (
-                <LinkItem
-                  key={channel.title}
-                  href={`/${channel.title}`}
-                  className="w-full"
-                >
+                <LinkItem key={channel.title} href={`/${channel.title}`} className="w-full">
                   {channelLabel(channel)}
                 </LinkItem>
               ))}

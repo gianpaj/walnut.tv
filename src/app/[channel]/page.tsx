@@ -13,9 +13,7 @@ export function generateStaticParams() {
   return channels.map((channel) => ({ channel: channel.title }));
 }
 
-export async function generateMetadata({
-  params,
-}: ChannelPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ChannelPageProps): Promise<Metadata> {
   const { channel: slug } = await params;
   const channel = getChannel(slug);
   if (!channel) return {};
@@ -32,10 +30,7 @@ export async function generateMetadata({
  * Server component so an unknown slug returns a real 404 status. The fetching
  * below it has to stay client-side while Reddit blocks datacenter IPs.
  */
-export default async function ChannelPage({
-  params,
-  searchParams,
-}: ChannelPageProps) {
+export default async function ChannelPage({ params, searchParams }: ChannelPageProps) {
   const { channel: slug } = await params;
   const channel = getChannel(slug);
   if (!channel) notFound();
@@ -45,11 +40,5 @@ export default async function ChannelPage({
   const v = (await searchParams).v;
   const initialVideoId = typeof v === "string" ? v : undefined;
 
-  return (
-    <ChannelView
-      key={channel.title}
-      channel={channel}
-      initialVideoId={initialVideoId}
-    />
-  );
+  return <ChannelView key={channel.title} channel={channel} initialVideoId={initialVideoId} />;
 }

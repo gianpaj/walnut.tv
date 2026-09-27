@@ -1,5 +1,4 @@
 import "server-only";
-
 import { getSubreddits, type Channel } from "@/lib/data";
 import {
   dedupeByYouTubeId,
@@ -39,9 +38,7 @@ async function getAccessToken(): Promise<string> {
   const id = process.env.REDDIT_CLIENT_ID;
   const secret = process.env.REDDIT_CLIENT_SECRET;
   if (!id || !secret) {
-    throw new Error(
-      "REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET are required to fetch Reddit",
-    );
+    throw new Error("REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET are required to fetch Reddit");
   }
 
   const response = await fetch(TOKEN_URL, {
@@ -56,9 +53,7 @@ async function getAccessToken(): Promise<string> {
   });
 
   if (!response.ok) {
-    throw new Error(
-      `Reddit token request failed with ${response.status} ${response.statusText}`,
-    );
+    throw new Error(`Reddit token request failed with ${response.status} ${response.statusText}`);
   }
 
   const token = (await response.json()) as TokenResponse;
@@ -83,21 +78,16 @@ export async function fetchSubredditVideos(
 ): Promise<VideoData[]> {
   const token = await getAccessToken();
 
-  const response = await fetch(
-    `${API}/r/${subreddit}/hot?limit=${LISTING_LIMIT}&raw_json=1`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "User-Agent": userAgent(),
-      },
-      next: { revalidate: REVALIDATE_SECONDS },
+  const response = await fetch(`${API}/r/${subreddit}/hot?limit=${LISTING_LIMIT}&raw_json=1`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "User-Agent": userAgent(),
     },
-  );
+    next: { revalidate: REVALIDATE_SECONDS },
+  });
 
   if (!response.ok) {
-    throw new Error(
-      `Reddit /r/${subreddit} failed with ${response.status} ${response.statusText}`,
-    );
+    throw new Error(`Reddit /r/${subreddit} failed with ${response.status} ${response.statusText}`);
   }
 
   const listing = (await response.json()) as RedditResponseData;
@@ -110,9 +100,7 @@ export async function fetchSubredditVideos(
 }
 
 /** Fetches every subreddit of a channel and interleaves the results. */
-export async function fetchRedditVideos(
-  channel: Channel,
-): Promise<VideoData[]> {
+export async function fetchRedditVideos(channel: Channel): Promise<VideoData[]> {
   const subreddits = getSubreddits(channel);
   if (subreddits.length === 0) return [];
 

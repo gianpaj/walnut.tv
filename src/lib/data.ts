@@ -36,7 +36,6 @@ const LABEL_OVERRIDES: Record<string, string> = { ai: "AI" };
 
 export function channelLabel(channel: Channel): string {
   return (
-    LABEL_OVERRIDES[channel.title] ??
-    channel.title.charAt(0).toUpperCase() + channel.title.slice(1)
+    LABEL_OVERRIDES[channel.title] ?? channel.title.charAt(0).toUpperCase() + channel.title.slice(1)
   );
 }

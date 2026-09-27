@@ -43,10 +43,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '${GA_MEASUREMENT_ID}');`}
       </Script>
-      <script
-        type="module"
-        dangerouslySetInnerHTML={{ __html: FIREBASE_SNIPPET }}
-      />
+      <script type="module" dangerouslySetInnerHTML={{ __html: FIREBASE_SNIPPET }} />
     </>
   );
 }

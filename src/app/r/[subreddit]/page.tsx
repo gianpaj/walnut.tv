@@ -11,9 +11,7 @@ interface SubredditPageProps {
 /** Reddit allows letters, digits and underscores, 3-21 characters. */
 const SUBREDDIT_PATTERN = /^\w{2,21}$/;
 
-export async function generateMetadata({
-  params,
-}: SubredditPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: SubredditPageProps): Promise<Metadata> {
   const { subreddit } = await params;
   const title = `r/${subreddit} videos - walnut.tv`;
   return {
@@ -30,10 +28,7 @@ export async function generateMetadata({
  * on the live site. Synthesises a Channel so the rest of the pipeline — fetch,
  * interleave, dedupe, /r/{sub}/{id} deep links — is shared with the real ones.
  */
-export default async function SubredditPage({
-  params,
-  searchParams,
-}: SubredditPageProps) {
+export default async function SubredditPage({ params, searchParams }: SubredditPageProps) {
   const { subreddit } = await params;
 
   // No notFound() on a bad name: whether a subreddit exists is Reddit's to

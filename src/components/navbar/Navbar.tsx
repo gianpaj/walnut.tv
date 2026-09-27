@@ -34,9 +34,7 @@ const Navbar = () => {
                   active={isActiveChannel(path, channel.title)}
                   className={navigationMenuTriggerStyle()}
                 >
-                  <Link href={`/${channel.title}`}>
-                    {channelLabel(channel)}
-                  </Link>
+                  <Link href={`/${channel.title}`}>{channelLabel(channel)}</Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
             ))}

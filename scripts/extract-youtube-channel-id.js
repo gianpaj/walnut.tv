@@ -27,16 +27,16 @@ const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
 // ANSI color codes for terminal output
 const colors = {
-  reset: '\x1b[0m',
-  green: '\x1b[32m',
-  red: '\x1b[31m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[36m',
+  reset: "\x1b[0m",
+  green: "\x1b[32m",
+  red: "\x1b[31m",
+  yellow: "\x1b[33m",
+  blue: "\x1b[36m",
 };
 
 let verbose = false;
 
-function log(message, color = 'reset') {
+function log(message, color = "reset") {
   if (verbose) {
     console.log(`${colors[color]}${message}${colors.reset}`);
   }
@@ -55,7 +55,7 @@ function logError(message) {
  */
 function validateApiKey() {
   if (!YOUTUBE_API_KEY) {
-    throw new Error('YOUTUBE_API_KEY environment variable is not set');
+    throw new Error("YOUTUBE_API_KEY environment variable is not set");
   }
 }
 
@@ -63,10 +63,10 @@ function validateApiKey() {
  * Safely get description text, with fallback for missing/invalid values
  */
 function getDescription(description) {
-  if (typeof description === 'string' && description.length > 0) {
+  if (typeof description === "string" && description.length > 0) {
     return description.substring(0, 100);
   }
-  return '(No description available)';
+  return "(No description available)";
 }
 
 /**
@@ -147,7 +147,7 @@ async function getChannelFromVideo(videoId) {
       videoTitle: video.snippet.title,
     };
   } catch (error) {
-    if (error.message.includes('YouTube API')) {
+    if (error.message.includes("YouTube API")) {
       throw error;
     }
     throw new Error(`Failed to fetch video data: ${error.message}`);
@@ -159,7 +159,7 @@ async function getChannelFromVideo(videoId) {
  */
 async function searchChannelByName(username) {
   // Remove @ symbol if present
-  const cleanUsername = username.replace(/^@/, '');
+  const cleanUsername = username.replace(/^@/, "");
 
   const url = `https://www.googleapis.com/youtube/v3/search?part=id,snippet&q=${encodeURIComponent(cleanUsername)}&type=channel&key=${YOUTUBE_API_KEY}`;
 
@@ -186,7 +186,7 @@ async function searchChannelByName(username) {
       description: item.snippet.description,
     }));
   } catch (error) {
-    if (error.message.includes('YouTube API')) {
+    if (error.message.includes("YouTube API")) {
       throw error;
     }
     throw new Error(`Failed to search for channel: ${error.message}`);
@@ -223,7 +223,7 @@ async function getChannelById(channelId) {
       description: channel.snippet.description,
     };
   } catch (error) {
-    if (error.message.includes('YouTube API')) {
+    if (error.message.includes("YouTube API")) {
       throw error;
     }
     throw new Error(`Failed to fetch channel data: ${error.message}`);
@@ -234,68 +234,68 @@ async function main() {
   const args = process.argv.slice(2);
 
   if (args.length === 0) {
-    log('Usage: node scripts/extract-youtube-channel-id.js <input> [--verbose]', 'yellow');
-    log('', 'reset');
-    log('Where <input> can be:', 'blue');
-    log('  - YouTube video URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'blue');
-    log('  - YouTube short URL: https://youtu.be/dQw4w9WgXcQ', 'blue');
-    log('  - YouTube live URL: https://www.youtube.com/live/dQw4w9WgXcQ', 'blue');
-    log('  - Channel URL: https://www.youtube.com/@gianpaj', 'blue');
-    log('  - Channel username: lexfridman or @lexfridman', 'blue');
-    log('  - Channel ID: UC2D6eRvCeMtcF5OGHf1-trw', 'blue');
-    log('', 'reset');
-    log('Options:', 'blue');
-    log('  --verbose - Output detailed information instead of just the channel ID', 'blue');
-    log('', 'reset');
-    log('Environment variable required: YOUTUBE_API_KEY', 'yellow');
+    log("Usage: node scripts/extract-youtube-channel-id.js <input> [--verbose]", "yellow");
+    log("", "reset");
+    log("Where <input> can be:", "blue");
+    log("  - YouTube video URL: https://www.youtube.com/watch?v=dQw4w9WgXcQ", "blue");
+    log("  - YouTube short URL: https://youtu.be/dQw4w9WgXcQ", "blue");
+    log("  - YouTube live URL: https://www.youtube.com/live/dQw4w9WgXcQ", "blue");
+    log("  - Channel URL: https://www.youtube.com/@gianpaj", "blue");
+    log("  - Channel username: lexfridman or @lexfridman", "blue");
+    log("  - Channel ID: UC2D6eRvCeMtcF5OGHf1-trw", "blue");
+    log("", "reset");
+    log("Options:", "blue");
+    log("  --verbose - Output detailed information instead of just the channel ID", "blue");
+    log("", "reset");
+    log("Environment variable required: YOUTUBE_API_KEY", "yellow");
     process.exit(1);
   }
 
-  verbose = args.includes('--verbose');
+  verbose = args.includes("--verbose");
   const input = args[0].trim();
 
   try {
     validateApiKey();
     if (isChannelId(input)) {
       // Input is already a channel ID, just validate it
-      log(`Input appears to be a channel ID: ${input}`, 'blue');
+      log(`Input appears to be a channel ID: ${input}`, "blue");
       const channelInfo = await getChannelById(input);
 
-      log('\n✅ Channel found:', 'green');
-      log(`   Channel ID: ${channelInfo.channelId}`, 'reset');
-      log(`   Channel Title: ${channelInfo.channelTitle}`, 'reset');
-      log(`   Description: ${getDescription(channelInfo.description)}`, 'reset');
+      log("\n✅ Channel found:", "green");
+      log(`   Channel ID: ${channelInfo.channelId}`, "reset");
+      log(`   Channel Title: ${channelInfo.channelTitle}`, "reset");
+      log(`   Description: ${getDescription(channelInfo.description)}`, "reset");
       logChannelId(channelInfo.channelId);
     } else if (isChannelUrl(input)) {
       // Extract username from channel URL
-      log(`Extracting username from channel URL: ${input}`, 'blue');
+      log(`Extracting username from channel URL: ${input}`, "blue");
 
       const username = extractUsernameFromChannelUrl(input);
       if (!username) {
-        throw new Error('Could not extract username from channel URL');
+        throw new Error("Could not extract username from channel URL");
       }
 
-      log(`Extracted username: ${username}`, 'blue');
+      log(`Extracted username: ${username}`, "blue");
 
       const results = await searchChannelByName(username);
 
       if (results.length === 1) {
         const channel = results[0];
-        log('\n✅ Channel found:', 'green');
-        log(`   Channel ID: ${channel.channelId}`, 'reset');
-        log(`   Channel Title: ${channel.channelTitle}`, 'reset');
-        log(`   Description: ${getDescription(channel.description)}`, 'reset');
+        log("\n✅ Channel found:", "green");
+        log(`   Channel ID: ${channel.channelId}`, "reset");
+        log(`   Channel Title: ${channel.channelTitle}`, "reset");
+        log(`   Description: ${getDescription(channel.description)}`, "reset");
         logChannelId(channel.channelId);
       } else {
-        log(`\n✅ Found ${results.length} channels:`, 'green');
+        log(`\n✅ Found ${results.length} channels:`, "green");
 
         results.forEach((channel, index) => {
-          log(`\n${index + 1}. ${channel.channelTitle}`, 'blue');
-          log(`   Channel ID: ${channel.channelId}`, 'reset');
-          log(`   Description: ${getDescription(channel.description)}`, 'reset');
+          log(`\n${index + 1}. ${channel.channelTitle}`, "blue");
+          log(`   Channel ID: ${channel.channelId}`, "reset");
+          log(`   Description: ${getDescription(channel.description)}`, "reset");
         });
 
-        log('\nTip: Use the exact channel ID for precise results', 'yellow');
+        log("\nTip: Use the exact channel ID for precise results", "yellow");
 
         if (!verbose && results.length > 0) {
           logChannelId(results[0].channelId);
@@ -303,45 +303,45 @@ async function main() {
       }
     } else if (isVideoUrl(input)) {
       // Extract channel ID from video URL
-      log(`Extracting channel ID from video URL: ${input}`, 'blue');
+      log(`Extracting channel ID from video URL: ${input}`, "blue");
 
       const videoId = extractVideoId(input);
       if (!videoId) {
-        throw new Error('Could not extract video ID from URL');
+        throw new Error("Could not extract video ID from URL");
       }
 
-      log(`Extracted video ID: ${videoId}`, 'blue');
+      log(`Extracted video ID: ${videoId}`, "blue");
 
       const videoInfo = await getChannelFromVideo(videoId);
 
-      log('\n✅ Channel found:', 'green');
-      log(`   Video Title: ${videoInfo.videoTitle}`, 'reset');
-      log(`   Channel ID: ${videoInfo.channelId}`, 'reset');
-      log(`   Channel Title: ${videoInfo.channelTitle}`, 'reset');
+      log("\n✅ Channel found:", "green");
+      log(`   Video Title: ${videoInfo.videoTitle}`, "reset");
+      log(`   Channel ID: ${videoInfo.channelId}`, "reset");
+      log(`   Channel Title: ${videoInfo.channelTitle}`, "reset");
       logChannelId(videoInfo.channelId);
     } else {
       // Treat as username/channel name
-      log(`Searching for channel by name: ${input}`, 'blue');
+      log(`Searching for channel by name: ${input}`, "blue");
 
       const results = await searchChannelByName(input);
 
       if (results.length === 1) {
         const channel = results[0];
-        log('\n✅ Channel found:', 'green');
-        log(`   Channel ID: ${channel.channelId}`, 'reset');
-        log(`   Channel Title: ${channel.channelTitle}`, 'reset');
-        log(`   Description: ${getDescription(channel.description)}`, 'reset');
+        log("\n✅ Channel found:", "green");
+        log(`   Channel ID: ${channel.channelId}`, "reset");
+        log(`   Channel Title: ${channel.channelTitle}`, "reset");
+        log(`   Description: ${getDescription(channel.description)}`, "reset");
         logChannelId(channel.channelId);
       } else {
-        log(`\n✅ Found ${results.length} channels:`, 'green');
+        log(`\n✅ Found ${results.length} channels:`, "green");
 
         results.forEach((channel, index) => {
-          log(`\n${index + 1}. ${channel.channelTitle}`, 'blue');
-          log(`   Channel ID: ${channel.channelId}`, 'reset');
-          log(`   Description: ${getDescription(channel.description)}`, 'reset');
+          log(`\n${index + 1}. ${channel.channelTitle}`, "blue");
+          log(`   Channel ID: ${channel.channelId}`, "reset");
+          log(`   Description: ${getDescription(channel.description)}`, "reset");
         });
 
-        log('\nTip: Use the exact channel ID for precise results', 'yellow');
+        log("\nTip: Use the exact channel ID for precise results", "yellow");
 
         if (!verbose && results.length > 0) {
           logChannelId(results[0].channelId);

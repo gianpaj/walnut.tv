@@ -6,11 +6,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { useIsDesktop } from "@/hooks/use-media-query";
 import useVideo from "@/hooks/use-video";
 import { cn } from "@/lib/utils";
@@ -77,10 +73,7 @@ const VideoList = ({
             onClick={() => onSelect(index)}
           >
             <motion.div
-              className={cn(
-                "col-span-1",
-                isActive ? "h-full w-[5px] rounded-lg bg-primary" : "",
-              )}
+              className={cn("col-span-1", isActive ? "h-full w-[5px] rounded-lg bg-primary" : "")}
               layoutId="underline"
             />
             <div className="relative col-span-2">
@@ -93,9 +86,7 @@ const VideoList = ({
                 unoptimized
               />
               {isWatched && (
-                <Badge className="absolute left-1 top-1 text-[10px] leading-none">
-                  WATCHED
-                </Badge>
+                <Badge className="absolute left-1 top-1 text-[10px] leading-none">WATCHED</Badge>
               )}
             </div>
             <div className="col-span-3 px-2">
@@ -108,9 +99,7 @@ const VideoList = ({
                 {video.title}
               </span>
               {showAuthor && (
-                <span className="line-clamp-2 text-start text-xs text-primary">
-                  {video.author}
-                </span>
+                <span className="line-clamp-2 text-start text-xs text-primary">{video.author}</span>
               )}
             </div>
           </button>
@@ -126,9 +115,7 @@ const VideoList = ({
 
 const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
   const isDesktop = useIsDesktop();
-  const setCurrentVideoWatching = useVideo(
-    (state) => state.setCurrentVideoWatching,
-  );
+  const setCurrentVideoWatching = useVideo((state) => state.setCurrentVideoWatching);
   const addToClickedVideos = useVideo((state) => state.addToClickedVideos);
   const addToWatchedVideos = useVideo((state) => state.addToWatchedVideos);
 
@@ -154,13 +141,7 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
       addToClickedVideos(next.youtubeId);
       addToWatchedVideos(next.youtubeId);
     },
-    [
-      videos,
-      urlPrefix,
-      setCurrentVideoWatching,
-      addToClickedVideos,
-      addToWatchedVideos,
-    ],
+    [videos, urlPrefix, setCurrentVideoWatching, addToClickedVideos, addToWatchedVideos],
   );
 
   // select() writes history and the watched store, so it must not run inside a
@@ -260,23 +241,12 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
 
   if (isDesktop) {
     return (
-      <ResizablePanelGroup
-        direction="horizontal"
-        className="min-h-[200px] rounded-lg border"
-      >
+      <ResizablePanelGroup direction="horizontal" className="min-h-[200px] rounded-lg border">
         <ResizablePanel defaultSize={25}>
-          <VideoList
-            videos={videos}
-            activeIndex={index}
-            onSelect={select}
-            className="h-screen"
-          />
+          <VideoList videos={videos} activeIndex={index} onSelect={select} className="h-screen" />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel
-          defaultSize={75}
-          className="flex flex-col justify-between"
-        >
+        <ResizablePanel defaultSize={75} className="flex flex-col justify-between">
           {player}
           <Footer />
         </ResizablePanel>
@@ -290,13 +260,7 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
   return (
     <>
       {player}
-      <VideoList
-        videos={videos}
-        activeIndex={index}
-        onSelect={select}
-        showAuthor
-        scroll={false}
-      />
+      <VideoList videos={videos} activeIndex={index} onSelect={select} showAuthor scroll={false} />
       <Footer />
     </>
   );

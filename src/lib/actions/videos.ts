@@ -1,5 +1,4 @@
 import "server-only";
-
 import { fetchRedditVideos } from "@/lib/actions/reddit";
 import { fetchYouTubeVideos } from "@/lib/actions/youtube";
 import type { Channel } from "@/lib/data";
@@ -16,9 +15,7 @@ export interface ChannelVideosResult {
  * site does. Settled rather than all-or-nothing: if Reddit is unreachable the
  * YouTube half should still render, and vice versa.
  */
-export async function fetchChannelVideos(
-  channel: Channel,
-): Promise<ChannelVideosResult> {
+export async function fetchChannelVideos(channel: Channel): Promise<ChannelVideosResult> {
   const [reddit, youtube] = await Promise.allSettled([
     fetchRedditVideos(channel),
     fetchYouTubeVideos(channel),
@@ -26,10 +23,7 @@ export async function fetchChannelVideos(
 
   for (const result of [reddit, youtube]) {
     if (result.status === "rejected") {
-      console.error(
-        `Error fetching videos for /${channel.title}:`,
-        result.reason,
-      );
+      console.error(`Error fetching videos for /${channel.title}:`, result.reason);
     }
   }
 

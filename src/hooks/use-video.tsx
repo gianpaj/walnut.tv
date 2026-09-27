@@ -27,9 +27,7 @@ function readLegacyWatchedVideos(): string[] {
     const raw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
     if (!raw) return [];
     const parsed: unknown = JSON.parse(raw);
-    return Array.isArray(parsed)
-      ? parsed.filter((id): id is string => typeof id === "string")
-      : [];
+    return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === "string") : [];
   } catch {
     return [];
   }
@@ -82,10 +80,7 @@ const useVideo = create(
         return {
           ...currentState,
           ...persisted,
-          watchedVideos: union(
-            currentState.watchedVideos,
-            persisted.watchedVideos ?? [],
-          ),
+          watchedVideos: union(currentState.watchedVideos, persisted.watchedVideos ?? []),
         };
       },
     },

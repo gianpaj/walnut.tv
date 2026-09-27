@@ -13,11 +13,7 @@ interface Props {
 const GoBackButton = (props: Props) => {
   const router = useRouter();
   return (
-    <Button
-      className={cn(props.className)}
-      onClick={() => router.back()}
-      variant={"default"}
-    >
+    <Button className={cn(props.className)} onClick={() => router.back()} variant={"default"}>
       <ArrowLeftIcon className="mr-2 h-4 w-4" />
       Go Back
     </Button>
