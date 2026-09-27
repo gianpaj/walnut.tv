@@ -1,17 +1,16 @@
 /** @satisfies {import('next').NextConfig} */
 const nextConfig = {
+  // The legacy SPA shim needs the raw query, before Next decodes and reserializes it.
+  skipProxyUrlNormalize: true,
   experimental: {
     useTypeScriptCli: true,
   },
   async redirects() {
-    return [
-      { source: "/", destination: "/hustle", permanent: false },
-      ...["reddit", "curious", "docus"].map((category) => ({
-        source: `/${category}/:videoId?`,
-        destination: "/",
-        permanent: true,
-      })),
-    ];
+    return ["reddit", "curious", "docus"].map((category) => ({
+      source: `/${category}/:videoId?`,
+      destination: "/",
+      permanent: true,
+    }));
   },
   images: {
     remotePatterns: [
