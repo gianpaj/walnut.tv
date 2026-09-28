@@ -34,18 +34,23 @@ describe("migration redirects", () => {
     );
   });
 
-  it("restores a shim's query without forwarding its wrapper parameters", () => {
-    assert.equal(
-      redirect("?p=/ai&q=v=video-id~and~tag=a%26b~and~tag=c+d&utm_source=outer").headers.get(
-        "location",
-      ),
-      `${ORIGIN}/ai?v=video-id&tag=a%26b&tag=c+d`,
-    );
+  it("hands raw and platform-normalized shim requests to the browser decoder", () => {
+    for (const search of [
+      "?p=/ai&q=v=video-id~and~tag=a%26b~and~tag=c+d",
+      "?p=%2Fai&q=v%3Dvideo-id~and~tag%3Da%26b~and~tag%3Dc%20d",
+      "?p=",
+      "?p=//external.invalid",
+      "?p=/ai%GG",
+    ]) {
+      const response = redirect(search);
+      assert.equal(response.headers.get("x-middleware-next"), "1");
+      assert.equal(response.headers.get("location"), null);
+    }
   });
 
   it("omits a fragment in Location so the browser inherits the original fragment", () => {
-    const response = redirect("?p=/r/videos/post-id&q=sort=hot#player");
-    assert.equal(response.headers.get("location"), `${ORIGIN}/r/videos/post-id?sort=hot`);
+    const response = redirect("?v=video-id#player");
+    assert.equal(response.headers.get("location"), `${ORIGIN}/hustle?v=video-id`);
   });
 
   it("redirects only the retired categories and their video links home", async () => {
@@ -59,9 +64,9 @@ describe("migration redirects", () => {
     );
   });
 
-  it("restores retired and unknown destinations for the existing redirect/404 rules", () => {
+  it("hands retired and unknown shim paths to the same browser decoder", () => {
     for (const path of ["/reddit", "/curious/video-id", "/docus/video-id", "/unknown/video-id"]) {
-      assert.equal(redirect(`?p=${path}`).headers.get("location"), ORIGIN + path);
+      assert.equal(redirect(`?p=${path}`).headers.get("x-middleware-next"), "1");
     }
   });
 });

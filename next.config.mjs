@@ -1,6 +1,6 @@
 /** @satisfies {import('next').NextConfig} */
 const nextConfig = {
-  // The legacy SPA shim needs the raw query, before Next decodes and reserializes it.
+  // Avoid Next's URL normalization for ordinary homepage redirects.
   skipProxyUrlNormalize: true,
   experimental: {
     useTypeScriptCli: true,
