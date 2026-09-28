@@ -15,11 +15,32 @@ records a protected deployment of `4a33f66`, deployed legacy-link checks and
 mobile-menu evidence. Hosted feeds are blocked by YouTube access denial; full
 browser confirmation and cutover gates remain open.
 
+## Remaining work at a glance
+
+**Completed:** homepage/retired-route policy (R1), legacy links (R2), pending
+navigation (U1), feed error handling (D1), duration parsing (D2), watched-history
+fixtures (B4), and local metadata/assets acceptance (L4). Vercel configuration
+and a protected Preview deployment are complete. Frozen install, channel checks,
+typecheck, lint, 137 tests and production builds passed for `4a33f66`.
+
+| Remaining work       | Checklist           | What is needed                                                                                                                        |
+| -------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Working hosted feeds | L1/L2               | Resolve Preview YouTube access denial, redeploy and verify real feeds; finish secret-exposure checks                                  |
+| Browser acceptance   | U2/U3, B0–B3, B5–B7 | Finish scroll/menu checks, player lifecycle/controls, loaded-route checks and paired screenshots across themes and viewport sizes     |
+| Product decisions    | P1/P3               | Choose source ordering; decide whether to retain the resizable sidebar and require playback-position continuity across layout changes |
+| Cache and quota      | L3                  | Measure Vercel cache sharing/persistence and upstream usage across visits, cold starts and redeploys                                  |
+| Analytics            | L5                  | Select the intended property/integrations, exclude preview traffic and verify navigation events without duplicates                    |
+| Release              | L6/L7               | Complete final-revision validation, review Git deployment policy, update the PR and document cutover/rollback                         |
+
+**Paused, not failed:** Reddit vote/filter/feed parity (P2 and Reddit portions of
+B6/B7) and live OAuth checks require approved API access. Keep Reddit disabled.
+Disabled-route behavior and absence of Reddit requests remain release requirements.
+
 ## Baseline
 
-The 2026-09-27 audit compares local `dev` (`b7281fa`) with `master` (`561d929`).
-PR #325 has head `962fbcb`; its `src/` tree matches the local branch, but its
-channel configuration differs. See the [audit note](./.agents/notes/implemented/migration/2026-09-27-parity-audit.md)
+The 2026-09-27 audit baseline is local `dev` (`b7281fa`), `master` (`561d929`)
+and PR #325 head `962fbcb`. The audit records matching local/PR `src/` trees
+and differing channel configurations; these are baseline revisions, not current heads. See the [audit note](./.agents/notes/implemented/migration/2026-09-27-parity-audit.md)
 for evidence, validation results, and preview availability.
 
 `channels.js` contains three YouTube categories: `hustle`, `ai`, and `crypto`.
@@ -55,7 +76,7 @@ playlist items and video details at two hours. The disabled Reddit implementatio
 retains ten-minute listing revalidation and per-instance OAuth token reuse.
 There is no Reddit browser fallback and no three-channel YouTube cap.
 
-## Confirmed gaps
+## Implementation and targeted acceptance
 
 ### P0 — Landing route and link compatibility
 
@@ -154,7 +175,9 @@ revision, browser and result. Unit coverage does not establish browser parity.
       back to the first video when it leaves the feed matches legacy behavior.
       Local route/404 fixtures pass. Back/Forward restores the selected video
       from the history URL rather than cached page props; confirmation passed.
-      Logo interaction and the reviewed deployment still need acceptance.
+      Vercel checks cover home navigation, category error pages, Reddit unavailable
+      routes, unknown-route HTTP 404s and legacy-link decoding. Loaded deep links,
+      logo interaction and the full routing matrix still need hosted acceptance.
 - [ ] **B2: Player lifecycle.** Select before the IFrame API loads and between
       player construction and `onReady`; the latest selection must win without
       throwing. `VideoPlayer` gates cueing on readiness and synchronizes the latest
@@ -164,7 +187,10 @@ revision, browser and result. Unit coverage does not establish browser parity.
 - [ ] **B3: Playback and controls.** Play/pause, fullscreen, source links,
       keyboard arrows outside editable fields, prev/next boundaries and skipping
       removed/private/blocked videos. End-of-video must not advance automatically:
-      autoplay-next is disabled in both implementations.
+      autoplay-next is disabled in both implementations. Local real-player checks
+      passed Play advancing beyond two seconds, pause and fullscreen. Complete
+      the remaining controls and blocked-video/end behavior on the reviewed revision;
+      hosted playback is blocked by YouTube access denial.
 - [x] **B4: Watched history.** Local fixtures passed all four seeds, union,
       duplicate suppression, reload and intact legacy storage. Seed legacy `videosWatched` only, new
       `video-storage` only, both keys and malformed legacy JSON. Verify the union
@@ -180,9 +206,12 @@ revision, browser and result. Unit coverage does not establish browser parity.
       newest-first sorting, duration boundary, missing thumbnail variants,
       Reddit hot/vote filters, multiple subreddits, mixed Reddit/YouTube results
       and duplicates. Resolve P1/P2 before asserting exact ordering/filter parity.
-- [ ] **B7: Failure states.** Exercise D1 and slow-source navigation. A single
-      rejected subreddit currently rejects the whole Reddit source (`Promise.all`);
-      verify the consequence and decide whether finer isolation is needed.
+- [ ] **B7: Failure states.** D1 feed-state fixtures and U1 slow-source
+      navigation checks passed; deployed categories render API-denial messages.
+      Include these cases in the complete final-revision browser run. Reddit
+      isolation checks are paused: one rejected subreddit rejects the whole
+      Reddit source (`Promise.all`); decide whether finer isolation is needed
+      before re-enabling Reddit.
 
 ## Release gates
 
@@ -191,6 +220,9 @@ revision, browser and result. Unit coverage does not establish browser parity.
       app, but all categories show YouTube access denial. Fix Preview API access
       and verify real feeds before closing this gate. See the Vercel note for
       deployment evidence and README for the Git-build policy.
+  - [x] Select Vercel and configure Node 24, frozen pnpm installation and Next build.
+  - [x] Deploy reviewed source as a protected Preview and verify app responses.
+  - [ ] Verify successful real feeds and playback from the Preview host.
 - [ ] **L2: Upstream access and secrets.** Verify YouTube key restrictions and
       API-denial behavior from the deployment host. Confirm disabled Reddit paths
       make no requests. Reddit OAuth and token-renewal verification require API
@@ -207,7 +239,9 @@ revision, browser and result. Unit coverage does not establish browser parity.
       channel/deep-link and `?v=` canonicals, inherited Open Graph/Twitter images,
       favicon/manifest/icon URLs and the category-only sitemap. Reddit pages set
       `noindex, follow` while allowing crawling. Sixteen focused tests cover
-      metadata inheritance, canonical handling and asset files. Recheck on the host at cutover.
+      metadata inheritance, canonical handling and asset files. Vercel spot checks
+      also passed manifest/sitemap/robots responses, social images and Reddit
+      noindex. Recheck the full metadata/asset matrix on the host at cutover.
 - [ ] **L5: Analytics.** Verify initial loads and history-based navigation in
       GA4 realtime/debug reporting. Confirm which of the two configured properties
       is used and whether both integrations are wanted; avoid duplicate counting
@@ -219,6 +253,10 @@ revision, browser and result. Unit coverage does not establish browser parity.
       channel validation, typecheck, lint, 137 tests and build passed. The browser
       harness exists in `scripts/browser-acceptance/`; its full confirmation run
       is incomplete, so this release gate remains open.
+  - [x] Pass frozen install, channel validation, typecheck, lint, 137 tests and
+        production build for deployed source `4a33f66`; Vercel build also passes.
+  - [ ] Complete the browser confirmation suite and rerun validation for any
+        subsequent code changes on the release revision.
 - [ ] **L7: Cutover and rollback.** Review current `master` channel changes,
       finish or explicitly accept the open parity items, update the PR summary,
       and record the deployment target, redirect policy and rollback procedure.
