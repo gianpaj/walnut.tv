@@ -5,9 +5,11 @@
 Code revision: `aaf651d75933b16532150a3478835762185a1b58`.
 Release status remains **blocked**; local verification is not host acceptance.
 
-- R2 uses a root-only Next proxy to decode the legacy SPA query before the
-  default redirect. Raw escapes are preserved; unsafe destinations go to Hustle.
-  A root config redirect would run too early. Retired categories still go home.
+- R2 uses a root-only Next proxy to distinguish legacy links from ordinary
+  homepage requests. `LegacyRedirect` decodes the raw browser query, preserving
+  escapes and fragments; unsafe destinations go to Hustle. A root config redirect
+  would run too early. See the [Vercel note](./2026-09-28-vercel-preview/README.md)
+  for the host-normalization constraint and deployed verification.
 - D1 returns allowlisted issue codes alongside successful videos. Empty results
   are not quota failures; partial feeds retain playable results. Raw upstream
   errors and request URLs are not exposed. Cache durations are unchanged.
@@ -90,9 +92,10 @@ PR head inspected: `2e48f0e4e0ee33ef22a9b8fcedcb2acfaddd6d0b`.
   Build/publish/runtime settings need inspection; exact cause is unconfirmed.
 - Vercel deployment `AJs1XvHeA7SXN11CQgjEEmBLEtP4`: canceled by its Ignored Build
   Step. The dev alias points to a February 2024 deployment and requires login.
-- Choose the preview host before changing shared hosting settings. Deployment-host
-  credentials, cache sharing/quota, analytics property selection and exclusion of
-  preview traffic, cutover and rollback remain unverified.
+- Vercel is the selected host. The [protected preview verification](./2026-09-28-vercel-preview/README.md)
+  records the deployed revision and YouTube-denial blocker. Cache sharing/quota,
+  analytics property selection and exclusion of preview traffic, cutover and
+  rollback remain unverified.
 - Local analytics requests reached both configured properties during diagnostic
   visits. Fixture entry-point runs block analytics scripts. This is not GA4
   realtime verification; filtering nonproduction traffic remains an L5 gate.

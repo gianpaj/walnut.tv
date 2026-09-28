@@ -132,7 +132,15 @@ switch and re-enabling requirements.
 
 ## Deployment
 
-Automatically on Netlify. Vercel is under consideration for the cutover.
+Production runs on Netlify from `master`. Vercel is the selected Next.js host;
+`vercel.json` configures frozen pnpm installation and the production build on
+Node 24. Use explicit Preview deployments until the cutover gates pass.
+
+Vercel's project maps `dev` to production and uses an Ignored Build Step of
+`exit 0`. Review that branch policy before enabling Git deployments; do not
+remove the ignore command expecting `dev` to create previews. See the
+[preview verification note](./.agents/notes/implemented/migration/2026-09-28-vercel-preview/README.md)
+and [release gates](./MIGRATION-PLAN.md#release-gates).
 
 ## License
 

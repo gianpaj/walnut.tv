@@ -9,9 +9,11 @@ is not browser verification. Check off an open item only after its acceptance
 criteria pass, or record an explicit decision to accept the difference.
 
 The [September 27 verification note](./.agents/notes/implemented/migration/2026-09-27-parity-verification.md)
-records local production-feed/playback checks, fixture coverage, paired screenshots
-and remaining blockers. Five code-fix chunks are committed. The full browser
-confirmation is incomplete; neither hosted preview serves the reviewed code.
+records local production-feed/playback checks, fixture coverage and paired screenshots.
+The [Vercel preview note](./.agents/notes/implemented/migration/2026-09-28-vercel-preview/README.md)
+records a protected deployment of `4a33f66`, deployed legacy-link checks and
+mobile-menu evidence. Hosted feeds are blocked by YouTube access denial; full
+browser confirmation and cutover gates remain open.
 
 ## Baseline
 
@@ -64,12 +66,14 @@ There is no Reddit browser fallback and no three-channel YouTube cap.
       retired-category rules live in `next.config.mjs`.
       HTTP and browser routing checks passed; loaded-feed and logo-interaction
       acceptance remain part of B0/B1/B3. See the [routing verification note](./.agents/notes/implemented/migration/2026-09-27-home-and-retired-routes.md).
-- [x] **R2: Handle legacy SPA-shim links.** The root proxy decodes
-      `/?p=/path&q=...` and `~and~`, preserving supported paths, queries and
-      inherited fragments. Unsafe/malformed destinations fall back to Hustle;
-      retired-category and unknown-route policies remain intact. Unit, HTTP and
-      local browser checks cover deep links, `?v=`, `?p=`, malformed input and
-      retired categories. Video selection retains query/fragment data.
+- [x] **R2: Handle legacy SPA-shim links.** The root proxy passes `?p=` requests
+      to `LegacyRedirect`, which decodes the raw browser query before navigating.
+      This preserves `/?p=/path&q=...`, `~and~`, escapes and fragments despite
+      Vercel's lossy server-query normalization. JavaScript is required, matching
+      the legacy SPA. Unsafe/malformed destinations fall back to Hustle;
+      retired-category and unknown-route policies remain intact. Unit and local
+      browser checks plus nine deployed legacy-link checks pass. Ordinary root
+      and retired-category redirects retain their HTTP behavior.
 
 ### P1 — User-visible behavior and correctness
 
@@ -83,9 +87,10 @@ There is no Reddit browser fallback and no three-channel YouTube cap.
       the desktop clipping regression. Confirm Previous past the fold and the
       short-viewport/orientation matrix in a stable browser before sign-off.
 - [ ] **U3: Name the mobile menu control.** The trigger is named
-      “Open navigation menu.” Keyboard opening, Escape/focus return and category
-      selection passed in the initial batch. The confirmation run timed out at
-      menu-close/focus restoration; repeat it and capture a settled menu image.
+      “Open navigation menu.” Deployed keyboard opening, Escape/focus return and
+      a settled menu screenshot passed. A repeat run selected AI by keyboard but
+      stalled the dialog animation; confirm visible dismissal and focus return
+      after category selection in a stable browser before sign-off.
 - [x] **D1: Distinguish empty, failed, quota-exhausted and partial feeds.**
       Fetchers return successful videos plus allowlisted issue codes. Only explicit
       quota reasons produce quota messages; no raw upstream errors reach the UI.
@@ -138,9 +143,10 @@ revision, browser and result. Unit coverage does not establish browser parity.
       note. Note blocked comparisons rather than treating them as passes.
       Pixel-identical styling is not required; explain intentional differences.
       Screenshots complement the interaction checks below; they do not replace them.
-      Paired loaded screenshots were captured and inspected locally. The menu
-      capture is mid-animation, not a pass; final-build highlight/watched, menu,
-      theme and short-viewport comparisons remain open.
+      Paired loaded screenshots were captured and inspected locally. A settled
+      deployed menu screenshot is inspected in the Vercel note; it is not a paired
+      comparison. Final-build highlight/watched, menu, theme and short-viewport
+      comparisons remain open.
 
 - [ ] **B1: Routing.** Every configured category, both deep-link route shapes,
       `?v=`, reload, navbar changes, Back/Forward, and unknown-channel HTTP 404s.
@@ -180,11 +186,11 @@ revision, browser and result. Unit coverage does not establish browser parity.
 
 ## Release gates
 
-- [ ] **L1: Working deployment preview.** Netlify's successful status serves
-      generic 404s; Vercel canceled the reviewed build via its Ignored Build Step.
-      Select Netlify or Vercel, configure
-      Next.js runtime support and server-only credentials, and produce a preview
-      of the revision being reviewed. A successful build is not API verification.
+- [ ] **L1: Working deployment preview.** Vercel is selected. A protected
+      explicit Preview deployment of `4a33f66` is Ready and serves the reviewed
+      app, but all categories show YouTube access denial. Fix Preview API access
+      and verify real feeds before closing this gate. See the Vercel note for
+      deployment evidence and README for the Git-build policy.
 - [ ] **L2: Upstream access and secrets.** Verify YouTube key restrictions and
       API-denial behavior from the deployment host. Confirm disabled Reddit paths
       make no requests. Reddit OAuth and token-renewal verification require API
@@ -222,10 +228,10 @@ revision, browser and result. Unit coverage does not establish browser parity.
 
 ## Suggested restart order
 
-1. Restore a usable preview with working feeds (L1/L2).
-2. Fix R2, D1/D2 and U1–U3 in small tested changes; settle P1/P2 explicitly.
-3. Run the browser checklist, prioritizing player readiness and watched history.
-4. Collect cache, metadata and analytics evidence, then complete cutover gates.
+1. Resolve Vercel Preview YouTube access and verify working feeds (L1/L2).
+2. Confirm U2/U3 and settle P1/P3; keep P2 paused while Reddit is disabled.
+3. Finish the browser checklist on the reviewed revision, including screenshot parity.
+4. Collect cache and analytics evidence, then complete cutover gates.
 
 Auth, custom channels, native Reddit playback and sharing UI are not required
 to replace the working legacy feature set. Do not build adapters, databases or

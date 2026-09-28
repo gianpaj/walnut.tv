@@ -172,5 +172,7 @@ on the deployment host before treating request volume as traffic-independent.
 
 ## Deployment
 
-Netlify today, from `master`. Vercel is under consideration for the cutover —
-see the release gates in `MIGRATION-PLAN.md`.
+Production runs on Netlify from `master`; Vercel is the selected Next.js host.
+Use explicit Preview deployments, not production promotion. Read
+[deployment configuration](./README.md#deployment) before changing Vercel's
+Git-build or branch policy, and follow the release gates in `MIGRATION-PLAN.md`.
