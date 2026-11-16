@@ -262,7 +262,8 @@ revision, browser and result. Unit coverage does not establish browser parity.
       and record the deployment target, redirect policy and rollback procedure.
       Keep the public origin stable to preserve watched history. After cutover,
       check home/deep links, enabled APIs, Reddit's unavailable state, analytics
-      and quota usage in production.
+      and quota usage in production. The proposed order of Netlify, Vercel and
+      DNS changes, and the rollback, are in the [cutover note](./.agents/notes/proposed/migration/2026-11-16-cutover-and-rollback.md).
 
 ## Suggested restart order
 
