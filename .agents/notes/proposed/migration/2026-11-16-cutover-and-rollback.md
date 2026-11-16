@@ -33,7 +33,8 @@ Freeze the legacy site, make Vercel build `master`, then move DNS.
    and `?p=` links on the Vercel production URL before any DNS change.
 5. **Add the domains.** Add `walnut.tv` and `www.walnut.tv` to the Vercel
    project, with `www` redirecting to the apex, as it does today.
-6. **Move DNS.** In Cloudflare, replace both records with the values Vercel
+6. **Move DNS.** In Cloudflare, first record the current type, target and
+   proxy status of the `walnut.tv` and `www` records. Then replace both records with the values Vercel
    shows and set them to DNS only. The origin stays `walnut.tv`, so watched
    history in `localStorage` survives.
 7. **Check production.** Run the L7 checks: home and deep links, legacy links,
@@ -42,8 +43,8 @@ Freeze the legacy site, make Vercel build `master`, then move DNS.
    `js/all.js` (L2), stop Netlify builds or delete the site, and remove the
    unused Bunnyshell webhook.
 
-**Rollback** before step 8: point the Cloudflare records back at Netlify. The
-locked deploy is still published there. While it stays locked, the merge
+**Rollback** before step 8: restore the Cloudflare records recorded in step 6.
+The locked deploy is still published on Netlify. While it stays locked, the merge
 does not need reverting.
 
 ## Alternatives considered
