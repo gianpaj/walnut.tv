@@ -301,7 +301,7 @@ try:
             )
         shot("fixture-watched-storage")
 
-        # Resize the same document across 768px; identity must survive player recreation.
+        # Resize the same document across the 993px layout breakpoint; identity must survive player recreation.
         open_feed("/hustle/fx000000040")
         next_video()
         selected = current_id()
@@ -310,8 +310,8 @@ try:
             (390, 844, "mobile-watched"),
             (390, 568, "short-portrait"),
             (844, 390, "short-landscape"),
-            (767, 844, "below-768"),
-            (768, 844, "at-768"),
+            (992, 844, "below-993"),
+            (993, 844, "at-993"),
             (390, 844, "crossing-mobile"),
         ]:
             browser("set", "viewport", str(width), str(height))
@@ -319,7 +319,7 @@ try:
                 "wait",
                 "--fn",
                 'document.querySelectorAll("[data-fixture-player]").length===1 && playerFixture.current()?.ready && !!document.querySelector("#video-list")?.closest("[data-radix-scroll-area-viewport]")==='
-                + str(width >= 768).lower(),
+                + str(width >= 993).lower(),
             )
             metrics = js("""(() => {
               const row=document.querySelector('#video-list [data-active]').getBoundingClientRect();
@@ -336,7 +336,9 @@ try:
                 metrics["id"] == selected
                 and metrics["players"] == 1
                 and metrics["next"]["height"] > 0
-                and metrics["next"]["bottom"] <= height + 1
+                # A phone in landscape gives the player the full height; its
+                # controls are one scroll below.
+                and (width < 993 and width > height or metrics["next"]["bottom"] <= height + 1)
                 and metrics["title"]["height"] > 0
                 and metrics["documentWidth"] <= width + 1,
                 metrics,
@@ -345,7 +347,7 @@ try:
                 "U2 " + label + " no document movement / desktop selection visible",
                 metrics["scrollY"] == 0
                 and (
-                    width < 768
+                    width < 993
                     or (
                         metrics["row"]["top"] >= 0
                         and metrics["row"]["bottom"] <= height + 1

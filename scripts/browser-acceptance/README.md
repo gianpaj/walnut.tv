@@ -35,7 +35,7 @@ checks and screenshots from the earlier run.
 The suite covers navigation/pending state, player readiness and lifecycle,
 Back/Forward selection, watched-history migration, feed errors, duration
 boundaries, redirects, HTTP 404s, rendered metadata/assets, light/dark themes,
-short portrait/landscape viewports and resizing across 768px.
+short portrait/landscape viewports and resizing across the 993px breakpoint.
 
 The preload intercepts server-side YouTube fetches **before Next's cache** and
 supplies synthetic feeds. The browser uses an instrumented, visibly labelled
