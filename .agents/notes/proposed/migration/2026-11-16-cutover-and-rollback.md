@@ -71,6 +71,9 @@ does not need reverting.
 - Deleting the legacy key before the rollback window ends breaks the rollback
   target. Until step 8 it stays public, as it is today; its API and referrer
   restrictions are what limit abuse.
+- A rollback hides videos watched on Vercel. The Next.js app imports the legacy
+  `videosWatched` key but stores new history under `video-storage`, which the
+  legacy app does not read. History from before the cutover is unaffected.
 - The cause of the Preview's YouTube denial is unconfirmed. A
   referrer-restricted key would explain it; `YOUTUBE_API_REFERER` exists for
   that case.
