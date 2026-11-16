@@ -258,7 +258,10 @@ revision, browser and result. Unit coverage does not establish browser parity.
   - [x] Pass frozen install, channel validation, typecheck, lint, 137 tests and
         production build for deployed source `4a33f66`; Vercel build also passes.
   - [ ] Complete the browser confirmation suite and rerun validation for any
-        subsequent code changes on the release revision.
+        subsequent code changes on the release revision. The fixture suite
+        passed 66 of 66 checks headless for `b07ebd9` with agent-browser 0.38.1,
+        including the U3 keyboard menu checks; it uses synthetic feeds, so real
+        feeds remain unverified.
 - [ ] **L7: Cutover and rollback.** Review current `master` channel changes,
       finish or explicitly accept the open parity items, update the PR summary,
       and record the deployment target, redirect policy and rollback procedure.
