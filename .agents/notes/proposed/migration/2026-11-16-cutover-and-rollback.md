@@ -18,8 +18,9 @@ preview for PR #325 already returns 404 for that reason.
 
 Freeze the legacy site, make Vercel build `master`, then move DNS.
 
-1. **Before merging.** Close L1/L2: the Preview must serve real feeds. Set
-   `YOUTUBE_API_KEY` for Vercel Production as well.
+1. **Before merging.** Close release gates L1–L6, or record in
+   `MIGRATION-PLAN.md` which open items are accepted for launch. The Preview
+   must serve real feeds; set `YOUTUBE_API_KEY` for Vercel Production as well.
 2. **Freeze Netlify.** Use "Lock to stop auto publishing" on the current
    production deploy. walnut.tv keeps serving the legacy app, and that locked
    deploy is the rollback target.
