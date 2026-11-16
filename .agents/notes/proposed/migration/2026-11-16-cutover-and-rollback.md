@@ -21,6 +21,8 @@ Freeze the legacy site, make Vercel build `master`, then move DNS.
 1. **Before merging.** Close release gates L1–L6, or record in
    `MIGRATION-PLAN.md` which open items are accepted for launch. The Preview
    must serve real feeds; set `YOUTUBE_API_KEY` for Vercel Production as well.
+   Confirm the legacy key embedded in `js/all.js` is restricted to the YouTube
+   Data API and `walnut.tv` referrers, since the rollback target still uses it.
 2. **Freeze Netlify.** Use "Lock to stop auto publishing" on the current
    production deploy. walnut.tv keeps serving the legacy app, and that locked
    deploy is the rollback target.
@@ -36,7 +38,7 @@ Freeze the legacy site, make Vercel build `master`, then move DNS.
    history in `localStorage` survives.
 7. **Check production.** Run the L7 checks: home and deep links, legacy links,
    feeds and playback, Reddit's unavailable state, analytics and quota usage.
-8. **After the rollback window.** Rotate the legacy key embedded in
+8. **After the rollback window.** Delete the legacy key embedded in
    `js/all.js` (L2), stop Netlify builds or delete the site, and remove the
    unused Bunnyshell webhook.
 
@@ -65,8 +67,9 @@ does not need reverting.
 
 ## Risks
 
-- Rotating the legacy key before the rollback window ends breaks the rollback
-  target. Rotate it only in step 8.
+- Deleting the legacy key before the rollback window ends breaks the rollback
+  target. Until step 8 it stays public, as it is today; its API and referrer
+  restrictions are what limit abuse.
 - The cause of the Preview's YouTube denial is unconfirmed. A
   referrer-restricted key would explain it; `YOUTUBE_API_REFERER` exists for
   that case.
