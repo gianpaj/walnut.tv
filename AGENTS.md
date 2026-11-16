@@ -166,9 +166,8 @@ on the deployment host before treating request volume as traffic-independent.
 - `src/components/ui/*` comes from shadcn/ui (`components.json`, base colour
   slate). Prefer regenerating over hand-editing.
 - Deliberate version pins, with reasons, in the Next 16 upgrade commit:
-  react-resizable-panels stays on v3 (v4 renamed its exports), Tailwind stays
-  on 3 (v4 is a CSS-first rewrite), tailwind-merge stays on 2 (v3 targets
-  Tailwind 4).
+  Tailwind stays on 3 (v4 is a CSS-first rewrite), tailwind-merge stays on 2
+  (v3 targets Tailwind 4).
 
 ## Deployment
 

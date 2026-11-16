@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { useIsDesktop } from "@/hooks/use-media-query";
 import useVideo from "@/hooks/use-video";
 import { cn } from "@/lib/utils";
@@ -87,10 +86,16 @@ const VideoList = ({
             className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr]"
             onClick={() => onSelect(index)}
           >
-            <motion.div
-              className={cn("col-span-1", isActive ? "h-full w-[5px] rounded-lg bg-primary" : "")}
-              layoutId="underline"
-            />
+            {/* Only the active row may carry the layoutId: when every row shares
+                it, framer-motion hides the marker until the first click. */}
+            <div className="col-span-1">
+              {isActive && (
+                <motion.div
+                  className="h-full w-[5px] rounded-lg bg-primary"
+                  layoutId="active-video"
+                />
+              )}
+            </div>
             <div className="relative col-span-2">
               <Image
                 src={video.thumbnail}
@@ -261,9 +266,15 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
   // a second YouTube player and every onEnded/onError would fire twice.
   const player = (
     <div className="flex w-full flex-col justify-center p-4">
-      {/* Capped by width so 16:9 leaves room for the title and controls; at
-          full width the player alone pushed both below the fold. */}
-      <div className="mx-auto w-full max-w-[calc((100dvh-18rem)*16/9)]">
+      {/* Capped by width so 16:9 fits the viewport height. Desktop also leaves
+          room for the title and controls; the stacked layout scrolls, so it
+          reserves only the navbar and padding. */}
+      <div
+        className={cn(
+          "mx-auto w-full",
+          isDesktop ? "max-w-[calc((100dvh-18rem)*16/9)]" : "max-w-[calc((100dvh-5rem)*16/9)]",
+        )}
+      >
         <VideoPlayer video={video} onEnded={onVideoEnded} onError={goNext} />
       </div>
       {details}
@@ -273,16 +284,18 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
 
   if (isDesktop) {
     return (
-      <ResizablePanelGroup direction="horizontal" className="min-h-0 flex-1 rounded-lg border">
-        <ResizablePanel defaultSize={25}>
-          <VideoList videos={videos} activeIndex={index} onSelect={select} />
-        </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={75} className="flex flex-col justify-between overflow-y-auto">
+      <div className="flex min-h-0 flex-1 rounded-lg border">
+        <VideoList
+          videos={videos}
+          activeIndex={index}
+          onSelect={select}
+          className="w-[400px] shrink-0 border-r"
+        />
+        <div className="flex min-w-0 flex-1 flex-col justify-between overflow-y-auto">
           {player}
           <Footer />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+        </div>
+      </div>
     );
   }
 
