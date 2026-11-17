@@ -19,7 +19,9 @@ async function findEmptyChannels(ids, key) {
   for (let i = 0; i < ids.length; i += BATCH) {
     const batch = ids.slice(i, i + BATCH);
     const url = `${API}?${new URLSearchParams({ part: "statistics", id: batch.join(","), key })}`;
-    const response = await fetch(url);
+    // Same optional header the app sends for a referrer-restricted key.
+    const referer = process.env.YOUTUBE_API_REFERER;
+    const response = await fetch(url, { headers: referer ? { Referer: referer } : {} });
     const body = await response.json().catch(() => ({}));
     // Anything but a channel list (e.g. an HTML error page with status 200)
     // would otherwise read as "every channel is gone".
