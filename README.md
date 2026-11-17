@@ -132,7 +132,11 @@ switch and re-enabling requirements.
 
 ## Deployment
 
-Production runs on Netlify from `master`. Vercel is the selected Next.js host;
+Production runs on Netlify from `master`, behind Cloudflare DNS and proxy.
+Merging `dev` into `master` before the
+[cutover steps](./.agents/notes/proposed/migration/2026-11-16-cutover-and-rollback.md)
+would make Netlify publish the Next.js source as a static site, which 404s.
+Vercel is the selected Next.js host;
 `vercel.json` configures frozen pnpm installation and the production build on
 Node 24. Use explicit Preview deployments until the cutover gates pass.
 

@@ -229,7 +229,8 @@ revision, browser and result. Unit coverage does not establish browser parity.
       API-denial behavior from the deployment host. Confirm disabled Reddit paths
       make no requests. Reddit OAuth and token-renewal verification require API
       approval before re-enabling. Use `YOUTUBE_API_KEY`, inspect client output for
-      unintended secret exposure, and rotate the legacy app's embedded key at cutover.
+      unintended secret exposure, and delete the legacy app's embedded key once the
+      rollback window in the [cutover note](./.agents/notes/proposed/migration/2026-11-16-cutover-and-rollback.md) ends.
 - [ ] **L3: Cache/quota evidence.** Measure repeated and concurrent visits,
       cold starts, redeploys and preview/production isolation against API quota
       usage. With 91 unique populated channels and one effective shared cache,
@@ -267,7 +268,8 @@ revision, browser and result. Unit coverage does not establish browser parity.
       and record the deployment target, redirect policy and rollback procedure.
       Keep the public origin stable to preserve watched history. After cutover,
       check home/deep links, enabled APIs, Reddit's unavailable state, analytics
-      and quota usage in production.
+      and quota usage in production. The proposed order of Netlify, Vercel and
+      DNS changes, and the rollback, are in the [cutover note](./.agents/notes/proposed/migration/2026-11-16-cutover-and-rollback.md).
 
 ## Suggested restart order
 
