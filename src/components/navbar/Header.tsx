@@ -15,7 +15,10 @@ import Logo from "./Logo";
  */
 const Header = () => {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  // Remember where the menu was opened, so any navigation (logo, Back,
+  // choosing a video) closes it without an effect.
+  const [openedOn, setOpenedOn] = useState<string | null>(null);
+  const open = openedOn === pathname;
   const toggleRef = useRef<HTMLButtonElement>(null);
   const current = channels.find((channel) => isActiveChannel(pathname, channel.title));
 
@@ -24,7 +27,7 @@ const Header = () => {
       <NavigationLink
         href={`/${channel.title}`}
         label={channelLabel(channel)}
-        onClick={() => setOpen(false)}
+        onClick={() => setOpenedOn(null)}
         className={cn(
           "block px-[14px] py-[15px] font-semibold uppercase leading-5 hover:text-white max-[992px]:px-1.5 max-[992px]:py-2.5 max-[992px]:text-xs/5",
           current === channel ? "text-white" : "text-negative",
@@ -43,7 +46,7 @@ const Header = () => {
           className="flex w-[86px] flex-col items-center min-[993px]:hidden landscape:hidden"
           onKeyDown={(event) => {
             if (event.key !== "Escape" || !open) return;
-            setOpen(false);
+            setOpenedOn(null);
             toggleRef.current?.focus();
           }}
         >
@@ -52,7 +55,7 @@ const Header = () => {
             type="button"
             aria-expanded={open}
             aria-controls="category-menu"
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpenedOn(open ? null : pathname)}
             className="my-2 rounded border border-[#333] px-2.5 py-[9px] uppercase text-white hover:bg-[#333] focus:bg-[#333]"
           >
             <span className="sr-only">Category </span>
