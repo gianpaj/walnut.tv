@@ -106,13 +106,16 @@ dark (`defaultTheme="dark"`). The legacy site is dark only.
 | Selected + watched 390×844  | [b0-legacy-390-selected-watched.png](./b0-legacy-390-selected-watched.png)   | [b0-new-390-selected-watched-dark.png](./b0-new-390-selected-watched-dark.png)     |
 | Menu open, 390×844          | [b0-legacy-390-menu-open.png](./b0-legacy-390-menu-open.png)                 | [dark](./b0-new-390-menu-open-dark.png), [light](./b0-new-390-menu-open-light.png) |
 
-Both selected states show `FmvRhxq2oHE` watched and `ng7zKKp60Q4` active.
+Both selected states show `FmvRhxq2oHE` watched and `ng7zKKp60Q4` active. The
+legacy pair has a second watched row, `h_aA1-R70E8`: legacy marks its first
+video watched on load, and that video is not in the new feed.
 
 Feed differences, not UI: legacy hustle has 62 videos, new has 68, 61 shared.
 Legacy leads with `h_aA1-R70E8` (a16z), which the new feed lacks; the new feed
 has seven videos legacy lacks, including `LPKLhoS4kN8` and `wOib5fHqOZQ`.
-`dev` also drops one hustle channel (`UCfRtwc6K_VU9N4OjNnU2P7g`) relative to
-`master`. Whether the missing a16z video is cache age was not determined.
+`dev` deliberately drops three channels that `master` lists: hustle
+`UCfRtwc6K_VU9N4OjNnU2P7g` and ai `UCxRU9z5Jm-r11oQpYFtNQ8g` have no public
+videos, and crypto `UCdzMx7Zhy5va5End1-XJFbA` no longer exists. Whether the missing a16z video is cache age was not determined.
 
 UI differences, all visible in the pairs:
 
@@ -127,9 +130,15 @@ UI differences, all visible in the pairs:
   [parity verification note](../2026-09-27-parity-verification.md).
 - Mobile menu: a left sheet whose three links are spread over the full screen
   height (a grid sized to `100svh`), against legacy's compact dropdown.
-- Selection writes `/{category}/{id}`; legacy stays at `/`.
+- Selection writes `/{category}/{id}`; legacy stays at `/`. Opening
+  `/hustle?v=X` leaves a redundant `?v=`: `/hustle/X?v=X`.
+- Light theme is reachable only through `localStorage.theme`; legacy is dark
+  only.
 
-None blocks use. The menu spacing is the only one that looks unintended.
+None blocks use. The owner decided on 2026-11-17: keep the app dark only, drop
+the redundant `?v=`, keep updating the URL on selection for sharing, and match
+legacy visually everywhere else, keeping the mobile list below the player and
+removing the desktop Prev/Next, counter and footer.
 
 ## Alternatives considered
 
@@ -148,7 +157,7 @@ None blocks use. The menu spacing is the only one that looks unintended.
   player error was tested); touch and physical-device behavior; a legacy
   short-viewport and landscape pair; loading, empty and error pairs against
   legacy.
-- B0 needs a product decision on the listed differences, mainly the mobile
-  menu spacing and the mobile list, before sign-off.
+- B0 stays open until the legacy visual parity change lands and the pairs
+  are captured again.
 - The light theme has no user entry point, so its screenshots document an
   unreachable state.
