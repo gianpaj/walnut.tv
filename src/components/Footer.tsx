@@ -1,26 +1,23 @@
-import React from "react";
-import Link from "next/link";
-
-import { Button } from "@/components/ui/button";
+const LINKS = [
+  ["Terms of Service", "https://telegra.ph/Terms-of-Use-10-20-2"],
+  ["Privacy Policy", "https://telegra.ph/Privacy-Policy-10-31-7"],
+  ["Contact Us", "mailto:hi@walnut.tv"],
+] as const;
 
 const Footer = () => {
   return (
-    <div className="mt-6 flex flex-col justify-center border-t md:flex-row">
-      <div>
-        <Link href="https://telegra.ph/Terms-of-Use-10-20-2" target="_blank">
-          <Button variant={"link"}>Terms of Service</Button>
-        </Link>
-      </div>
-      <div>
-        <Link href="https://telegra.ph/Privacy-Policy-10-31-7" target="_blank">
-          <Button variant={"link"}>Privacy Policy</Button>
-        </Link>
-      </div>
-      <div>
-        <Link href="mailto:hi@walnut.tv" target="_blank">
-          <Button variant={"link"}>Contact Us</Button>
-        </Link>
-      </div>
+    <div className="flex flex-wrap gap-x-2.5">
+      {LINKS.map(([label, href]) => (
+        <a
+          key={label}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#8e8c8c] hover:text-negative"
+        >
+          {label}
+        </a>
+      ))}
     </div>
   );
 };
