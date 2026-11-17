@@ -312,7 +312,7 @@ try:
         shot("fixture-watched-storage")
 
         # Resize the same document across the 993px layout breakpoint; the
-        # player must survive without being destroyed or rebuilt.
+        # player must survive without being destroyed, rebuilt or moved.
         open_feed("/hustle/fx000000040")
         next_video()
         selected = current_id()
@@ -340,6 +340,7 @@ try:
               const viewport=document.querySelector('#video-list').closest('[data-radix-scroll-area-viewport]');
               return {id:playerFixture.current().id,players:document.querySelectorAll('[data-fixture-player]').length,
                 built:playerFixture.players.length,destroyed:playerFixture.calls.filter(c=>c[0]==='destroy').length,
+                detached:playerFixture.detached,
                 row:row.toJSON(),next:next.toJSON(),title:title.toJSON(),scrollY,
                 documentWidth:document.documentElement.scrollWidth,width:innerWidth,height:innerHeight,
                 listBottom:viewport?.getBoundingClientRect().bottom,theme:document.documentElement.className};
@@ -350,6 +351,7 @@ try:
                 and metrics["players"] == 1
                 and metrics["built"] == built
                 and metrics["destroyed"] == 0
+                and metrics["detached"] == 0
                 and metrics["next"]["height"] > 0
                 # A phone in landscape gives the player the full height; its
                 # controls are one scroll below.

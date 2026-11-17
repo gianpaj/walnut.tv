@@ -3,7 +3,7 @@
   if (location.hostname !== "127.0.0.1") return;
   const query = new URLSearchParams(location.search);
   const api = query.get("testApi");
-  const f = (window.playerFixture = { calls: [], players: [], apiRequested: false });
+  const f = (window.playerFixture = { calls: [], players: [], apiRequested: false, detached: 0 });
   f.install = () => {
     window.YT = {
       PlayerState: { ENDED: 0 },
@@ -17,6 +17,12 @@
           this.node.style.cssText = "height:100%;background:#17202c;color:white;padding:24px";
           this.node.textContent = "YOUTUBE TEST DOUBLE — " + this.id;
           target.replaceWith(this.node);
+          // A real iframe reloads when moved, so count removals of its node.
+          const node = this.node;
+          new MutationObserver((records) => {
+            for (const r of records)
+              for (const n of r.removedNodes) if (n === node || n.contains?.(node)) f.detached++;
+          }).observe(document.documentElement, { childList: true, subtree: true });
           f.players.push(this);
           f.calls.push(["construct", this.id]);
           if (query.get("testReady") !== "manual") queueMicrotask(() => this.makeReady());
