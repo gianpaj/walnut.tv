@@ -34,10 +34,15 @@ function replaceVideoUrl(urlPrefix: string, videoId: string) {
   if (url.href !== window.location.href) window.history.replaceState(null, "", url);
 }
 
-/** The legacy list's cut: titles over 90 characters end at a word within 80. */
+/**
+ * The legacy list's cut: titles over 90 characters end at a word within 80.
+ * Legacy left only "..." when the first 80 had no space (common in CJK
+ * titles); those are cut at 80 characters instead.
+ */
 function shortTitle(title: string) {
   if (title.length <= 90) return title;
-  return `${title.trim().substring(0, 80).split(" ").slice(0, -1).join(" ")}...`;
+  const head = title.trim().substring(0, 80);
+  return `${head.split(" ").slice(0, -1).join(" ") || head}...`;
 }
 
 interface VideoListProps {
