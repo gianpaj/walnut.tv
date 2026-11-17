@@ -246,11 +246,13 @@ revision, browser and result. Unit coverage does not establish browser parity.
       also passed manifest/sitemap/robots responses, social images and Reddit
       noindex. Recheck the full metadata/asset matrix on the host at cutover.
 - [ ] **L5: Analytics.** The app reports only to GA4 property 372022725
-      (`G-LJ7B0PVNZL`) through the Google tag, and loads it only on the
-      `walnut.tv` hostname so deployments on other hosts are not counted. Legacy
-      also sends Firebase Analytics to property 187037157 (`G-Z6V9TW1R8F`); that
-      property keeps its history but receives no data after cutover. After
-      cutover, verify initial loads and history-based navigation in GA4 realtime.
+      (`G-LJ7B0PVNZL`) through the Google tag, and loads it only on
+      `walnut.tv` and `www.walnut.tv` so deployments on other hosts are not
+      counted. Legacy also sends Firebase Analytics to property 187037157
+      (`G-Z6V9TW1R8F`); that property keeps its history but receives no data
+      after cutover. After cutover, verify initial loads and history-based
+      navigation in GA4 realtime, and check in DebugView that `page_title` on a
+      navbar navigation names the new channel, not the previous one.
 - [ ] **L6: Reproducible validation.** Frozen-lockfile install, channel check,
       typecheck, lint, tests and production build pass on the release revision.
       Add focused regression tests for the fixes above; helper tests alone do not
