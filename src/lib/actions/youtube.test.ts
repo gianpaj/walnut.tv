@@ -220,11 +220,12 @@ it("treats a channel without an uploads playlist as empty", async (t) => {
 });
 
 it("still reports other not-found responses as failures", async (t) => {
-  mockApi(t, (url) => {
+  const fetch = mockApi(t, (url) => {
     if (!url.pathname.endsWith("/playlistItems")) return;
     return Response.json({ error: { errors: [{ reason: "notFound" }] } }, { status: 404 });
   });
   assert.deepEqual(await fetchChannelUploads("source"), failure("fetch-failed"));
+  assert.equal(fetch.mock.callCount(), 2);
 });
 
 it("classifies error envelopes even when the HTTP status is successful", async (t) => {
