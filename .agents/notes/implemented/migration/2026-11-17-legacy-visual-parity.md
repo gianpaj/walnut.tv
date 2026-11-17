@@ -24,7 +24,8 @@ the source of truth for fonts, sizes, colours and spacing.
   stacked) whose player, title and footer rows start at zero height and share
   the spare height, so the player is 47% of its width plus a third of the
   rest. The player keeps its place in the shared element tree.
-- Desktop has no Prev/Next, counter or footer; arrow keys step the list.
+- Desktop has no Prev/Next or counter; arrow keys step the list. Its footer
+  sits at the bottom of the viewport-tall column, a short scroll down.
   Phones get legacy's pixel arrows and footer, then the video list, which
   legacy lacks, styled as legacy sidebar rows.
 - The sidebar scrolls natively with legacy's scrollbar styling.
@@ -43,7 +44,9 @@ the source of truth for fonts, sizes, colours and spacing.
 
 - Paired 1440×900 and 390×844 captures match legacy in layout and type
   (embed, title, arrows and menu within 2px).
-- Desktop's right column scrolls 50px past the title, as legacy's page does.
+- Desktop's right column scrolls 50px to the Terms, Privacy and Contact
+  links, as legacy's page does.
+- The theme is forced dark; a stored `theme=light` is ignored.
 - `VideoPlayer`'s fade-in animation and the mobile list remain differences.
 - The browser fixtures drive the dropdown by `aria-controls="category-menu"`
   and use arrow keys where they clicked Next on desktop.
