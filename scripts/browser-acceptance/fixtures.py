@@ -1,6 +1,6 @@
 """Run: python3 scripts/browser-acceptance/fixtures.py. Fake feeds and player."""
 
-import re
+import subprocess
 import sys
 from subprocess import TimeoutExpired
 
@@ -23,12 +23,20 @@ from harness import (
 )
 
 # The fake feed gives each source 4 videos; 2 are longer than 120 seconds.
-HUSTLE_ROWS = 2 * len(
-    re.search(
-        r"title: 'hustle'.*?youtubeChannels:\s*'([^']*)'",
-        (ROOT / "channels.js").read_text(),
-        re.S,
-    )[1].split(";")
+# Read channels.js with Node, the same way the app and fetch-fixture.cjs do.
+HUSTLE_ROWS = 2 * int(
+    subprocess.run(
+        [
+            "node",
+            "-p",
+            'new Set(require("./channels.js").channels.find((c) => c.title === "hustle")'
+            '.youtubeChannels.split(";").filter(Boolean)).size',
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
 )
 
 results = {"build": fingerprint(), "screenshotsEnabled": SCREENSHOTS, "checks": []}
