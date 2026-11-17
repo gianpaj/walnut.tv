@@ -12,8 +12,8 @@ The [September 27 verification note](./.agents/notes/implemented/migration/2026-
 records local production-feed/playback checks, fixture coverage and paired screenshots.
 The [Vercel preview note](./.agents/notes/implemented/migration/2026-09-28-vercel-preview/README.md)
 records a protected deployment of `4a33f66`, deployed legacy-link checks and
-mobile-menu evidence. A Git deployment of `858403c` on `walnut-tv-git-dev-gianpaj.vercel.app`
-serves real YouTube feeds in every category; hosted playback, full browser
+mobile-menu evidence. The Git deployment of `d599ab2` on `walnut-tv-git-dev-gianpaj.vercel.app`
+serves real YouTube feeds in every category and plays them; full browser
 confirmation and cutover gates remain open.
 
 ## Remaining work at a glance
@@ -24,13 +24,13 @@ fixtures (B4), and local metadata/assets acceptance (L4). Vercel configuration
 and a protected Preview deployment are complete. Frozen install, channel checks,
 typecheck, lint, 137 tests and production builds passed for `4a33f66`.
 
-| Remaining work       | Checklist           | What is needed                                                                                                                    |
-| -------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| Working hosted feeds | L1/L2               | Verify hosted playback; finish secret-exposure checks                                                                             |
-| Browser acceptance   | U2/U3, B0–B3, B5–B7 | Finish scroll/menu checks, player lifecycle/controls, loaded-route checks and paired screenshots across themes and viewport sizes |
-| Cache and quota      | L3                  | Measure Vercel cache sharing/persistence and upstream usage across visits, cold starts and redeploys                              |
-| Analytics            | L5                  | Verify initial loads and navigation events in GA4 realtime after cutover                                                          |
-| Release              | L6/L7               | Complete final-revision validation, review Git deployment policy, update the PR and document cutover/rollback                     |
+| Remaining work     | Checklist           | What is needed                                                                                                                    |
+| ------------------ | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Upstream access    | L2                  | Confirm the legacy key's referrer restriction                                                                                     |
+| Browser acceptance | U2/U3, B0–B3, B5–B7 | Finish scroll/menu checks, player lifecycle/controls, loaded-route checks and paired screenshots across themes and viewport sizes |
+| Cache and quota    | L3                  | Read YouTube quota use in Google Cloud for a day of hosted traffic and compare with the estimate                                  |
+| Analytics          | L5                  | Verify initial loads and navigation events in GA4 realtime after cutover                                                          |
+| Release            | L6/L7               | Complete final-revision validation, review Git deployment policy, update the PR and document cutover/rollback                     |
 
 **Paused, not failed:** Reddit vote/filter/feed parity (P2 and Reddit portions of
 B6/B7) and live OAuth checks require approved API access. Keep Reddit disabled.
@@ -194,8 +194,9 @@ revision, browser and result. Unit coverage does not establish browser parity.
       removed/private/blocked videos. End-of-video must not advance automatically:
       autoplay-next is disabled in both implementations. Local real-player checks
       passed Play advancing beyond two seconds, pause and fullscreen. Complete
-      the remaining controls and blocked-video/end behavior on the reviewed revision;
-      hosted playback is unverified.
+      the remaining controls and blocked-video/end behavior on the reviewed revision.
+      On the `d599ab2` deployment a real video played (muted, via the IFrame API)
+      and Next cued the following video.
 - [x] **B4: Watched history.** Local fixtures passed all four seeds, union,
       duplicate suppression, reload and intact legacy storage. Seed legacy `videosWatched` only, new
       `video-storage` only, both keys and malformed legacy JSON. Verify the union
@@ -221,26 +222,34 @@ revision, browser and result. Unit coverage does not establish browser parity.
 
 ## Release gates
 
-- [ ] **L1: Working deployment preview.** Vercel is selected. The deployment of
-      `858403c` loads real YouTube videos in hustle, ai and crypto. Verify playback
-      from the deployment before closing this gate. See the Vercel note for
-      deployment evidence and README for the Git-build policy.
+- [x] **L1: Working deployment preview.** Vercel is selected. The deployment of
+      `d599ab2` loads real YouTube videos in hustle, ai and crypto and plays them.
+      Playback continued without reloading the iframe through resizes across
+      993px (1440→992→390→1440) and a phone rotation (844×390→390×844). See the
+      Vercel note for deployment evidence and README for the Git-build policy.
   - [x] Select Vercel and configure Node 24, frozen pnpm installation and Next build.
   - [x] Deploy reviewed source as a protected Preview and verify app responses.
   - [x] Verify successful real feeds from the deployment host.
-  - [ ] Verify playback from the deployment host.
+  - [x] Verify playback from the deployment host.
 - [ ] **L2: Upstream access and secrets.** Verify YouTube key restrictions and
       API-denial behavior from the deployment host. Confirm disabled Reddit paths
       make no requests. Reddit OAuth and token-renewal verification require API
-      approval before re-enabling. Use `YOUTUBE_API_KEY`, inspect client output for
-      unintended secret exposure, and delete the legacy app's embedded key once the
+      approval before re-enabling. The app reads `YOUTUBE_API_KEY` on the server
+      only. The `d599ab2` deployment's HTML for every route shape and all 15
+      client assets it references contain no `AIza…` key and no secret variable
+      names. Still open: confirm the legacy key in `js/all.js` accepts only
+      walnut.tv referrers. Delete the legacy app's embedded key once the
       rollback window in the [cutover note](./.agents/notes/proposed/migration/2026-11-16-cutover-and-rollback.md) ends.
 - [ ] **L3: Cache/quota evidence.** Measure repeated and concurrent visits,
       cold starts, redeploys and preview/production isolation against API quota
       usage. With 88 unique populated channels and one effective shared cache,
       list-call estimates are 264 units for a cold fill and about 2,112/day for
       twelve two-hour refreshes, plus playlist-ID refreshes. These are estimates,
-      not enforced limits. Add durable storage only if host behavior requires it;
+      not enforced limits. On `d599ab2` category pages render per request
+      (`x-vercel-cache: MISS`, `no-store`) in about 0.4–0.7 s, and eight
+      concurrent requests finished within 2.1 s, consistent with the Data Cache
+      answering YouTube calls. Upstream use is only visible in Google Cloud's
+      quota graph. Add durable storage only if host behavior requires it;
       define failure/stale-data behavior before relying on caching for availability.
 - [x] **L4: Metadata and assets.** Local production HTML/browser checks verify
       channel/deep-link and `?v=` canonicals, inherited Open Graph/Twitter images,
@@ -281,7 +290,7 @@ revision, browser and result. Unit coverage does not establish browser parity.
 
 ## Suggested restart order
 
-1. Verify hosted playback and finish the secret checks (L1/L2).
+1. Confirm the legacy key restriction (L2) and read a day of quota use (L3).
 2. Confirm U2/U3; keep P2 paused while Reddit is disabled.
 3. Finish the browser checklist on the reviewed revision, including screenshot parity.
 4. Collect cache and analytics evidence, then complete cutover gates.
