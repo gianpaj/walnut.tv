@@ -316,7 +316,10 @@ try:
         open_feed("/hustle/fx000000040")
         next_video()
         selected = current_id()
-        built = js("playerFixture.players.length")
+        browser("wait", "--fn", "playerFixture.current()?.ready")
+        baseline = js(
+            "({built:playerFixture.players.length,destroyed:playerFixture.calls.filter(c=>c[0]==='destroy').length,detached:playerFixture.detached})"
+        )
         for width, height, label in [
             (1440, 900, "desktop-watched"),
             (390, 844, "mobile-watched"),
@@ -349,9 +352,7 @@ try:
                 "B5 " + label + " identity, single player, controls and width",
                 metrics["id"] == selected
                 and metrics["players"] == 1
-                and metrics["built"] == built
-                and metrics["destroyed"] == 0
-                and metrics["detached"] == 0
+                and all(metrics[k] == baseline[k] for k in baseline)
                 and metrics["next"]["height"] > 0
                 # A phone in landscape gives the player the full height; its
                 # controls are one scroll below.
