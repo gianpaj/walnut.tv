@@ -131,6 +131,11 @@ Use the Read tool to display the relevant section of `channels.js` to the user.
    - Error: "channels.js has error(s)"
    - Solution: Check that the channel ID is exactly 24 characters and properly formatted
 
+6. **Channel Has No Videos**
+   - Warning: "this channel has no public videos" or "no longer exists"; the app will show nothing from it
+   - The script still adds the channel. Tell the user and ask whether to keep it; if not, remove the ID from `channels.js`
+   - "could not check the channel's videos" means the check itself failed; mention it and continue
+
 ## YouTube Channel ID Format
 
 YouTube channel IDs:
