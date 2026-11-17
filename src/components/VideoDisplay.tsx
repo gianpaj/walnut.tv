@@ -282,32 +282,30 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
     </div>
   );
 
-  if (isDesktop) {
-    return (
-      <div className="flex min-h-0 flex-1 rounded-lg border">
-        <VideoList
-          videos={videos}
-          activeIndex={index}
-          onSelect={select}
-          className="w-[400px] shrink-0 border-r"
-        />
-        <div className="flex min-w-0 flex-1 flex-col justify-between overflow-y-auto">
-          {player}
-          <Footer />
-        </div>
-      </div>
-    );
-  }
-
-  // Mobile stacks and scrolls with the page. A vertical ResizablePanelGroup was
-  // tried here and computed to 1px tall — it never gets a definite height off a
-  // page that scrolls — which collapsed both the player and the list to nothing.
+  // Both layouts share one element tree so the player keeps its position, and
+  // keeps playing, when the width crosses the breakpoint. Desktop puts the list
+  // in a fixed sidebar on the left; below it, `contents` drops the wrappers and
+  // everything stacks and scrolls with the page.
   return (
-    <>
-      {player}
-      <VideoList videos={videos} activeIndex={index} onSelect={select} showAuthor scroll={false} />
-      <Footer />
-    </>
+    <div className={isDesktop ? "flex min-h-0 flex-1 rounded-lg border" : "contents"}>
+      <div
+        className={
+          isDesktop ? "flex min-w-0 flex-1 flex-col justify-between overflow-y-auto" : "contents"
+        }
+      >
+        {player}
+        {isDesktop && <Footer />}
+      </div>
+      <VideoList
+        videos={videos}
+        activeIndex={index}
+        onSelect={select}
+        className={isDesktop ? "order-first w-[400px] shrink-0 border-r" : undefined}
+        showAuthor={!isDesktop}
+        scroll={isDesktop}
+      />
+      {!isDesktop && <Footer />}
+    </div>
   );
 };
 
