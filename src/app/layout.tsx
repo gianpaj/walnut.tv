@@ -72,7 +72,8 @@ export default function RootLayout({
         <ToastProvider>
           <ThemeProvider attribute="class" defaultTheme="dark">
             <NavigationProvider>
-              <div className="flex min-h-dvh flex-col md:h-dvh md:overflow-hidden">
+              {/* Fixed height only for the sidebar layout; 993px matches useIsDesktop. */}
+              <div className="flex min-h-dvh flex-col min-[993px]:h-dvh min-[993px]:overflow-hidden">
                 <Header />
                 {children}
               </div>

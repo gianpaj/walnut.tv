@@ -24,5 +24,8 @@ export function useMediaQuery(query: string) {
   );
 }
 
-/** Tailwind's `md` breakpoint. */
-export const useIsDesktop = () => useMediaQuery("(min-width: 768px)");
+/**
+ * The legacy site's breakpoint. Below it the 400px sidebar would leave the
+ * player too narrow, and phones in landscape stay on the stacked layout.
+ */
+export const useIsDesktop = () => useMediaQuery("(min-width: 993px)");

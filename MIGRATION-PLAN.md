@@ -23,14 +23,14 @@ fixtures (B4), and local metadata/assets acceptance (L4). Vercel configuration
 and a protected Preview deployment are complete. Frozen install, channel checks,
 typecheck, lint, 137 tests and production builds passed for `4a33f66`.
 
-| Remaining work       | Checklist           | What is needed                                                                                                                        |
-| -------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Working hosted feeds | L1/L2               | Resolve Preview YouTube access denial, redeploy and verify real feeds; finish secret-exposure checks                                  |
-| Browser acceptance   | U2/U3, B0–B3, B5–B7 | Finish scroll/menu checks, player lifecycle/controls, loaded-route checks and paired screenshots across themes and viewport sizes     |
-| Product decisions    | P1/P3               | Choose source ordering; decide whether to retain the resizable sidebar and require playback-position continuity across layout changes |
-| Cache and quota      | L3                  | Measure Vercel cache sharing/persistence and upstream usage across visits, cold starts and redeploys                                  |
-| Analytics            | L5                  | Select the intended property/integrations, exclude preview traffic and verify navigation events without duplicates                    |
-| Release              | L6/L7               | Complete final-revision validation, review Git deployment policy, update the PR and document cutover/rollback                         |
+| Remaining work       | Checklist           | What is needed                                                                                                                    |
+| -------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Working hosted feeds | L1/L2               | Resolve Preview YouTube access denial, redeploy and verify real feeds; finish secret-exposure checks                              |
+| Browser acceptance   | U2/U3, B0–B3, B5–B7 | Finish scroll/menu checks, player lifecycle/controls, loaded-route checks and paired screenshots across themes and viewport sizes |
+| Product decisions    | P1/P3               | Choose source ordering; decide whether playback position must survive layout changes                                              |
+| Cache and quota      | L3                  | Measure Vercel cache sharing/persistence and upstream usage across visits, cold starts and redeploys                              |
+| Analytics            | L5                  | Select the intended property/integrations, exclude preview traffic and verify navigation events without duplicates                |
+| Release              | L6/L7               | Complete final-revision validation, review Git deployment policy, update the PR and document cutover/rollback                     |
 
 **Paused, not failed:** Reddit vote/filter/feed parity (P2 and Reddit portions of
 B6/B7) and live OAuth checks require approved API access. Keep Reddit disabled.
@@ -134,9 +134,11 @@ There is no Reddit browser fallback and no three-channel YouTube cap.
       threshold; the rewrite always checks `score >= minVotes`. At zero, negative
       scores are excluded rather than disabling the filter. Choose the rule and
       cover it with fixtures. Paused while Reddit is disabled.
-- [ ] **P3: Responsive layout.** Decide whether the resizable desktop sidebar
-      is wanted. Crossing 768px recreates the player; verify orientation changes
-      and decide whether playback-position continuity is required.
+- [ ] **P3: Responsive layout.** The desktop sidebar is a fixed 400px, as on
+      legacy, from the legacy 993px breakpoint; narrower screens, including
+      phones in landscape, use the stacked layout. Crossing the breakpoint
+      recreates the player; verify orientation changes and decide whether
+      playback-position continuity is required.
 
 Deduplicating the final combined feed is a useful difference from legacy, not
 an implementation gap. Acceptance should compare source coverage and order,
@@ -256,7 +258,10 @@ revision, browser and result. Unit coverage does not establish browser parity.
   - [x] Pass frozen install, channel validation, typecheck, lint, 137 tests and
         production build for deployed source `4a33f66`; Vercel build also passes.
   - [ ] Complete the browser confirmation suite and rerun validation for any
-        subsequent code changes on the release revision.
+        subsequent code changes on the release revision. The fixture suite
+        passed 66 of 66 checks headless for `b07ebd9` with agent-browser 0.38.1,
+        including the U3 keyboard menu checks; it uses synthetic feeds, so real
+        feeds remain unverified.
 - [ ] **L7: Cutover and rollback.** Review current `master` channel changes,
       finish or explicitly accept the open parity items, update the PR summary,
       and record the deployment target, redirect policy and rollback procedure.
