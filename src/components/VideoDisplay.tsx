@@ -253,10 +253,10 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
         </a>
       </div>
       {!isDesktop && controls}
-      {/* The footer row; legacy leaves it below the fold on desktop, so it is
-          dropped there but still takes its share of the height. */}
+      {/* The footer row. On desktop it sits at the bottom of the viewport-tall
+          box, a short scroll down, as on legacy. */}
       <div className={cn("flex grow basis-0 items-end", isDesktop ? "pb-4" : "pt-5")}>
-        {!isDesktop && <Footer />}
+        <Footer />
       </div>
     </div>
   );
