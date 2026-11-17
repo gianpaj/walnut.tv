@@ -1,5 +1,6 @@
 """Run: python3 scripts/browser-acceptance/fixtures.py. Fake feeds and player."""
 
+import re
 import sys
 from subprocess import TimeoutExpired
 
@@ -7,6 +8,7 @@ sys.dont_write_bytecode = True
 from harness import (
     BASE,
     OUT,
+    ROOT,
     SCREENSHOTS,
     SCRIPTS,
     browser,
@@ -18,6 +20,15 @@ from harness import (
     server,
     shot,
     state,
+)
+
+# The fake feed gives each source 4 videos; 2 are longer than 120 seconds.
+HUSTLE_ROWS = 2 * len(
+    re.search(
+        r"title: 'hustle'.*?youtubeChannels:\s*'([^']*)'",
+        (ROOT / "channels.js").read_text(),
+        re.S,
+    )[1].split(";")
 )
 
 results = {"build": fingerprint(), "screenshotsEnabled": SCREENSHOTS, "checks": []}
@@ -422,7 +433,7 @@ try:
         )
         check(
             "D2 optional duration fields included; <=120 seconds excluded",
-            len(durations) == 60
+            len(durations) == HUSTLE_ROWS
             and any("PT3M" in s for s in durations)
             and any("PT1H" in s for s in durations)
             and all("PT2M" not in s and "PT1M59S" not in s for s in durations),
