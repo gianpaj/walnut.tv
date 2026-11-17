@@ -128,8 +128,10 @@ There is no Reddit browser fallback and no three-channel YouTube cap.
 - [x] **P1: Source ordering.** `interleaveArrays` keeps rotating between
       sources until all are empty: `[[1,2,3,4],[5],[6,7,8]]` gives
       `[1,5,6,2,7,3,8,4]`, where legacy gave `[1,5,6,2,3,4,7,8]`. Accepted so a
-      prolific source cannot fill the list. Newest-first categories re-sort the
-      result, so the configured YouTube categories are unaffected.
+      prolific source cannot fill the list. The rules differ only with three or
+      more sources. Newest-first categories re-sort the result, so the configured
+      YouTube categories differ only among videos with equal or missing publish
+      times. Unsorted multi-subreddit Reddit feeds will follow the rotation.
 - [ ] **P2: Reddit vote semantics.** Legacy filters `ups` only for a truthy
       threshold; the rewrite always checks `score >= minVotes`. At zero, negative
       scores are excluded rather than disabling the filter. Choose the rule and
@@ -210,7 +212,8 @@ revision, browser and result. Unit coverage does not establish browser parity.
 - [ ] **B6: Feed fixtures.** All configured YouTube sources considered,
       newest-first sorting, duration boundary, missing thumbnail variants,
       Reddit hot/vote filters, multiple subreddits, mixed Reddit/YouTube results
-      and duplicates. Resolve P2 before asserting exact filter parity.
+      and duplicates. Multi-subreddit fixtures should expect the P1 rotation, not
+      legacy order. Resolve P2 before asserting exact filter parity.
 - [ ] **B7: Failure states.** D1 feed-state fixtures and U1 slow-source
       navigation checks passed; a deployment with a denied key rendered API-denial
       messages.
