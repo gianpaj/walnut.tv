@@ -75,7 +75,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <ToastProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark">
+          <ThemeProvider attribute="class" forcedTheme="dark">
             <NavigationProvider>
               {/* Fixed height only for the sidebar layout; 993px matches useIsDesktop. */}
               <div className="flex min-h-dvh flex-col min-[993px]:h-dvh min-[993px]:overflow-hidden">

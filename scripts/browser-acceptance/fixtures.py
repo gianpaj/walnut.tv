@@ -394,26 +394,24 @@ try:
             )
             shot("fixture-" + label)
 
+        # The app is dark only: a stored light theme must be ignored.
         js('localStorage.setItem("theme","light")')
         for width, height, label in [
-            (1440, 900, "desktop-light"),
-            (390, 844, "mobile-light"),
+            (1440, 900, "desktop-stored-light"),
+            (390, 844, "mobile-stored-light"),
         ]:
             browser("set", "viewport", str(width), str(height))
             browser("reload")
-            browser(
-                "wait",
-                "--fn",
-                'document.documentElement.classList.contains("light") && playerFixture.current()?.ready',
-            )
+            browser("wait", "--fn", "playerFixture.current()?.ready")
             check(
-                "B5 " + label + " theme and player",
+                "B5 " + label + " stays dark with one player",
                 player()["players"] == 1
-                and js('document.documentElement.classList.contains("light")'),
+                and js('document.documentElement.classList.contains("dark")')
+                and not js('document.documentElement.classList.contains("light")'),
                 state(),
             )
             shot("fixture-" + label)
-        js('localStorage.setItem("theme","dark")')
+        js('localStorage.removeItem("theme")')
         open_feed("/hustle")
         mode(delay=1500)
         browser("focus", MENU_BUTTON)
