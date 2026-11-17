@@ -54,8 +54,8 @@ const VideoList = ({ videos, activeIndex, onSelect, scroll = true, className }: 
   const activeRef = useRef<HTMLButtonElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
 
-  // Keep the playing video visible when arrow keys or prev/next move the
-  // selection past the edge of the scroll area.
+  // Keep the playing video visible when arrow keys move the selection past
+  // the edge of the sidebar, or when the sidebar appears at the breakpoint.
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport || !activeRef.current) return;
@@ -63,7 +63,7 @@ const VideoList = ({ videos, activeIndex, onSelect, scroll = true, className }: 
     const bounds = viewport.getBoundingClientRect();
     if (item.top < bounds.top) viewport.scrollTop -= bounds.top - item.top;
     else if (item.bottom > bounds.bottom) viewport.scrollTop += item.bottom - bounds.bottom;
-  }, [activeIndex]);
+  }, [activeIndex, scroll]);
 
   const items = (
     <div id="video-list">
