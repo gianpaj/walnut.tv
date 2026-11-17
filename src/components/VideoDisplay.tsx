@@ -34,7 +34,8 @@ function replaceVideoUrl(urlPrefix: string, videoId: string) {
   // A departing route can remain mounted while Next commits its replacement.
   if (url.pathname !== urlPrefix && !url.pathname.startsWith(`${urlPrefix}/`)) return;
   url.pathname = `${urlPrefix}/${encodeURIComponent(videoId)}`;
-  if (url.searchParams.has("v")) url.searchParams.set("v", videoId);
+  // The path names the video, so a legacy `?v=` would only duplicate it.
+  url.searchParams.delete("v");
   if (url.href !== window.location.href) window.history.replaceState(null, "", url);
 }
 

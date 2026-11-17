@@ -463,12 +463,12 @@ try:
         for path, suffix in [
             (
                 "/hustle?v=fx000000004&keep=yes#player",
-                "/hustle/fx000000004?v=fx000000004&keep=yes#player",
+                "/hustle/fx000000004?keep=yes#player",
             ),
             ("/hustle/not-in-feed", "/hustle/fx000000000"),
             (
                 "/?p=/hustle/fx000000008&q=keep=yes~and~v=fx000000008#player",
-                "/hustle/fx000000008?keep=yes&v=fx000000008#player",
+                "/hustle/fx000000008?keep=yes#player",
             ),
             ("/?p=//evil.invalid", "/hustle/fx000000000"),
             ("/?p=/hustle%GG", "/hustle/fx000000000"),
