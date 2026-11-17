@@ -2,7 +2,7 @@
   "date": "2026-11-17",
   "target": "https://walnut-tv-git-dev-gianpaj.vercel.app",
   "targetDeploymentIdInAssets": "dpl_DeysBqtRK8Y9Mb7XCieupuTKG7AF",
-  "targetCommit": "d0ff4b7 (app code identical to 631a2f4), as reported by the requester",
+  "targetCommit": "d0ff4b7 (app code identical to 631a2f4: git diff only removes .github/workflows/pullfrog.yml)",
   "baseline": "https://walnut.tv (legacy Vue 1 production), analytics requests aborted",
   "browser": "agent-browser 0.38.1, HeadlessChrome 154.0.0.0, Linux",
   "checks": {
@@ -54,7 +54,7 @@
     },
     "B1 logo click": {
       "pass": true,
-      "evidence": "from /ai/ptARPC3Mzio -> /hustle/FmvRhxq2oHE 1/68, client-side (no new navigation entry)"
+      "evidence": "from /ai/ptARPC3Mzio -> /hustle/FmvRhxq2oHE 1/68, client-side navigation, no full page load"
     },
     "B3 play/pause via API": {
       "pass": true,
@@ -120,9 +120,9 @@
       "notes": "Light theme is reachable only by setting localStorage.theme: the theme toggle is commented out and prefers-color-scheme: light still renders dark"
     },
     "B0 paired screenshots": {
-      "pass": true,
+      "pass": null,
       "evidence": "1440x900 and 390x844 pairs for loaded, selected + watched and mobile menu; legacy is dark only, so light has no pair",
-      "feedDifferences": "hustle: legacy 62 videos, new 68, 61 shared; legacy-only h_aA1-R70E8 (newest a16z upload, legacy row 1); new-only LPKLhoS4kN8, wOib5fHqOZQ, _Vk4e_d5mBQ, X3HpSbVw9lw, 6DT8Cy2rnd0, 1cWZ7Ekff6E, G3i2k6DdI0o",
+      "feedDifferences": "hustle: legacy 62 videos, new 68, 61 shared; legacy-only h_aA1-R70E8 (newest a16z upload, legacy row 1); new-only LPKLhoS4kN8, wOib5fHqOZQ, _Vk4e_d5mBQ, X3HpSbVw9lw, 6DT8Cy2rnd0, 1cWZ7Ekff6E, G3i2k6DdI0o; dev drops three channels master lists: UCfRtwc6K_VU9N4OjNnU2P7g (hustle) and UCxRU9z5Jm-r11oQpYFtNQ8g (ai) have no public videos, UCdzMx7Zhy5va5End1-XJFbA (crypto) no longer exists",
       "uiDifferences": [
         "desktop: logo 32x48 vs legacy 15x50",
         "desktop: category links are filled pills vs plain text",
@@ -130,8 +130,11 @@
         "watched: image at 50% + yellow badge vs legacy small grey label and dimmed title",
         "mobile: list with thumbnails below player; legacy shows no list, only pixel prev/next arrows",
         "mobile menu: left sheet with three items spread over the full height vs legacy dropdown under the header",
-        "URL: new writes /{category}/{id} on selection; legacy stays at /"
-      ]
+        "URL: new writes /{category}/{id} on selection; legacy stays at /",
+        "URL: /hustle?v=X becomes /hustle/X?v=X (redundant ?v=)",
+        "theme: light is reachable only through localStorage.theme; legacy is dark only"
+      ],
+      "status": "captured, decision pending"
     }
   }
 }
