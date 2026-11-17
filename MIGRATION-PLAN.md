@@ -12,8 +12,9 @@ The [September 27 verification note](./.agents/notes/implemented/migration/2026-
 records local production-feed/playback checks, fixture coverage and paired screenshots.
 The [Vercel preview note](./.agents/notes/implemented/migration/2026-09-28-vercel-preview/README.md)
 records a protected deployment of `4a33f66`, deployed legacy-link checks and
-mobile-menu evidence. Hosted feeds are blocked by YouTube access denial; full
-browser confirmation and cutover gates remain open.
+mobile-menu evidence. A Git deployment of `858403c` on `walnut-tv-git-dev-gianpaj.vercel.app`
+serves real YouTube feeds in every category; hosted playback, full browser
+confirmation and cutover gates remain open.
 
 ## Remaining work at a glance
 
@@ -25,7 +26,7 @@ typecheck, lint, 137 tests and production builds passed for `4a33f66`.
 
 | Remaining work       | Checklist           | What is needed                                                                                                                    |
 | -------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| Working hosted feeds | L1/L2               | Resolve Preview YouTube access denial, redeploy and verify real feeds; finish secret-exposure checks                              |
+| Working hosted feeds | L1/L2               | Verify hosted playback; finish secret-exposure checks                                                                             |
 | Browser acceptance   | U2/U3, B0–B3, B5–B7 | Finish scroll/menu checks, player lifecycle/controls, loaded-route checks and paired screenshots across themes and viewport sizes |
 | Product decisions    | P1/P3               | Choose source ordering; decide whether playback position must survive layout changes                                              |
 | Cache and quota      | L3                  | Measure Vercel cache sharing/persistence and upstream usage across visits, cold starts and redeploys                              |
@@ -44,7 +45,7 @@ and differing channel configurations; these are baseline revisions, not current 
 for evidence, validation results, and preview availability.
 
 `channels.js` contains three YouTube categories: `hustle`, `ai`, and `crypto`.
-Their source counts are 30, 36, and 27 entries respectively, with 91 unique
+Their source counts are 29, 33, and 26 entries respectively, with 88 unique
 YouTube channel IDs overall. Ad-hoc Reddit routes use `/r/{subreddit}` but show
 an unavailable message: Reddit access is intentionally disabled pending approval.
 Reddit-only parity checks are paused, not passed. See [Reddit access](./AGENTS.md#reddit-access)
@@ -192,7 +193,7 @@ revision, browser and result. Unit coverage does not establish browser parity.
       autoplay-next is disabled in both implementations. Local real-player checks
       passed Play advancing beyond two seconds, pause and fullscreen. Complete
       the remaining controls and blocked-video/end behavior on the reviewed revision;
-      hosted playback is blocked by YouTube access denial.
+      hosted playback is unverified.
 - [x] **B4: Watched history.** Local fixtures passed all four seeds, union,
       duplicate suppression, reload and intact legacy storage. Seed legacy `videosWatched` only, new
       `video-storage` only, both keys and malformed legacy JSON. Verify the union
@@ -209,7 +210,8 @@ revision, browser and result. Unit coverage does not establish browser parity.
       Reddit hot/vote filters, multiple subreddits, mixed Reddit/YouTube results
       and duplicates. Resolve P1/P2 before asserting exact ordering/filter parity.
 - [ ] **B7: Failure states.** D1 feed-state fixtures and U1 slow-source
-      navigation checks passed; deployed categories render API-denial messages.
+      navigation checks passed; a deployment with a denied key rendered API-denial
+      messages.
       Include these cases in the complete final-revision browser run. Reddit
       isolation checks are paused: one rejected subreddit rejects the whole
       Reddit source (`Promise.all`); decide whether finer isolation is needed
@@ -217,14 +219,14 @@ revision, browser and result. Unit coverage does not establish browser parity.
 
 ## Release gates
 
-- [ ] **L1: Working deployment preview.** Vercel is selected. A protected
-      explicit Preview deployment of `4a33f66` is Ready and serves the reviewed
-      app, but all categories show YouTube access denial. Fix Preview API access
-      and verify real feeds before closing this gate. See the Vercel note for
+- [ ] **L1: Working deployment preview.** Vercel is selected. The deployment of
+      `858403c` loads real YouTube videos in hustle, ai and crypto. Verify playback
+      from the deployment before closing this gate. See the Vercel note for
       deployment evidence and README for the Git-build policy.
   - [x] Select Vercel and configure Node 24, frozen pnpm installation and Next build.
   - [x] Deploy reviewed source as a protected Preview and verify app responses.
-  - [ ] Verify successful real feeds and playback from the Preview host.
+  - [x] Verify successful real feeds from the deployment host.
+  - [ ] Verify playback from the deployment host.
 - [ ] **L2: Upstream access and secrets.** Verify YouTube key restrictions and
       API-denial behavior from the deployment host. Confirm disabled Reddit paths
       make no requests. Reddit OAuth and token-renewal verification require API
@@ -233,8 +235,8 @@ revision, browser and result. Unit coverage does not establish browser parity.
       rollback window in the [cutover note](./.agents/notes/proposed/migration/2026-11-16-cutover-and-rollback.md) ends.
 - [ ] **L3: Cache/quota evidence.** Measure repeated and concurrent visits,
       cold starts, redeploys and preview/production isolation against API quota
-      usage. With 91 unique populated channels and one effective shared cache,
-      list-call estimates are 273 units for a cold fill and about 2,184/day for
+      usage. With 88 unique populated channels and one effective shared cache,
+      list-call estimates are 264 units for a cold fill and about 2,112/day for
       twelve two-hour refreshes, plus playlist-ID refreshes. These are estimates,
       not enforced limits. Add durable storage only if host behavior requires it;
       define failure/stale-data behavior before relying on caching for availability.
@@ -273,7 +275,7 @@ revision, browser and result. Unit coverage does not establish browser parity.
 
 ## Suggested restart order
 
-1. Resolve Vercel Preview YouTube access and verify working feeds (L1/L2).
+1. Verify hosted playback and finish the secret checks (L1/L2).
 2. Confirm U2/U3 and settle P1/P3; keep P2 paused while Reddit is disabled.
 3. Finish the browser checklist on the reviewed revision, including screenshot parity.
 4. Collect cache and analytics evidence, then complete cutover gates.

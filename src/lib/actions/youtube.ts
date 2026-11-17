@@ -43,6 +43,9 @@ class YouTubeFeedError extends Error {
   }
 }
 
+/** A channel with no public uploads has no uploads playlist; that is not a failure. */
+class PlaylistNotFoundError extends Error {}
+
 async function callApi<T>(
   path: string,
   params: Record<string, string>,
@@ -65,6 +68,12 @@ async function callApi<T>(
     error?: { code?: number; errors?: { reason?: string }[] };
   };
   if (!response.ok || body.error) {
+    if (
+      response.status === 404 &&
+      body.error?.errors?.some(({ reason }) => reason === "playlistNotFound")
+    ) {
+      throw new PlaylistNotFoundError();
+    }
     // A 403 alone does not establish quota exhaustion. Ignore upstream messages.
     const quotaExceeded = body.error?.errors?.some(({ reason }) =>
       ["quotaExceeded", "dailyLimitExceeded", "dailyLimitExceededUnreg"].includes(reason ?? ""),
@@ -128,6 +137,7 @@ export async function fetchChannelUploads(channelId: string): Promise<FeedResult
       .filter((video): video is VideoData => video !== null);
     return { videos, issues: [] };
   } catch (error) {
+    if (error instanceof PlaylistNotFoundError) return { videos: [], issues: [] };
     return {
       videos: [],
       issues: [
