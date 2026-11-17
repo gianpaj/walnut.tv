@@ -3,10 +3,11 @@ import Script from "next/script";
 /** GA4 property 372022725, "walnut.tv - GA4". */
 const GA_MEASUREMENT_ID = "G-LJ7B0PVNZL";
 
-// Loads only on walnut.tv, so vercel.app deployments and local builds stay out
-// of the reports. Enhanced measurement records client-side route changes from
-// history events, so there is no per-navigation pageview call.
-const GTAG_SNIPPET = `if (location.hostname === "walnut.tv") {
+// Loads only on walnut.tv and www.walnut.tv, so vercel.app deployments and
+// local builds stay out of the reports. Enhanced measurement records
+// client-side route changes from history events, so there is no
+// per-navigation pageview call.
+const GTAG_SNIPPET = `if (["walnut.tv", "www.walnut.tv"].includes(location.hostname)) {
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { dataLayer.push(arguments); };
   gtag("js", new Date());
