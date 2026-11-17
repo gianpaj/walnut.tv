@@ -21,17 +21,17 @@ confirmation and cutover gates remain open.
 
 **Completed:** homepage/retired-route policy (R1), legacy links (R2), pending
 navigation (U1), feed error handling (D1), duration parsing (D2), watched-history
-fixtures (B4), local metadata/assets acceptance (L4) and hosted playback (L1).
+fixtures (B4), local metadata/assets acceptance (L4), hosted playback (L1),
+upstream access (L2), cache/quota evidence (L3), and hosted browser checks for
+U2, U3, B1, B2 and B3.
 Vercel configuration and a protected Preview deployment are complete. Frozen install, channel checks,
 typecheck, lint, 137 tests and production builds passed for `4a33f66`.
 
-| Remaining work     | Checklist | What is needed                                                                                                          |
-| ------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Upstream access    | L2        | Show disabled Reddit paths make no requests on the host                                                                 |
-| Browser acceptance | B0        | Decide on the open visual differences from legacy; B6/B7 Reddit cases stay paused with Reddit                           |
-| Cache and quota    | L3        | Count upstream YouTube requests across visits, cold starts, redeploys and preview/production; compare with the estimate |
-| Analytics          | L5        | Verify initial loads and navigation events in GA4 realtime after cutover                                                |
-| Release            | L6/L7     | Complete final-revision validation, review Git deployment policy, update the PR and document cutover/rollback           |
+| Remaining work     | Checklist | What is needed                                                                                                |
+| ------------------ | --------- | ------------------------------------------------------------------------------------------------------------- |
+| Browser acceptance | B0/B5     | Land the legacy visual parity change, then capture B0 pairs and B5 again; B6/B7 Reddit cases stay paused      |
+| Analytics          | L5        | Verify initial loads and navigation events in GA4 realtime after cutover                                      |
+| Release            | L6/L7     | Complete final-revision validation, review Git deployment policy, update the PR and document cutover/rollback |
 
 **Paused, not failed:** Reddit vote/filter/feed parity (P2 and Reddit portions of
 B6/B7) and live OAuth checks require approved API access. Keep Reddit disabled.
@@ -50,8 +50,9 @@ YouTube channel IDs overall. Ad-hoc Reddit routes use `/r/{subreddit}` but show
 an unavailable message: Reddit access is intentionally disabled pending approval.
 Reddit-only parity checks are paused, not passed. See [Reddit access](./AGENTS.md#reddit-access)
 for the switch and re-enabling requirements.
-The channel data matches current `master`; do not restore retired categories
-just to satisfy an outdated checklist.
+The channel data matches current `master` except for three channels removed on
+purpose: two with no public videos and one that no longer exists. Do not
+restore them or retired categories just to satisfy an outdated checklist.
 
 ## Implemented in code
 
@@ -178,7 +179,10 @@ revision, browser and result. Unit coverage does not establish browser parity.
       [hosted browser acceptance note](./.agents/notes/implemented/migration/2026-11-17-hosted-browser-acceptance/README.md). Open differences needing a decision:
       the mobile menu spreads its three links over the full screen height; light
       theme is reachable only through `localStorage` (no toggle); `?v=` stays in
-      the URL after selection. Legacy is dark-only and shows no list on mobile.
+      the URL after selection. Owner decisions (2026-11-17): stay dark only, drop
+      the redundant `?v=` while still updating the URL for sharing, and match
+      legacy visually, keeping the mobile list and removing the desktop
+      Prev/Next, counter and footer. Capture the pairs again after that change.
 
 - [x] **B1: Routing.** Every configured category, both deep-link route shapes,
       `?v=`, reload, navbar changes, Back/Forward, the logo and unknown-route
@@ -205,11 +209,13 @@ revision, browser and result. Unit coverage does not establish browser parity.
       intact. Marking a video watched on selection, not playback/completion,
       matches legacy. The active row stays distinct from watched rows. Use seeded
       data on preview: localStorage does not cross origins.
-- [x] **B5: Mobile and desktop presentation.** At 1440×900, 390×844, 844×390
+- [ ] **B5: Mobile and desktop presentation.** At 1440×900, 390×844, 844×390
       and 390×568 in both themes: one player, active highlight, watched badge and
       dimming, independent desktop list scrolling and no horizontal scroll. At
       844×390 the title and controls sit one scroll below the player, and at
-      390×568 the active row is below the fold. See the
+      390×568 the active row is below the fold. Run again after the legacy visual
+      parity change, which replaces this layout, and compare landscape with
+      legacy. See the
       [hosted browser acceptance note](./.agents/notes/implemented/migration/2026-11-17-hosted-browser-acceptance/README.md).
 - [ ] **B6: Feed fixtures.** All configured YouTube sources considered,
       newest-first sorting, duration boundary, missing thumbnail variants,
@@ -236,7 +242,7 @@ revision, browser and result. Unit coverage does not establish browser parity.
   - [x] Deploy reviewed source as a protected Preview and verify app responses.
   - [x] Verify successful real feeds from the deployment host.
   - [x] Verify playback from the deployment host.
-- [ ] **L2: Upstream access and secrets.** Verify YouTube key restrictions and
+- [x] **L2: Upstream access and secrets.** Verify YouTube key restrictions and
       API-denial behavior from the deployment host. Confirm disabled Reddit paths
       make no requests. Reddit OAuth and token-renewal verification require API
       approval before re-enabling. The app reads `YOUTUBE_API_KEY`, falling back
@@ -246,10 +252,11 @@ revision, browser and result. Unit coverage does not establish browser parity.
       names; see the [hosted checks note](./.agents/notes/implemented/migration/2026-11-17-hosted-checks.md). An earlier deployment with a
       denied key showed the API-denial message. The owner confirmed on
       2026-11-17 that the legacy key in `js/all.js` is restricted to the YouTube
-      Data API and walnut.tv referrers. Still open: show on the host that
-      disabled Reddit paths make no requests. Delete the legacy app's embedded key once the
+      Data API and walnut.tv referrers. On a Preview that logged every outbound
+      request, Reddit routes made none ([evidence](./.agents/notes/implemented/migration/2026-11-17-hosted-checks.md#outbound-requests-l2-reddit-l3-quota)).
+      Delete the legacy app's embedded key once the
       rollback window in the [cutover note](./.agents/notes/proposed/migration/2026-11-16-cutover-and-rollback.md) ends.
-- [ ] **L3: Cache/quota evidence.** Measure repeated and concurrent visits,
+- [x] **L3: Cache/quota evidence.** Measure repeated and concurrent visits,
       cold starts, redeploys and preview/production isolation against API quota
       usage. With 88 unique populated channels and one effective shared cache,
       list-call estimates are 264 units for a cold fill and about 2,112/day for
@@ -257,9 +264,11 @@ revision, browser and result. Unit coverage does not establish browser parity.
       not enforced limits, and the daily figure assumes every category is
       requested at least once every two hours. On `d599ab2` category pages
       render per request in about 0.4–0.7 s ([timings](./.agents/notes/implemented/migration/2026-11-17-hosted-checks.md#l3-timing)), which is
-      consistent with the Data Cache but does not prove it. Count outbound
-      requests to `www.googleapis.com`, or read the quota graph filtered by
-      credential. Add durable storage only if host behavior requires it;
+      consistent with the Data Cache. Logged outbound requests confirm it: the
+      first visit to each category on a new deployment made 257 YouTube calls,
+      and later visits made none ([evidence](./.agents/notes/implemented/migration/2026-11-17-hosted-checks.md#outbound-requests-l2-reddit-l3-quota)).
+      The owner accepted the daily estimate; confirm it in the Google Cloud
+      quota graph during the first week after cutover. Add durable storage only if host behavior requires it;
       define failure/stale-data behavior before relying on caching for availability.
 - [x] **L4: Metadata and assets.** Local production HTML/browser checks verify
       channel/deep-link and `?v=` canonicals, inherited Open Graph/Twitter images,
@@ -279,19 +288,16 @@ revision, browser and result. Unit coverage does not establish browser parity.
 - [ ] **L6: Reproducible validation.** Frozen-lockfile install, channel check,
       typecheck, lint, tests and production build pass on the release revision.
       Add focused regression tests for the fixes above; helper tests alone do not
-      prove route, player, storage or fetcher behavior. Local frozen install,
-      channel validation, typecheck, lint, 137 tests and build passed. The browser
-      harness exists in `scripts/browser-acceptance/`; its full confirmation run
-      is incomplete, so this release gate remains open.
+      prove route, player, storage or fetcher behavior. It stays open until the
+      release revision, including the legacy visual parity change, passes.
   - [x] Pass frozen install, channel validation, typecheck, lint, 137 tests and
         production build for deployed source `4a33f66`; Vercel build also passes.
   - [x] Pass a clean frozen install, channel validation, typecheck, lint,
         format check, 140 tests, production build and the fixture suite (66 of
         66, headless, agent-browser 0.38.1) for `631a2f4`, `dev` with `master`
         merged in.
-  - [ ] Complete the browser confirmation suite (B0–B3, B5–B7) and rerun this
-        validation if code changes before release. The fixture suite uses
-        synthetic feeds; real-feed playback is covered by L1.
+  - [ ] Rerun this validation on the release revision, and finish B0 and B5.
+        The Reddit parts of B6/B7 stay paused with Reddit.
 - [ ] **L7: Cutover and rollback.** Review current `master` channel changes,
       finish or explicitly accept the open parity items, update the PR summary,
       and record the deployment target, redirect policy and rollback procedure.
@@ -302,8 +308,10 @@ revision, browser and result. Unit coverage does not establish browser parity.
 
 ## Suggested restart order
 
-1. Settle the B0 differences and close L2/L3; keep P2 paused while Reddit is disabled.
-2. Complete the cutover (L7), then check analytics (L5).
+1. Land the legacy visual parity change, then finish B0 and B5; keep P2 paused
+   while Reddit is disabled.
+2. Rerun L6 on the release revision.
+3. Complete the cutover (L7), then check analytics (L5).
 
 Auth, custom channels, native Reddit playback and sharing UI are not required
 to replace the working legacy feature set. Do not build adapters, databases or
