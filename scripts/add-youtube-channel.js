@@ -160,14 +160,14 @@ async function main() {
     }
 
     // The app shows nothing for such a channel but spends quota on it.
-    try {
-      const [empty] = await findEmptyChannels([channelId], YOUTUBE_API_KEY);
-      if (empty) {
-        log(`Warning: this channel ${empty.problem}; the app will show nothing from it.`, "yellow");
-      }
-    } catch (error) {
-      log(`Warning: could not check the channel's videos: ${error.message}`, "yellow");
+    const {
+      problems: [empty],
+      error,
+    } = await findEmptyChannels([channelId], YOUTUBE_API_KEY);
+    if (empty) {
+      log(`Warning: this channel ${empty.problem}; the app will show nothing from it.`, "yellow");
     }
+    if (error) log(`Warning: could not check the channel's videos: ${error.message}`, "yellow");
 
     if (channelTitle === "--justSearch" || justSearch) {
       process.exit(0);

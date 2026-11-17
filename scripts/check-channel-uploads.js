@@ -13,9 +13,22 @@
 const API = "https://www.googleapis.com/youtube/v3/channels";
 const BATCH = 50;
 
-/** Returns `{ id, problem }` for each channel that is missing or has no videos. */
+/**
+ * Returns `{ problems, error }`. `problems` lists `{ id, problem }` for each
+ * missing or empty channel found before a request failed; `error` is set if
+ * one did, so earlier findings are still reported.
+ */
 async function findEmptyChannels(ids, key) {
   const problems = [];
+  try {
+    await checkBatches(ids, key, problems);
+  } catch (error) {
+    return { problems, error };
+  }
+  return { problems };
+}
+
+async function checkBatches(ids, key, problems) {
   for (let i = 0; i < ids.length; i += BATCH) {
     const batch = ids.slice(i, i + BATCH);
     const url = `${API}?${new URLSearchParams({ part: "statistics", id: batch.join(","), key })}`;
@@ -38,7 +51,6 @@ async function findEmptyChannels(ids, key) {
         problems.push({ id, problem: "has no public videos" });
     }
   }
-  return problems;
 }
 
 function warn(message) {
@@ -63,17 +75,14 @@ async function main() {
     }
   }
 
-  try {
-    const problems = await findEmptyChannels([...byId.keys()], key);
-    for (const { id, problem } of problems) {
-      warn(
-        `YouTube channel ${id} (${byId.get(id).join(", ")}) ${problem}; remove it from channels.js.`,
-      );
-    }
-    console.log(`Checked ${byId.size} YouTube channels: ${problems.length} to remove.`);
-  } catch (error) {
-    warn(`Could not check YouTube channels: ${error.message}`);
+  const { problems, error } = await findEmptyChannels([...byId.keys()], key);
+  for (const { id, problem } of problems) {
+    warn(
+      `YouTube channel ${id} (${byId.get(id).join(", ")}) ${problem}; remove it from channels.js.`,
+    );
   }
+  if (error) warn(`Could not check every YouTube channel: ${error.message}`);
+  else console.log(`Checked ${byId.size} YouTube channels: ${problems.length} to remove.`);
 }
 
 module.exports = { findEmptyChannels };
