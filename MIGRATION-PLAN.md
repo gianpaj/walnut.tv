@@ -45,7 +45,7 @@ and differing channel configurations; these are baseline revisions, not current 
 for evidence, validation results, and preview availability.
 
 `channels.js` contains three YouTube categories: `hustle`, `ai`, and `crypto`.
-Their source counts are 30, 36, and 27 entries respectively, with 91 unique
+Their source counts are 29, 33, and 26 entries respectively, with 88 unique
 YouTube channel IDs overall. Ad-hoc Reddit routes use `/r/{subreddit}` but show
 an unavailable message: Reddit access is intentionally disabled pending approval.
 Reddit-only parity checks are paused, not passed. See [Reddit access](./AGENTS.md#reddit-access)
@@ -235,8 +235,8 @@ revision, browser and result. Unit coverage does not establish browser parity.
       rollback window in the [cutover note](./.agents/notes/proposed/migration/2026-11-16-cutover-and-rollback.md) ends.
 - [ ] **L3: Cache/quota evidence.** Measure repeated and concurrent visits,
       cold starts, redeploys and preview/production isolation against API quota
-      usage. With 91 unique populated channels and one effective shared cache,
-      list-call estimates are 273 units for a cold fill and about 2,184/day for
+      usage. With 88 unique populated channels and one effective shared cache,
+      list-call estimates are 264 units for a cold fill and about 2,112/day for
       twelve two-hour refreshes, plus playlist-ID refreshes. These are estimates,
       not enforced limits. Add durable storage only if host behavior requires it;
       define failure/stale-data behavior before relying on caching for availability.
