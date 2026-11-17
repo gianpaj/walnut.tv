@@ -61,14 +61,14 @@ const Header = () => {
             <span className="sr-only">Category </span>
             {current?.title ?? "channels"}
           </button>
-          {open && (
-            <ul
-              id="category-menu"
-              className="border-t border-[#101010] py-[7.5px] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
-            >
-              {links}
-            </ul>
-          )}
+          {/* Always rendered so the button's aria-controls points at it. */}
+          <ul
+            id="category-menu"
+            hidden={!open}
+            className="border-t border-[#101010] py-[7.5px] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+          >
+            {links}
+          </ul>
         </div>
         <ul className="flex items-center max-[992px]:portrait:hidden">{links}</ul>
       </div>

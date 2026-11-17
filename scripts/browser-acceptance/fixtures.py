@@ -40,6 +40,7 @@ HUSTLE_ROWS = 2 * int(
 )
 
 MENU_BUTTON = 'button[aria-controls="category-menu"]'
+OPEN_MENU = "#category-menu:not([hidden])"
 
 results = {"build": fingerprint(), "screenshotsEnabled": SCREENSHOTS, "checks": []}
 
@@ -160,7 +161,8 @@ try:
         shot("fixture-desktop-deeplink-visible")
         selected_before_nav = current_id()
         mode(delay=1500)
-        browser("click", 'a[href="/ai"]')
+        # The hidden dropdown also holds an /ai link; click the visible navbar one.
+        browser("click", 'header ul:not(#category-menu) a[href="/ai"]')
         pending = js(
             '({status:[...document.querySelectorAll("[role=status]")].map(x=>x.textContent),calls:playerFixture.calls})'
         )
@@ -225,7 +227,7 @@ try:
         shot("fixture-mobile-deeplink-past-fold")
         browser("focus", MENU_BUTTON)
         browser("press", "Enter")
-        browser("wait", "#category-menu")
+        browser("wait", OPEN_MENU)
         shot("fixture-mobile-menu-keyboard")
         check(
             "U3 keyboard opens named menu",
@@ -233,12 +235,12 @@ try:
                 "document.querySelector(" + json.dumps(MENU_BUTTON) + ").textContent"
             ).startswith("Category"),
         )
-        browser("focus", "#category-menu a")
+        browser("focus", OPEN_MENU + " a")
         browser("press", "Escape")
         browser(
             "wait",
             "--fn",
-            '!document.querySelector("#category-menu") && document.activeElement?.getAttribute("aria-controls")==="category-menu"',
+            '!document.querySelector("#category-menu:not([hidden])") && document.activeElement?.getAttribute("aria-controls")==="category-menu"',
         )
         check(
             "U3 Escape restores trigger focus",
@@ -247,13 +249,13 @@ try:
             ),
         )
         browser("press", "Enter")
-        browser("wait", "#category-menu")
-        browser("focus", '#category-menu a[href="/crypto"]')
+        browser("wait", OPEN_MENU)
+        browser("focus", OPEN_MENU + ' a[href="/crypto"]')
         browser("press", "Enter")
         browser(
             "wait",
             "--fn",
-            'location.pathname.startsWith("/crypto/") && !document.querySelector("#category-menu")',
+            'location.pathname.startsWith("/crypto/") && !document.querySelector("#category-menu:not([hidden])")',
         )
         check("U3 keyboard selects category and closes menu", True, state())
         browser("set", "viewport", "1440", "900")
@@ -416,8 +418,8 @@ try:
         mode(delay=1500)
         browser("focus", MENU_BUTTON)
         browser("press", "Enter")
-        browser("wait", "#category-menu")
-        browser("focus", '#category-menu a[href="/ai"]')
+        browser("wait", OPEN_MENU)
+        browser("focus", OPEN_MENU + ' a[href="/ai"]')
         browser("press", "Enter")
         browser("wait", "--fn", 'document.body.innerText.includes("Loading AI")')
         check(
