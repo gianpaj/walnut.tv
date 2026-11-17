@@ -61,7 +61,6 @@ def launch():
     # Fixture visits must not count as production analytics traffic.
     for url in [
         "**://www.googletagmanager.com/**",
-        "**://www.gstatic.com/firebasejs/**",
         "**://*.google-analytics.com/**",
     ]:
         browser("network", "route", url, "--abort")
