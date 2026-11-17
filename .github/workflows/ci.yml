@@ -28,6 +28,13 @@ jobs:
       # Validates the 24-character YouTube channel IDs in channels.js.
       - run: pnpm check-channels
 
+      # Warns about channels that no longer exist or have no public videos.
+      # Never fails the build; skipped when the secret is unavailable (forks).
+      - run: pnpm check-channel-uploads
+        continue-on-error: true
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+
       - run: pnpm typecheck
 
       - run: pnpm test

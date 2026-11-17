@@ -37,6 +37,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node --test --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \"src/**/*.test.ts\"",
     "check-channels": "node scripts/check-channels.js",
+    "check-channel-uploads": "node scripts/check-channel-uploads.js",
     "watch-channels": "nodemon scripts/check-channels.js"
   },
   "dependencies": {

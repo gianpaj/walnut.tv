@@ -19,6 +19,8 @@
 const fs = require("fs");
 const path = require("path");
 
+const { findEmptyChannels } = require("./check-channel-uploads");
+
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 const CHANNELS_FILE_PATH = path.join(__dirname, "../channels.js");
 
@@ -155,6 +157,16 @@ async function main() {
     // Validate channel ID format (YouTube channel IDs are 24 characters)
     if (channelId.length !== 24) {
       log(`Warning: Channel ID has unusual length (${channelId.length} chars)`, "yellow");
+    }
+
+    // The app shows nothing for such a channel but spends quota on it.
+    try {
+      const [empty] = await findEmptyChannels([channelId], YOUTUBE_API_KEY);
+      if (empty) {
+        log(`Warning: this channel ${empty.problem}; the app will show nothing from it.`, "yellow");
+      }
+    } catch (error) {
+      log(`Warning: could not check the channel's videos: ${error.message}`, "yellow");
     }
 
     if (channelTitle === "--justSearch" || justSearch) {
