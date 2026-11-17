@@ -10,8 +10,6 @@
  * Costs one quota unit per 50 channels (channels.list with statistics).
  */
 
-const { channels } = require("../channels");
-
 const API = "https://www.googleapis.com/youtube/v3/channels";
 const BATCH = 50;
 
@@ -48,6 +46,8 @@ function warn(message) {
 }
 
 async function main() {
+  // Loaded here so add-youtube-channel.js can import the helper without it.
+  const { channels } = require("../channels");
   const key = process.env.YOUTUBE_API_KEY;
   if (!key) {
     console.log("YOUTUBE_API_KEY is not set; skipping the channel upload check.");
