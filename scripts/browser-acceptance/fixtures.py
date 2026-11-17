@@ -1,5 +1,6 @@
 """Run: python3 scripts/browser-acceptance/fixtures.py. Fake feeds and player."""
 
+import subprocess
 import sys
 from subprocess import TimeoutExpired
 
@@ -7,6 +8,7 @@ sys.dont_write_bytecode = True
 from harness import (
     BASE,
     OUT,
+    ROOT,
     SCREENSHOTS,
     SCRIPTS,
     browser,
@@ -18,6 +20,23 @@ from harness import (
     server,
     shot,
     state,
+)
+
+# The fake feed gives each source 4 videos; 2 are longer than 120 seconds.
+# Read channels.js with Node, the same way the app and fetch-fixture.cjs do.
+HUSTLE_ROWS = 2 * int(
+    subprocess.run(
+        [
+            "node",
+            "-p",
+            'new Set(require("./channels.js").channels.find((c) => c.title === "hustle")'
+            '.youtubeChannels.split(";").filter(Boolean)).size',
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
 )
 
 results = {"build": fingerprint(), "screenshotsEnabled": SCREENSHOTS, "checks": []}
@@ -300,10 +319,15 @@ try:
             )
         shot("fixture-watched-storage")
 
-        # Resize the same document across the 993px layout breakpoint; identity must survive player recreation.
+        # Resize the same document across the 993px layout breakpoint; the
+        # player must survive without being destroyed, rebuilt or moved.
         open_feed("/hustle/fx000000040")
         next_video()
         selected = current_id()
+        browser("wait", "--fn", "playerFixture.current()?.ready")
+        baseline = js(
+            "({built:playerFixture.players.length,destroyed:playerFixture.calls.filter(c=>c[0]==='destroy').length,detached:playerFixture.detached})"
+        )
         for width, height, label in [
             (1440, 900, "desktop-watched"),
             (390, 844, "mobile-watched"),
@@ -326,6 +350,8 @@ try:
               const title=document.querySelector('a[href*="youtube.com/watch"]').getBoundingClientRect();
               const viewport=document.querySelector('#video-list').closest('[data-radix-scroll-area-viewport]');
               return {id:playerFixture.current().id,players:document.querySelectorAll('[data-fixture-player]').length,
+                built:playerFixture.players.length,destroyed:playerFixture.calls.filter(c=>c[0]==='destroy').length,
+                detached:playerFixture.detached,
                 row:row.toJSON(),next:next.toJSON(),title:title.toJSON(),scrollY,
                 documentWidth:document.documentElement.scrollWidth,width:innerWidth,height:innerHeight,
                 listBottom:viewport?.getBoundingClientRect().bottom,theme:document.documentElement.className};
@@ -334,6 +360,7 @@ try:
                 "B5 " + label + " identity, single player, controls and width",
                 metrics["id"] == selected
                 and metrics["players"] == 1
+                and all(metrics[k] == baseline[k] for k in baseline)
                 and metrics["next"]["height"] > 0
                 # A phone in landscape gives the player the full height; its
                 # controls are one scroll below.
@@ -422,7 +449,7 @@ try:
         )
         check(
             "D2 optional duration fields included; <=120 seconds excluded",
-            len(durations) == 60
+            len(durations) == HUSTLE_ROWS
             and any("PT3M" in s for s in durations)
             and any("PT1H" in s for s in durations)
             and all("PT2M" not in s and "PT1M59S" not in s for s in durations),
