@@ -207,6 +207,26 @@ for (const step of API_STEPS) {
   });
 }
 
+it("treats a channel without an uploads playlist as empty", async (t) => {
+  const fetch = mockApi(t, (url) => {
+    if (!url.pathname.endsWith("/playlistItems")) return;
+    return Response.json(
+      { error: { code: 404, message: RAW_ERROR, errors: [{ reason: "playlistNotFound" }] } },
+      { status: 404 },
+    );
+  });
+  assert.deepEqual(await fetchChannelUploads("source"), { videos: [], issues: [] });
+  assert.equal(fetch.mock.callCount(), 2);
+});
+
+it("still reports other not-found responses as failures", async (t) => {
+  mockApi(t, (url) => {
+    if (!url.pathname.endsWith("/playlistItems")) return;
+    return Response.json({ error: { errors: [{ reason: "notFound" }] } }, { status: 404 });
+  });
+  assert.deepEqual(await fetchChannelUploads("source"), failure("fetch-failed"));
+});
+
 it("classifies error envelopes even when the HTTP status is successful", async (t) => {
   mockApi(t, () => Response.json({ error: { code: 403, message: RAW_ERROR } }));
   assert.deepEqual(await fetchChannelUploads("source"), failure("api-denied"));
