@@ -74,8 +74,9 @@ does not need reverting.
 - A rollback hides videos watched on Vercel. The Next.js app imports the legacy
   `videosWatched` key but stores new history under `video-storage`, which the
   legacy app does not read. History from before the cutover is unaffected.
-- The cause of the Preview's YouTube denial is unconfirmed. A
-  referrer-restricted key would explain it; `YOUTUBE_API_REFERER` exists for
-  that case.
+- The Vercel `YOUTUBE_API_KEY` was replaced on 2026-11-17 after the earlier
+  key was denied, and feeds load since. If the new key shares a Google Cloud
+  project with the public legacy key, abuse of the legacy key can exhaust the
+  quota the new app relies on until step 8 deletes it.
 - These steps rely on DNS, response headers and deployment data. Netlify and
   Cloudflare dashboard settings have not been inspected.
