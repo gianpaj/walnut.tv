@@ -23,7 +23,9 @@ async function findEmptyChannels(ids, key) {
     const url = `${API}?${new URLSearchParams({ part: "statistics", id: batch.join(","), key })}`;
     const response = await fetch(url);
     const body = await response.json().catch(() => ({}));
-    if (!response.ok || body.error) {
+    // Anything but a channel list (e.g. an HTML error page with status 200)
+    // would otherwise read as "every channel is gone".
+    if (!response.ok || body.error || body.kind !== "youtube#channelListResponse") {
       // Do not echo the upstream message: it can contain the request URL and key.
       const reason = body.error?.errors?.[0]?.reason ?? "unknown";
       throw new Error(`YouTube API answered ${response.status} (${reason})`);
