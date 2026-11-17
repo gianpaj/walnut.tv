@@ -77,11 +77,20 @@ export function dedupeByYouTubeId(videos: VideoData[]): VideoData[] {
 }
 
 /**
- * Takes one element from each array in rotation, so no single subreddit or
- * YouTube channel monopolises the top of the list.
+ * Takes one element from each array in rotation until every array is empty,
+ * so no single subreddit or YouTube channel monopolises the top of the list.
  *
- * input = [[1,2,3], [4,5,6,7,8], [9,10]];
- * output = [1, 4, 9, 2, 5, 10, 3, 6, 7, 8]
+ * Channel A has 4 videos, B has 1 and C has 3:
+ *
+ *   input  = [[A1, A2, A3, A4], [B1], [C1, C2, C3]]
+ *   output = [A1, B1, C1, A2, C2, A3, C3, A4]
+ *
+ * The legacy site rotated only until the shortest non-empty array ran out,
+ * then appended the rest of each array in turn: [A1, B1, C1, A2, A3, A4, C2,
+ * C3]. The two rules can only differ with three or more sources. Categories
+ * sorted newest-first re-sort the result, so there the difference shows only
+ * among videos with equal or missing publish times. Unsorted feeds, such as a
+ * multi-subreddit Reddit category, follow this rotation.
  */
 export function interleaveArrays<T>(arrayOfArrays: T[][]): T[] {
   // Copy: the rotation below consumes the arrays it is given.

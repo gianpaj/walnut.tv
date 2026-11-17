@@ -19,8 +19,15 @@ describe("interleaveArrays", () => {
         [4, 5, 6, 7, 8],
         [9, 10],
       ]),
-      // The order the live site's mixElementsFromArraysOfArrays produces.
       [1, 4, 9, 2, 5, 10, 3, 6, 7, 8],
+    );
+  });
+
+  it("keeps rotating after the shortest array runs out, unlike legacy", () => {
+    assert.deepEqual(
+      interleaveArrays([["A1", "A2", "A3", "A4"], ["B1"], ["C1", "C2", "C3"]]),
+      // Legacy appended the remainders instead: A1 B1 C1 A2 A3 A4 C2 C3.
+      ["A1", "B1", "C1", "A2", "C2", "A3", "C3", "A4"],
     );
   });
 
