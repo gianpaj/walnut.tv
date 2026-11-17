@@ -30,7 +30,7 @@ typecheck, lint, 137 tests and production builds passed for `4a33f66`.
 | Browser acceptance   | U2/U3, B0–B3, B5–B7 | Finish scroll/menu checks, player lifecycle/controls, loaded-route checks and paired screenshots across themes and viewport sizes |
 | Product decisions    | P1/P3               | Choose source ordering; decide whether playback position must survive layout changes                                              |
 | Cache and quota      | L3                  | Measure Vercel cache sharing/persistence and upstream usage across visits, cold starts and redeploys                              |
-| Analytics            | L5                  | Select the intended property/integrations, exclude preview traffic and verify navigation events without duplicates                |
+| Analytics            | L5                  | Verify initial loads and navigation events in GA4 realtime after cutover                                                          |
 | Release              | L6/L7               | Complete final-revision validation, review Git deployment policy, update the PR and document cutover/rollback                     |
 
 **Paused, not failed:** Reddit vote/filter/feed parity (P2 and Reddit portions of
@@ -70,7 +70,7 @@ These are present, not claims of end-to-end verification:
 | All configured YouTube sources, four candidates each, duration filtering and newest-first sorting | `src/lib/actions/youtube.ts`, `src/lib/utils.ts`                     |
 | Server-side Reddit OAuth, hot listings, vote filtering (retained, disabled)                       | `src/lib/actions/reddit.ts`                                          |
 | Cross-source interleaving, deduplication and Reddit/YouTube failure isolation                     | `src/lib/actions/videos.ts`, `src/lib/videoService.ts`               |
-| GA4/Firebase scripts, metadata, icons, manifest, sitemap and robots                               | `src/components/Analytics.tsx`, `src/app/layout.tsx`, `public/`      |
+| GA4 script, metadata, icons, manifest, sitemap and robots                                         | `src/components/Analytics.tsx`, `src/app/layout.tsx`, `public/`      |
 
 YouTube uses Next's Data Cache: playlist-ID lookups revalidate at 30 days;
 playlist items and video details at two hours. The disabled Reddit implementation
@@ -247,10 +247,14 @@ revision, browser and result. Unit coverage does not establish browser parity.
       metadata inheritance, canonical handling and asset files. Vercel spot checks
       also passed manifest/sitemap/robots responses, social images and Reddit
       noindex. Recheck the full metadata/asset matrix on the host at cutover.
-- [ ] **L5: Analytics.** Verify initial loads and history-based navigation in
-      GA4 realtime/debug reporting. Confirm which of the two configured properties
-      is used and whether both integrations are wanted; avoid duplicate counting
-      and decide how preview traffic is excluded.
+- [ ] **L5: Analytics.** The app reports only to GA4 property 372022725
+      (`G-LJ7B0PVNZL`) through the Google tag, and loads it only on
+      `walnut.tv` and `www.walnut.tv` so deployments on other hosts are not
+      counted. Legacy also sends Firebase Analytics to property 187037157
+      (`G-Z6V9TW1R8F`); that property keeps its history but receives no data
+      after cutover. After cutover, verify initial loads and history-based
+      navigation in GA4 realtime, and check in DebugView that `page_title` on a
+      navbar navigation names the new channel, not the previous one.
 - [ ] **L6: Reproducible validation.** Frozen-lockfile install, channel check,
       typecheck, lint, tests and production build pass on the release revision.
       Add focused regression tests for the fixes above; helper tests alone do not
