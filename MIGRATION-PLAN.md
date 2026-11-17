@@ -284,11 +284,13 @@ revision, browser and result. Unit coverage does not establish browser parity.
       is incomplete, so this release gate remains open.
   - [x] Pass frozen install, channel validation, typecheck, lint, 137 tests and
         production build for deployed source `4a33f66`; Vercel build also passes.
-  - [ ] Complete the browser confirmation suite and rerun validation for any
-        subsequent code changes on the release revision. The fixture suite
-        passed 66 of 66 checks headless for `2b5f20d` with agent-browser 0.38.1,
-        including the U3 keyboard menu checks; it uses synthetic feeds, so real
-        feeds remain unverified.
+  - [x] Pass a clean frozen install, channel validation, typecheck, lint,
+        format check, 140 tests, production build and the fixture suite (66 of
+        66, headless, agent-browser 0.38.1) for `631a2f4`, `dev` with `master`
+        merged in.
+  - [ ] Complete the browser confirmation suite (B0–B3, B5–B7) and rerun this
+        validation if code changes before release. The fixture suite uses
+        synthetic feeds; real-feed playback is covered by L1.
 - [ ] **L7: Cutover and rollback.** Review current `master` channel changes,
       finish or explicitly accept the open parity items, update the PR summary,
       and record the deployment target, redirect policy and rollback procedure.
