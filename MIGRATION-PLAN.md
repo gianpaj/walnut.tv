@@ -28,7 +28,6 @@ typecheck, lint, 137 tests and production builds passed for `4a33f66`.
 | -------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | Working hosted feeds | L1/L2               | Verify hosted playback; finish secret-exposure checks                                                                             |
 | Browser acceptance   | U2/U3, B0–B3, B5–B7 | Finish scroll/menu checks, player lifecycle/controls, loaded-route checks and paired screenshots across themes and viewport sizes |
-| Product decisions    | P1                  | Choose source ordering                                                                                                            |
 | Cache and quota      | L3                  | Measure Vercel cache sharing/persistence and upstream usage across visits, cold starts and redeploys                              |
 | Analytics            | L5                  | Verify initial loads and navigation events in GA4 realtime after cutover                                                          |
 | Release              | L6/L7               | Complete final-revision validation, review Git deployment policy, update the PR and document cutover/rollback                     |
@@ -126,11 +125,11 @@ There is no Reddit browser fallback and no three-channel YouTube cap.
 
 ## Differences requiring a decision
 
-- [ ] **P1: Source ordering.** For `[[1,2,3,4],[5],[6,7,8]]`, legacy interleaving
-      produces `[1,5,6,2,3,4,7,8]`; `interleaveArrays` produces
-      `[1,5,6,2,7,3,8,4]`. Restore the legacy rule or accept round-robin and update
-      the helper's parity claim and tests. Newest-first sorting masks most of this
-      difference in the configured YouTube categories.
+- [x] **P1: Source ordering.** `interleaveArrays` keeps rotating between
+      sources until all are empty: `[[1,2,3,4],[5],[6,7,8]]` gives
+      `[1,5,6,2,7,3,8,4]`, where legacy gave `[1,5,6,2,3,4,7,8]`. Accepted so a
+      prolific source cannot fill the list. Newest-first categories re-sort the
+      result, so the configured YouTube categories are unaffected.
 - [ ] **P2: Reddit vote semantics.** Legacy filters `ups` only for a truthy
       threshold; the rewrite always checks `score >= minVotes`. At zero, negative
       scores are excluded rather than disabling the filter. Choose the rule and
@@ -211,7 +210,7 @@ revision, browser and result. Unit coverage does not establish browser parity.
 - [ ] **B6: Feed fixtures.** All configured YouTube sources considered,
       newest-first sorting, duration boundary, missing thumbnail variants,
       Reddit hot/vote filters, multiple subreddits, mixed Reddit/YouTube results
-      and duplicates. Resolve P1/P2 before asserting exact ordering/filter parity.
+      and duplicates. Resolve P2 before asserting exact filter parity.
 - [ ] **B7: Failure states.** D1 feed-state fixtures and U1 slow-source
       navigation checks passed; a deployment with a denied key rendered API-denial
       messages.
@@ -283,7 +282,7 @@ revision, browser and result. Unit coverage does not establish browser parity.
 ## Suggested restart order
 
 1. Verify hosted playback and finish the secret checks (L1/L2).
-2. Confirm U2/U3 and settle P1; keep P2 paused while Reddit is disabled.
+2. Confirm U2/U3; keep P2 paused while Reddit is disabled.
 3. Finish the browser checklist on the reviewed revision, including screenshot parity.
 4. Collect cache and analytics evidence, then complete cutover gates.
 
