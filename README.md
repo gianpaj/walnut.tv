@@ -52,22 +52,23 @@ are separate.
 
 ### Scripts
 
-| Command               | What it does                                        |
-| --------------------- | --------------------------------------------------- |
-| `pnpm dev`            | Portless development server at `walnut.localhost`   |
-| `pnpm dev:direct`     | Plain Next.js development server                    |
-| `pnpm build`          | Validate channels, then build for production        |
-| `pnpm start`          | Serve the production build                          |
-| `pnpm lint`           | Type-aware Oxlint checks                            |
-| `pnpm lint:fix`       | Apply lint fixes explicitly                         |
-| `pnpm format`         | Format code/config and Markdown                     |
-| `pnpm format:check`   | Check formatting without changes                    |
-| `pnpm typecheck`      | `tsc --noEmit`                                      |
-| `pnpm test`           | Node's built-in test runner over `src/**/*.test.ts` |
-| `pnpm check-channels` | Check every YouTube channel ID in `channels.js`     |
+| Command                      | What it does                                                        |
+| ---------------------------- | ------------------------------------------------------------------- |
+| `pnpm dev`                   | Portless development server at `walnut.localhost`                   |
+| `pnpm dev:direct`            | Plain Next.js development server                                    |
+| `pnpm build`                 | Validate channels, then build for production                        |
+| `pnpm start`                 | Serve the production build                                          |
+| `pnpm lint`                  | Type-aware Oxlint checks                                            |
+| `pnpm lint:fix`              | Apply lint fixes explicitly                                         |
+| `pnpm format`                | Format code/config and Markdown                                     |
+| `pnpm format:check`          | Check formatting without changes                                    |
+| `pnpm typecheck`             | `tsc --noEmit`                                                      |
+| `pnpm test`                  | Node's built-in test runner over `src/**/*.test.ts`                 |
+| `pnpm check-channels`        | Check every YouTube channel ID in `channels.js`                     |
+| `pnpm check-channel-uploads` | Warn about channels with no public videos (needs `YOUTUBE_API_KEY`) |
 
 CI runs channel validation, typecheck, tests, and the production build on every
-pull request. Formatting and linting run locally and in the pre-commit hook, not CI.
+pull request. It also warns, without failing, about channels with no public videos. Formatting and linting run locally and in the pre-commit hook, not CI.
 
 ### Browser acceptance
 

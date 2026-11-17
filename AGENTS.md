@@ -42,7 +42,8 @@ or transform step. That means test files import with an explicit `.ts`
 extension and can only use relative imports, not the `@/` alias.
 
 CI (`.github/workflows/ci.yml`) runs install, check-channels, typecheck, test and
-build on every PR. Formatting and linting run locally and in the pre-commit hook,
+build on every PR. It also runs check-channel-uploads with the `YOUTUBE_API_KEY`
+secret, which only warns. Formatting and linting run locally and in the pre-commit hook,
 not CI.
 
 Next's `experimental.useTypeScriptCli` enables build-time checking with TS7.
@@ -90,7 +91,10 @@ three things read or write it:
 
 - `scripts/check-channels.js` validates every YouTube channel ID is exactly 24
   characters
-- `scripts/add-youtube-channel.js` rewrites the file by regex
+- `scripts/check-channel-uploads.js` warns about channels that no longer exist
+  or have no public videos; the app shows nothing for them but still spends quota
+- `scripts/add-youtube-channel.js` rewrites the file by regex, and gives the same
+  warning for the channel it adds
 - the `add-youtube-channel` skill in `.claude/skills/` drives that script
 
 The app reads it only through `src/lib/data.ts`, which adds the `Channel` type
