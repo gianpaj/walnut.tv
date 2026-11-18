@@ -1,0 +1,60 @@
+{
+  "commit": "4a33f66873edbf44752ce827d21e108562058e68",
+  "preview": "https://walnut-kaw6e7opr-gianpaj.vercel.app",
+  "checks": [
+    {
+      "input": "/?p=/r/videos/test&q=tag=a%26b~and~space=a+b#player",
+      "expected": "/r/videos/test?tag=a%26b&space=a+b#player",
+      "actual": "/r/videos/test?tag=a%26b&space=a+b#player",
+      "pass": true
+    },
+    {
+      "input": "/?p=/r/videos/test&q=x=%7Eand%7Ey=z",
+      "expected": "/r/videos/test?x=%7Eand%7Ey=z",
+      "actual": "/r/videos/test?x=%7Eand%7Ey=z",
+      "pass": true
+    },
+    {
+      "input": "/?p=/r/videos/test&q=x=~and~y=z",
+      "expected": "/r/videos/test?x=&y=z",
+      "actual": "/r/videos/test?x=&y=z",
+      "pass": true
+    },
+    {
+      "input": "/?p=/r/videos/test&q=x%3Dy=z",
+      "expected": "/r/videos/test?x%3Dy=z",
+      "actual": "/r/videos/test?x%3Dy=z",
+      "pass": true
+    },
+    {
+      "input": "/?p=/r/videos/test&q=x=y%3Dz",
+      "expected": "/r/videos/test?x=y%3Dz",
+      "actual": "/r/videos/test?x=y%3Dz",
+      "pass": true
+    },
+    {
+      "input": "/?p=//evil.invalid",
+      "expected": "/hustle",
+      "actual": "/hustle",
+      "pass": true
+    },
+    {
+      "input": "/?p=/ai%GG",
+      "expected": "/hustle",
+      "actual": "/hustle",
+      "pass": true
+    },
+    {
+      "input": "/?p=/curious/old",
+      "expected": "/hustle",
+      "actual": "/hustle",
+      "pass": true
+    },
+    {
+      "input": "/?p=/unknown-channel/test",
+      "expected": "/unknown-channel/test",
+      "actual": "/unknown-channel/test",
+      "pass": true
+    }
+  ]
+}

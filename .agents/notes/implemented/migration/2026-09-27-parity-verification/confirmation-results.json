@@ -1,0 +1,217 @@
+{
+  "build": {
+    "head": "10ad0686ee9c33fb99a14ba44cee792571cc1fac",
+    "buildId": "Qu_F7W-9l2ePfgG9TMiTN",
+    "sourceSha256": "a167ebea3d06de513fb17add4f66133ec5a9c5fc1990df7c459fdd4477d9f784",
+    "browserCLI": "agent-browser 0.38.1",
+    "session": "walnut-acceptance-63530"
+  },
+  "screenshotsEnabled": false,
+  "checks": [
+    {
+      "check": "U2 desktop selection scrolls only list",
+      "pass": true,
+      "evidence": {
+        "active": {
+          "bottom": 899.171875,
+          "height": 74.2578125,
+          "left": 9,
+          "right": 352.25,
+          "top": 824.9140625,
+          "width": 343.25,
+          "x": 9,
+          "y": 824.9140625
+        },
+        "list": 1127.5,
+        "y": 0
+      }
+    },
+    {
+      "check": "U2 desktop selected row fully inside browser viewport",
+      "pass": true,
+      "evidence": {
+        "active": {
+          "bottom": 899.171875,
+          "height": 74.2578125,
+          "left": 9,
+          "right": 352.25,
+          "top": 824.9140625,
+          "width": 343.25,
+          "x": 9,
+          "y": 824.9140625
+        },
+        "list": 1127.5,
+        "y": 0
+      }
+    },
+    {
+      "check": "U1 pending names destination and pauses old player",
+      "pass": true,
+      "evidence": {
+        "calls": [
+          ["construct", "fx000000040"],
+          ["cue", "fx000000040"],
+          ["cue", "fx000000041"],
+          ["pause", "fx000000041"]
+        ],
+        "status": ["Loading AI\u2026"]
+      }
+    },
+    {
+      "check": "U1 navigation completes and unmount destroys player",
+      "pass": true,
+      "evidence": {
+        "calls": [
+          ["construct", "fx000000040"],
+          ["cue", "fx000000040"],
+          ["cue", "fx000000041"],
+          ["pause", "fx000000041"],
+          ["destroy", "fx000000041"],
+          ["construct", "fx000000120"],
+          ["cue", "fx000000120"]
+        ],
+        "id": "fx000000120",
+        "players": 1
+      }
+    },
+    {
+      "check": "B1 Back returns category",
+      "pass": true,
+      "evidence": {
+        "active": "Fixture 041 \u2014 PT1H",
+        "assets": [
+          "/site.webmanifest",
+          "/favicon.ico?favicon.2atqdijc3j-lh.ico",
+          "/favicon-32x32.png",
+          "/favicon-16x16.png",
+          "/apple-touch-icon.png"
+        ],
+        "canonical": "https://walnut.tv/hustle/fx000000040",
+        "messages": [""],
+        "ogImage": "https://walnut.tv/walnut.tv-og-image.png",
+        "players": 1,
+        "rows": 60,
+        "scrollY": 0,
+        "theme": "dark",
+        "title": "Hustle videos - walnut.tv",
+        "twitterImage": "https://walnut.tv/walnut.tv-og-image.png",
+        "url": "http://127.0.0.1:3100/hustle/fx000000041",
+        "viewport": [1440, 900]
+      }
+    },
+    {
+      "check": "B1 Back preserves selected video",
+      "pass": true,
+      "evidence": {
+        "expected": "fx000000041",
+        "actual": "fx000000041",
+        "player": {
+          "calls": [
+            ["construct", "fx000000040"],
+            ["cue", "fx000000040"],
+            ["cue", "fx000000041"],
+            ["pause", "fx000000041"],
+            ["destroy", "fx000000041"],
+            ["construct", "fx000000120"],
+            ["cue", "fx000000120"],
+            ["destroy", "fx000000120"],
+            ["construct", "fx000000041"],
+            ["cue", "fx000000041"]
+          ],
+          "id": "fx000000041",
+          "players": 1
+        }
+      }
+    },
+    {
+      "check": "B1 Back updates watched-store selection",
+      "pass": true,
+      "evidence": null
+    },
+    {
+      "check": "B1 Forward returns category",
+      "pass": true,
+      "evidence": {
+        "active": "Fixture 120 \u2014 PT3M",
+        "assets": [
+          "/site.webmanifest",
+          "/favicon.ico?favicon.2atqdijc3j-lh.ico",
+          "/favicon-32x32.png",
+          "/favicon-16x16.png",
+          "/apple-touch-icon.png"
+        ],
+        "canonical": "https://walnut.tv/ai",
+        "messages": [""],
+        "ogImage": "https://walnut.tv/walnut.tv-og-image.png",
+        "players": 1,
+        "rows": 68,
+        "scrollY": 0,
+        "theme": "dark",
+        "title": "AI videos - walnut.tv",
+        "twitterImage": "https://walnut.tv/walnut.tv-og-image.png",
+        "url": "http://127.0.0.1:3100/ai/fx000000120",
+        "viewport": [1440, 900]
+      }
+    },
+    {
+      "check": "U2 mobile initial deep link stays at top",
+      "pass": true,
+      "evidence": {
+        "active": "Fixture 040 \u2014 PT3MAcceptance source",
+        "assets": [
+          "/site.webmanifest",
+          "/favicon.ico?favicon.2atqdijc3j-lh.ico",
+          "/favicon-32x32.png",
+          "/favicon-16x16.png",
+          "/apple-touch-icon.png"
+        ],
+        "canonical": "https://walnut.tv/hustle/fx000000040",
+        "messages": [""],
+        "ogImage": "https://walnut.tv/walnut.tv-og-image.png",
+        "players": 1,
+        "rows": 60,
+        "scrollY": 0,
+        "theme": "dark",
+        "title": "Hustle videos - walnut.tv",
+        "twitterImage": "https://walnut.tv/walnut.tv-og-image.png",
+        "url": "http://127.0.0.1:3100/hustle/fx000000040?keep=yes#player",
+        "viewport": [390, 844]
+      }
+    },
+    {
+      "check": "U2 mobile next past fold does not move document",
+      "pass": true,
+      "evidence": {
+        "active": "Fixture 045 \u2014 PT1HAcceptance source",
+        "assets": [
+          "/site.webmanifest",
+          "/favicon.ico?favicon.2atqdijc3j-lh.ico",
+          "/favicon-32x32.png",
+          "/favicon-16x16.png",
+          "/apple-touch-icon.png"
+        ],
+        "canonical": "https://walnut.tv/hustle/fx000000040",
+        "messages": [""],
+        "ogImage": "https://walnut.tv/walnut.tv-og-image.png",
+        "players": 1,
+        "rows": 60,
+        "scrollY": 0,
+        "theme": "dark",
+        "title": "Hustle videos - walnut.tv",
+        "twitterImage": "https://walnut.tv/walnut.tv-og-image.png",
+        "url": "http://127.0.0.1:3100/hustle/fx000000045?keep=yes#player",
+        "viewport": [390, 844]
+      }
+    },
+    {
+      "check": "U3 keyboard opens named menu",
+      "pass": true,
+      "evidence": null
+    }
+  ],
+  "fatal": "browser wait: {'success': False, 'data': None, 'error': 'Wait timed out after 25000ms'}",
+  "summary": {
+    "passed": 11,
+    "failed": 0
+  }
+}
