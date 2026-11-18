@@ -1,6 +1,6 @@
 # Agent Note: Cutover and rollback
 
-Status: proposed — the steps depend on open release gates L1–L6
+Status: proposed — release gates L1–L6 are closed; the steps await the owner
 
 ## Problem
 
@@ -30,7 +30,10 @@ Freeze the legacy site, make Vercel build `master`, then move DNS.
    Ignored Build Step, and set the project Node version to 24.x to match
    `package.json`.
 4. **Merge PR #325.** Vercel builds production. Verify real feeds, deep links
-   and `?p=` links on the Vercel production URL before any DNS change.
+   and `?p=` links on the Vercel production URL before any DNS change. If the
+   build fails to resolve the `next/font/google` module, redeploy without the
+   build cache; the `dev` build of `b12bdd8` failed that way
+   ([recheck note](../../implemented/migration/2026-11-18-hosted-parity-recheck/README.md)).
 5. **Add the domains.** Add `walnut.tv` and `www.walnut.tv` to the Vercel
    project, with `www` redirecting to the apex, as it does today.
 6. **Move DNS.** In Cloudflare, first record the current type, target and
