@@ -42,8 +42,11 @@ the source of truth for fonts, sizes, colours and spacing.
 
 ## Consequences
 
-- Paired 1440×900 and 390×844 captures match legacy in layout and type
-  (embed, title, arrows and menu within 2px).
+- Hosted pairs at 1440×900, 390×844 and 390×568 match legacy within 2px
+  once the desktop footer padding is 10px, as legacy's `1rem` resolves under
+  Bootstrap 3. See the [hosted parity recheck](./2026-11-18-hosted-parity-recheck/README.md).
+- At 844×390 legacy's column wraps and its player shrinks to a 17px sliver.
+  The new app keeps a full-width player with the title one scroll below.
 - Desktop's right column scrolls 50px to the Terms, Privacy and Contact
   links, as legacy's page does.
 - The theme is forced dark; a stored `theme=light` is ignored.

@@ -259,8 +259,9 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
       </div>
       {!isDesktop && controls}
       {/* The footer row. On desktop it sits at the bottom of the viewport-tall
-          box, a short scroll down, as on legacy. */}
-      <div className={cn("flex grow basis-0 items-end", isDesktop ? "pb-4" : "pt-5")}>
+          box, a short scroll down, as on legacy. Legacy's 1rem bottom padding
+          is 10px under Bootstrap 3's root font size. */}
+      <div className={cn("flex grow basis-0 items-end", isDesktop ? "pb-2.5" : "pt-5")}>
         <Footer />
       </div>
     </div>
