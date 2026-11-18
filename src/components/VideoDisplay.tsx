@@ -2,17 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { useIsDesktop } from "@/hooks/use-media-query";
 import useVideo from "@/hooks/use-video";
 import { cn } from "@/lib/utils";
 
 import Footer from "./Footer";
-import { Badge } from "./ui/badge";
-import { ScrollArea } from "./ui/scroll-area";
 import VideoPlayer from "./VideoPlayer";
 
 interface Props {
@@ -34,37 +29,41 @@ function replaceVideoUrl(urlPrefix: string, videoId: string) {
   // A departing route can remain mounted while Next commits its replacement.
   if (url.pathname !== urlPrefix && !url.pathname.startsWith(`${urlPrefix}/`)) return;
   url.pathname = `${urlPrefix}/${encodeURIComponent(videoId)}`;
-  if (url.searchParams.has("v")) url.searchParams.set("v", videoId);
+  // The path names the video, so a legacy `?v=` would only duplicate it.
+  url.searchParams.delete("v");
   if (url.href !== window.location.href) window.history.replaceState(null, "", url);
+}
+
+/**
+ * The legacy list's cut: titles over 90 characters end at a word within 80.
+ * Legacy left only "..." when the first 80 had no space (common in CJK
+ * titles); those are cut at 80 characters instead.
+ */
+function shortTitle(title: string) {
+  if (title.length <= 90) return title;
+  const head = title.trim().substring(0, 80);
+  return `${head.split(" ").slice(0, -1).join(" ") || head}...`;
 }
 
 interface VideoListProps {
   videos: VideoData[];
   activeIndex: number;
   onSelect: (index: number) => void;
-  showAuthor?: boolean;
   /** Own scroll container (desktop sidebar) vs. scrolling with the page (mobile). */
   scroll?: boolean;
   className?: string;
 }
 
-const VideoList = ({
-  videos,
-  activeIndex,
-  onSelect,
-  showAuthor = false,
-  scroll = true,
-  className,
-}: VideoListProps) => {
+const VideoList = ({ videos, activeIndex, onSelect, scroll = true, className }: VideoListProps) => {
   const watchedVideos = useVideo((state) => state.watchedVideos);
   const activeRef = useRef<HTMLButtonElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
 
-  // Keep the playing video visible when arrow keys or prev/next move the
-  // selection past the edge of the scroll area.
+  // Keep the playing video visible when arrow keys move the selection past
+  // the edge of the sidebar, or when the sidebar appears at the breakpoint.
   useEffect(() => {
-    if (!scroll || !activeRef.current) return;
-    const viewport = activeRef.current.closest<HTMLElement>("[data-radix-scroll-area-viewport]");
-    if (!viewport) return;
+    const viewport = viewportRef.current;
+    if (!viewport || !activeRef.current) return;
     const item = activeRef.current.getBoundingClientRect();
     const bounds = viewport.getBoundingClientRect();
     if (item.top < bounds.top) viewport.scrollTop -= bounds.top - item.top;
@@ -72,7 +71,7 @@ const VideoList = ({
   }, [activeIndex, scroll]);
 
   const items = (
-    <div id="video-list" className="flex h-full flex-col space-y-4 p-2">
+    <div id="video-list">
       {videos.map((video, index) => {
         const isActive = index === activeIndex;
         // The active video is never dimmed, even once it counts as watched.
@@ -83,45 +82,36 @@ const VideoList = ({
             key={video.id}
             ref={isActive ? activeRef : undefined}
             data-active={isActive || undefined}
-            className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr]"
+            className={cn(
+              "flex w-full items-start border-l-4 px-2.5 py-3 text-left",
+              isActive ? "border-[#ffec00]" : "border-transparent",
+            )}
             onClick={() => onSelect(index)}
           >
-            {/* Only the active row may carry the layoutId: when every row shares
-                it, framer-motion hides the marker until the first click. */}
-            <div className="col-span-1">
-              {isActive && (
-                <motion.div
-                  className="h-full w-[5px] rounded-lg bg-primary"
-                  layoutId="active-video"
-                />
-              )}
-            </div>
-            <div className="relative col-span-2">
+            <div className="relative mr-[15px] shrink-0">
               <Image
                 src={video.thumbnail}
                 alt=""
-                width={320}
-                height={180}
-                className={cn("w-full", isWatched && "opacity-50")}
+                width={125}
+                height={70}
+                className="w-[125px]"
                 unoptimized
               />
               {isWatched && (
-                <Badge className="absolute left-1 top-1 text-[10px] leading-none">WATCHED</Badge>
+                <span className="absolute left-0 top-0 bg-[#1d2122] px-1 py-0.5 text-[8px] text-white">
+                  WATCHED
+                </span>
               )}
             </div>
-            <div className="col-span-3 px-2">
-              <span
-                className={cn(
-                  "line-clamp-2 text-start text-xs font-medium",
-                  isWatched && "opacity-60",
-                )}
-              >
-                {video.title}
-              </span>
-              {showAuthor && (
-                <span className="line-clamp-2 text-start text-xs text-primary">{video.author}</span>
+            <span
+              title={video.title}
+              className={cn(
+                "w-[225px] text-xs leading-4",
+                isWatched ? "text-[#5a5a5a]" : "text-white",
               )}
-            </div>
+            >
+              {shortTitle(video.title)}
+            </span>
           </button>
         );
       })}
@@ -130,7 +120,11 @@ const VideoList = ({
 
   if (!scroll) return items;
 
-  return <ScrollArea className={cn("h-full", className)}>{items}</ScrollArea>;
+  return (
+    <div ref={viewportRef} className={cn("h-full overflow-y-auto", className)}>
+      {items}
+    </div>
+  );
 };
 
 const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
@@ -221,64 +215,54 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
 
   if (!video) return null;
 
+  // Legacy's pixel arrows, shown only in the stacked layout.
   const controls = (
-    <div className="mt-4 flex items-center justify-between">
-      <Button
-        variant="secondary"
-        size="sm"
-        onClick={goPrev}
-        disabled={index < 1}
-        aria-label="Previous video"
-      >
-        <ChevronLeft className="mr-1 h-4 w-4" />
-        Prev
-      </Button>
-      <span className="text-xs text-muted-foreground">
-        {index + 1} / {videos.length}
-      </span>
-      <Button
-        variant="secondary"
-        size="sm"
+    <div className="flex justify-between pb-10 pt-5">
+      <button type="button" onClick={goPrev} disabled={index < 1} aria-label="Previous video">
+        <Image src="/img/walnut-logo.svg" alt="" width={30} height={45} className="rotate-180" />
+      </button>
+      <button
+        type="button"
         onClick={goNext}
         disabled={index >= videos.length - 1}
         aria-label="Next video"
       >
-        Next
-        <ChevronRight className="ml-1 h-4 w-4" />
-      </Button>
-    </div>
-  );
-
-  const details = (
-    <div className="mt-4">
-      <a
-        className="text-2xl font-semibold hover:underline"
-        href={video.url}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {video.title}
-      </a>
+        <Image src="/img/walnut-logo.svg" alt="" width={30} height={45} />
+      </button>
     </div>
   );
 
   // One layout at a time, not two CSS-hidden copies: a hidden copy would build
   // a second YouTube player and every onEnded/onError would fire twice.
+  //
+  // Legacy's flex column: a viewport-tall box (91vh when stacked) whose player,
+  // title and footer rows start at zero height and split the spare height
+  // evenly, so the player is 47% of its width plus a third of what is left.
   const player = (
-    <div className="flex w-full flex-col justify-center p-4">
-      {/* Capped by width so 16:9 fits the viewport height. Desktop also leaves
-          room for the title and controls; the stacked layout scrolls, so it
-          reserves only the navbar and padding. */}
-      <div
-        className={cn(
-          "mx-auto w-full",
-          isDesktop ? "max-w-[calc((100dvh-18rem)*16/9)]" : "max-w-[calc((100dvh-5rem)*16/9)]",
-        )}
-      >
+    <div
+      className={cn(
+        "flex shrink-0 flex-col",
+        isDesktop ? "h-screen px-[30px] pt-[15px]" : "h-[91vh] px-2.5 pt-[5px]",
+      )}
+    >
+      <div className="relative grow basis-0 pb-[47%] [&>*]:absolute [&>*]:inset-0 [&>*]:h-full">
         <VideoPlayer video={video} onEnded={onVideoEnded} onError={goNext} />
       </div>
-      {details}
-      {controls}
+      <div className={cn("grow basis-0", isDesktop ? "pt-5" : "mx-2.5")}>
+        <a className="block" href={video.url} target="_blank" rel="noopener noreferrer">
+          <h2
+            className={cn("mb-2.5 mt-5 text-white", isDesktop ? "text-2xl/[1.1]" : "text-lg/[1.1]")}
+          >
+            {video.title}
+          </h2>
+        </a>
+      </div>
+      {!isDesktop && controls}
+      {/* The footer row. On desktop it sits at the bottom of the viewport-tall
+          box, a short scroll down, as on legacy. */}
+      <div className={cn("flex grow basis-0 items-end", isDesktop ? "pb-4" : "pt-5")}>
+        <Footer />
+      </div>
     </div>
   );
 
@@ -287,24 +271,17 @@ const VideoDisplay = ({ videos, urlPrefix, initialVideoId }: Props) => {
   // in a fixed sidebar on the left; below it, `contents` drops the wrappers and
   // everything stacks and scrolls with the page.
   return (
-    <div className={isDesktop ? "flex min-h-0 flex-1 rounded-lg border" : "contents"}>
-      <div
-        className={
-          isDesktop ? "flex min-w-0 flex-1 flex-col justify-between overflow-y-auto" : "contents"
-        }
-      >
+    <div className={isDesktop ? "flex min-h-0 flex-1" : "contents"}>
+      <div className={isDesktop ? "flex min-w-0 flex-1 flex-col overflow-y-auto" : "contents"}>
         {player}
-        {isDesktop && <Footer />}
       </div>
       <VideoList
         videos={videos}
         activeIndex={index}
         onSelect={select}
-        className={isDesktop ? "order-first w-[400px] shrink-0 border-r" : undefined}
-        showAuthor={!isDesktop}
+        className={isDesktop ? "order-first w-[400px] shrink-0" : undefined}
         scroll={isDesktop}
       />
-      {!isDesktop && <Footer />}
     </div>
   );
 };

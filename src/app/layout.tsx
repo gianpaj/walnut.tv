@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Poppins } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 
 import "./globals.css";
 
@@ -9,9 +9,11 @@ import { NavigationProvider } from "@/components/providers/NavigationProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 
-const poppins = Poppins({
+// The weights the legacy site requests. Headings ask for 500 there, which
+// falls back to 400 because 500 is not loaded.
+const openSans = Open_Sans({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "600", "700"],
 });
 
 const description =
@@ -68,9 +70,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className={poppins.className} suppressHydrationWarning={true}>
+      <body
+        className={`${openSans.className} text-[13px] leading-[1.42857143]`}
+        suppressHydrationWarning={true}
+      >
         <ToastProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark">
+          <ThemeProvider attribute="class" forcedTheme="dark">
             <NavigationProvider>
               {/* Fixed height only for the sidebar layout; 993px matches useIsDesktop. */}
               <div className="flex min-h-dvh flex-col min-[993px]:h-dvh min-[993px]:overflow-hidden">

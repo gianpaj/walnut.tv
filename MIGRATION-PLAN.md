@@ -144,9 +144,9 @@ There is no Reddit browser fallback and no three-channel YouTube cap.
       phones in landscape, use the stacked layout. Both layouts share one
       element tree, so the player keeps playing when a resize or rotation
       crosses the breakpoint. The fixture resize check fails if the player is
-      rebuilt or moved. On desktop the DOM and tab order is player, title,
-      controls and footer, then the list, although the list is shown on the
-      left; keyboard users reach the player without tabbing through every row.
+      rebuilt or moved. On desktop the DOM and tab order is player, title and
+      footer, then the list, although the list is shown on the left; keyboard users
+      reach the player without tabbing through every row.
 
 Deduplicating the final combined feed is a useful difference from legacy, not
 an implementation gap. Acceptance should compare source coverage and order,

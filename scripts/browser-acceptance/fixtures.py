@@ -39,6 +39,9 @@ HUSTLE_ROWS = 2 * int(
     ).stdout
 )
 
+MENU_BUTTON = 'button[aria-controls="category-menu"]'
+OPEN_MENU = "#category-menu:not([hidden])"
+
 results = {"build": fingerprint(), "screenshotsEnabled": SCREENSHOTS, "checks": []}
 
 
@@ -68,7 +71,8 @@ def player():
 
 
 def next_video():
-    browser("find", "role", "button", "click", "--name", "Next video")
+    # Desktop has no Next button; arrow keys work in both layouts.
+    browser("press", "ArrowRight")
 
 
 def current_id():
@@ -142,7 +146,7 @@ try:
         open_feed("/hustle/fx000000040")
         browser("press", "ArrowRight")
         scroll = js(
-            '({y:scrollY,list:document.querySelector("[data-radix-scroll-area-viewport]").scrollTop,active:document.querySelector("#video-list [data-active]").getBoundingClientRect().toJSON()})'
+            '({y:scrollY,list:document.querySelector("#video-list").parentElement.scrollTop,active:document.querySelector("#video-list [data-active]").getBoundingClientRect().toJSON()})'
         )
         check(
             "U2 desktop selection scrolls only list",
@@ -157,7 +161,8 @@ try:
         shot("fixture-desktop-deeplink-visible")
         selected_before_nav = current_id()
         mode(delay=1500)
-        browser("click", 'a[href="/ai"]')
+        # The hidden dropdown also holds an /ai link; click the visible navbar one.
+        browser("click", 'header ul:not(#category-menu) a[href="/ai"]')
         pending = js(
             '({status:[...document.querySelectorAll("[role=status]")].map(x=>x.textContent),calls:playerFixture.calls})'
         )
@@ -213,41 +218,44 @@ try:
             state(),
         )
         for _ in range(3):
-            next_video()
+            browser("find", "role", "button", "click", "--name", "Next video")
         check(
             "U2 mobile next past fold does not move document",
             js("scrollY") == 0,
             state(),
         )
         shot("fixture-mobile-deeplink-past-fold")
-        browser("focus", 'button[aria-label="Open navigation menu"]')
+        browser("focus", MENU_BUTTON)
         browser("press", "Enter")
-        browser("wait", "[role=dialog]")
+        browser("wait", OPEN_MENU)
         shot("fixture-mobile-menu-keyboard")
         check(
             "U3 keyboard opens named menu",
-            js('!!document.querySelector("[role=dialog]")'),
+            js(
+                "document.querySelector(" + json.dumps(MENU_BUTTON) + ").textContent"
+            ).startswith("Category"),
         )
+        browser("focus", OPEN_MENU + " a")
         browser("press", "Escape")
         browser(
             "wait",
             "--fn",
-            '!document.querySelector("[role=dialog]") && document.activeElement?.getAttribute("aria-label")==="Open navigation menu"',
+            '!document.querySelector("#category-menu:not([hidden])") && document.activeElement?.getAttribute("aria-controls")==="category-menu"',
         )
         check(
             "U3 Escape restores trigger focus",
             js(
-                'document.activeElement?.getAttribute("aria-label")==="Open navigation menu"'
+                'document.activeElement?.getAttribute("aria-controls")==="category-menu"'
             ),
         )
         browser("press", "Enter")
-        browser("wait", "[role=dialog]")
-        browser("focus", '[role=dialog] a[href="/crypto"]')
+        browser("wait", OPEN_MENU)
+        browser("focus", OPEN_MENU + ' a[href="/crypto"]')
         browser("press", "Enter")
         browser(
             "wait",
             "--fn",
-            'location.pathname.startsWith("/crypto/") && !document.querySelector("[role=dialog]")',
+            'location.pathname.startsWith("/crypto/") && !document.querySelector("#category-menu:not([hidden])")',
         )
         check("U3 keyboard selects category and closes menu", True, state())
         browser("set", "viewport", "1440", "900")
@@ -305,7 +313,7 @@ try:
                 "wait", "--fn", '!!document.querySelector("#video-list [data-active]")'
             )
             stored = js(
-                '({legacy:localStorage.getItem("videosWatched"),state:JSON.parse(localStorage.getItem("video-storage")).state,watched:document.querySelectorAll("#video-list .opacity-50").length,activeBadge:document.querySelector("#video-list [data-active]").textContent.includes("WATCHED")})'
+                '({legacy:localStorage.getItem("videosWatched"),state:JSON.parse(localStorage.getItem("video-storage")).state,watched:[...document.querySelectorAll("#video-list button")].filter(b=>b.textContent.includes("WATCHED")).length,activeBadge:document.querySelector("#video-list [data-active]").textContent.includes("WATCHED")})'
             )
             expected = set((legacy if isinstance(legacy, list) else []) + (new or []))
             watched = stored["state"]["watchedVideos"]
@@ -341,30 +349,35 @@ try:
             browser(
                 "wait",
                 "--fn",
-                'document.querySelectorAll("[data-fixture-player]").length===1 && playerFixture.current()?.ready && !!document.querySelector("#video-list")?.closest("[data-radix-scroll-area-viewport]")==='
+                'document.querySelectorAll("[data-fixture-player]").length===1 && playerFixture.current()?.ready && (getComputedStyle(document.querySelector("#video-list").parentElement).overflowY==="auto")==='
                 + str(width >= 993).lower(),
             )
             metrics = js("""(() => {
               const row=document.querySelector('#video-list [data-active]').getBoundingClientRect();
-              const next=document.querySelector('[aria-label="Next video"]').getBoundingClientRect();
+              const next=document.querySelector('[aria-label="Next video"]')?.getBoundingClientRect() ?? null;
               const title=document.querySelector('a[href*="youtube.com/watch"]').getBoundingClientRect();
-              const viewport=document.querySelector('#video-list').closest('[data-radix-scroll-area-viewport]');
+              const viewport=document.querySelector('#video-list').parentElement;
               return {id:playerFixture.current().id,players:document.querySelectorAll('[data-fixture-player]').length,
                 built:playerFixture.players.length,destroyed:playerFixture.calls.filter(c=>c[0]==='destroy').length,
                 detached:playerFixture.detached,
-                row:row.toJSON(),next:next.toJSON(),title:title.toJSON(),scrollY,
+                row:row.toJSON(),next:next?.toJSON() ?? null,title:title.toJSON(),scrollY,
                 documentWidth:document.documentElement.scrollWidth,width:innerWidth,height:innerHeight,
-                listBottom:viewport?.getBoundingClientRect().bottom,theme:document.documentElement.className};
+                listBottom:viewport.getBoundingClientRect().bottom,theme:document.documentElement.className};
             })()""")
             check(
                 "B5 " + label + " identity, single player, controls and width",
                 metrics["id"] == selected
                 and metrics["players"] == 1
                 and all(metrics[k] == baseline[k] for k in baseline)
-                and metrics["next"]["height"] > 0
-                # A phone in landscape gives the player the full height; its
-                # controls are one scroll below.
-                and (width < 993 and width > height or metrics["next"]["bottom"] <= height + 1)
+                # Desktop has no Prev/Next buttons, as on the legacy site.
+                and (
+                    metrics["next"] is None
+                    if width >= 993
+                    # A phone in landscape gives the player the full height;
+                    # its controls are one scroll below.
+                    else metrics["next"]["height"] > 0
+                    and (width > height or metrics["next"]["bottom"] <= height + 1)
+                )
                 and metrics["title"]["height"] > 0
                 and metrics["documentWidth"] <= width + 1,
                 metrics,
@@ -383,32 +396,30 @@ try:
             )
             shot("fixture-" + label)
 
+        # The app is dark only: a stored light theme must be ignored.
         js('localStorage.setItem("theme","light")')
         for width, height, label in [
-            (1440, 900, "desktop-light"),
-            (390, 844, "mobile-light"),
+            (1440, 900, "desktop-stored-light"),
+            (390, 844, "mobile-stored-light"),
         ]:
             browser("set", "viewport", str(width), str(height))
             browser("reload")
-            browser(
-                "wait",
-                "--fn",
-                'document.documentElement.classList.contains("light") && playerFixture.current()?.ready',
-            )
+            browser("wait", "--fn", "playerFixture.current()?.ready")
             check(
-                "B5 " + label + " theme and player",
+                "B5 " + label + " stays dark with one player",
                 player()["players"] == 1
-                and js('document.documentElement.classList.contains("light")'),
+                and js('document.documentElement.classList.contains("dark")')
+                and not js('document.documentElement.classList.contains("light")'),
                 state(),
             )
             shot("fixture-" + label)
-        js('localStorage.setItem("theme","dark")')
+        js('localStorage.removeItem("theme")')
         open_feed("/hustle")
         mode(delay=1500)
-        browser("focus", 'button[aria-label="Open navigation menu"]')
+        browser("focus", MENU_BUTTON)
         browser("press", "Enter")
-        browser("wait", "[role=dialog]")
-        browser("focus", '[role=dialog] a[href="/ai"]')
+        browser("wait", OPEN_MENU)
+        browser("focus", OPEN_MENU + ' a[href="/ai"]')
         browser("press", "Enter")
         browser("wait", "--fn", 'document.body.innerText.includes("Loading AI")')
         check(
@@ -463,12 +474,12 @@ try:
         for path, suffix in [
             (
                 "/hustle?v=fx000000004&keep=yes#player",
-                "/hustle/fx000000004?v=fx000000004&keep=yes#player",
+                "/hustle/fx000000004?keep=yes#player",
             ),
             ("/hustle/not-in-feed", "/hustle/fx000000000"),
             (
                 "/?p=/hustle/fx000000008&q=keep=yes~and~v=fx000000008#player",
-                "/hustle/fx000000008?keep=yes&v=fx000000008#player",
+                "/hustle/fx000000008?keep=yes#player",
             ),
             ("/?p=//evil.invalid", "/hustle/fx000000000"),
             ("/?p=/hustle%GG", "/hustle/fx000000000"),
