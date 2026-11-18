@@ -1,6 +1,6 @@
 # Agent Note: Hosted checks on the d599ab2 deployment
 
-Status: implemented — evidence for release gates L1, L2 and L3 on `d599ab2`
+Status: implemented — evidence closing release gates L1, L2 and L3
 
 ## Problem
 
@@ -11,8 +11,8 @@ quota. The earlier [Vercel preview](./2026-09-28-vercel-preview/README.md) of
 
 ## Decision
 
-L1 is closed on this evidence. L2 and L3 stay open for the items listed under
-Consequences.
+L1, L2 and L3 are closed on this evidence, with L3's daily figure to be
+confirmed after cutover (see Consequences).
 
 - Source: `d599ab2` (merge of #354 into `dev`).
 - Deployment: `dpl_Fch9dyBQ9rYkUaNDpSgQq8ujugpX`, Vercel target Production
@@ -79,6 +79,30 @@ This is consistent with Next's Data Cache answering the YouTube calls, but
 does not prove it: channels are fetched in parallel, so uncached renders could
 take similar time.
 
+### Outbound requests (L2 Reddit, L3 quota)
+
+A temporary build of `c85a79a` plus an `instrumentation.ts` that logged every
+outbound HTTP request through undici's `undici:request:create` channel (method,
+origin and path; never the query, which carries the key) ran as Preview
+`dpl_GN4ovc7JBAHPmFMhg6ABPa6tSseM`. That channel sees only real network
+requests; fetches answered from Next's Data Cache appear as lookups to
+`iad1.suspense-cache.vercel-infra.com`. The branch was deleted afterwards and
+never merged.
+
+| Requests (2026-11-17, UTC)                                          | Requests to `www.googleapis.com`  |
+| ------------------------------------------------------------------- | --------------------------------- |
+| `/r/videos`, `/r/videos/abc123`, `/r/funny`, `/r/videos` (18:47:31) | 0, and no outbound request at all |
+| First `/hustle` on the new deployment (18:47:33)                    | 86                                |
+| First `/ai` and first `/crypto`                                     | 93 and 78                         |
+| Every later request, including six more at 18:48:15–18:48:20        | 0                                 |
+
+The first visit to each category on a new deployment fetched every channel:
+257 calls against the 264-unit cold-fill estimate (88 channels × 3 calls; a
+few channel lookups were already cached). Repeat visits within the two-hour
+window made no YouTube calls. A new deployment started with a cold cache for
+these keys, so each deployment that receives traffic can spend up to about
+260 units once.
+
 ## Alternatives considered
 
 - **Protected Preview with OIDC access**, as for `4a33f66`. Not needed: the
@@ -90,11 +114,8 @@ take similar time.
 
 - L1 is closed. P3's claim that playback survives the breakpoint now has real
   YouTube evidence, not only the fixture test double.
-- L2 still needs the legacy key confirmed as restricted to the YouTube Data
-  API and walnut.tv referrers. Hosted evidence that disabled Reddit paths make
-  no upstream requests is also still missing.
-- L3 still needs upstream request counts. A day of quota use only checks the
-  2,112/day estimate if every category is requested at least once every two
-  hours; filter the Google Cloud metrics by credential if both keys share a
-  project. Cold starts, redeploys and preview/production isolation remain
-  unmeasured.
+- L2 is closed: the owner confirmed the legacy key's restrictions, and the
+  Reddit routes made no outbound requests on the host.
+- L3 has upstream counts: a cold fill matches the estimate and cached visits
+  make no calls. The owner accepted the daily estimate, to be confirmed in the
+  Google Cloud quota graph during the first week after cutover.
