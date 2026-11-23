@@ -1,0 +1,61 @@
+.player:fullscreen {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  border: none;
+  border-radius: 0;
+}
+
+.player:fullscreen > :first-child {
+  aspect-ratio: auto;
+}
+
+.scrubber {
+  display: block;
+  width: 100%;
+  height: 32px;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+  --track: linear-gradient(to right, hsl(var(--primary)) var(--progress), #555 var(--progress));
+}
+
+.scrubber:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.scrubber:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.scrubber::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--track);
+}
+
+.scrubber::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--track);
+}
+
+.scrubber::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  appearance: none;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+}
+
+.scrubber::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+}
