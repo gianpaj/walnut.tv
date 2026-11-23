@@ -359,7 +359,7 @@ export default function NativePlayer() {
             aria-label={fullscreen ? "Exit fullscreen" : "Fullscreen"}
             variant="ghost"
             size="icon"
-            disabled={phase !== "video"}
+            disabled={!fullscreen && phase !== "video"}
             onClick={() => void toggleFullscreen()}
           >
             <FullscreenIcon aria-hidden="true" size={18} />
