@@ -14,6 +14,8 @@ Use `/lab/player` to play Blender's _Sintel_ trailer in an HTML video element
 next to the official YouTube embed. Both use the same cut. The native player
 serves a 480p H.264/AAC MP4 with WebVTT captions and a sprite sampled every three
 seconds. The preview reads the sprite instead of seeking the playing video.
+The English caption track follows the dialogue and music in Blender's trailer
+audio.
 
 Save only the main clip's timestamp in browser storage. A finished clip clears
 its resume point. The intro and outro are stills in the player area and have no
@@ -37,6 +39,12 @@ blocked media request and preserved the resume timestamp. The MP4 served byte
 ranges. Both players presented frames after a user gesture and responded to
 seeking on desktop Chrome and emulated iPhone WebKit. Both entered document
 fullscreen on desktop Chrome.
+
+`pnpm test` checks the late trailer cues. The
+[caption browser checks](../../../../scripts/browser-acceptance/README.md#player-lab-captions)
+verify visible text at 0:39 and the CC toggle while paused. Their live run also
+checks caption text in the official embeds for Sintel and TED's
+The Power of Vulnerability.
 
 ## Risks
 

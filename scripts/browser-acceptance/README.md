@@ -49,3 +49,16 @@ Screenshots are review evidence, not pixel-diff assertions. Viewport probes use
 headless desktop Chrome resizing, not physical phones or touch emulation.
 Review the JSON assertions alongside screenshots; keep real-feed/live-baseline
 captures separate from fixtures. Build success alone is not browser acceptance.
+
+## Player lab captions
+
+After `pnpm build`, run `python3 -B scripts/browser-acceptance/player_lab.py`
+to check captions against the lab's bundled Sintel trailer. The test seeks to
+0:12, 0:39 and 0:42, then turns captions off and back on while paused. It
+compares the video pixels at 0:39 with captions on and off.
+
+Pass `--live` to also start two real YouTube embeds and verify English caption
+text in the browser. The live checks use Blender's Sintel trailer and TED's
+The Power of Vulnerability. They require network access to YouTube.
+
+`pnpm test` checks the late dialogue and music cues in the bundled WebVTT file.
