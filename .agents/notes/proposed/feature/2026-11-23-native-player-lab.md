@@ -17,6 +17,13 @@ seconds. The preview reads the sprite instead of seeking the playing video.
 The English caption track follows the dialogue and music in Blender's trailer
 audio.
 
+The `/lab/player/direct` page tests a separate delivery path with the Sintel
+trailer and a TED talk. A Node route invokes yt-dlp for those two IDs and
+returns a fresh HTTPS `googlevideo.com` MP4 URL in JSON. It uses yt-dlp's web
+embed client because both clips allow embedding and its URLs passed the
+byte-range checks. The browser's video element requests the MP4 and handles
+seeking. The route requires `PLAYER_LAB_YT_DLP` on the Next.js host.
+
 Save only the main clip's timestamp in browser storage. A finished clip clears
 its resume point. The intro and outro are stills in the player area and have no
 playback time of their own. The first playback event reads duration from the
@@ -28,6 +35,9 @@ element because metadata can arrive before React hydrates.
   source but cannot test direct seeking and control over the video area.
 - Start with adaptive streaming and account sync. A single MP4 and local resume
   let us test the controls before choosing streaming or account infrastructure.
+- Relay video through the Walnut server. Returning only the URL tests whether
+  YouTube accepts media requests from the browser and keeps media traffic off
+  the Walnut server.
 
 ## Acceptance criteria
 
@@ -46,12 +56,22 @@ verify visible text at 0:39 and the CC toggle while paused. Their live run also
 checks caption text in the official embeds for Sintel and TED's
 The Power of Vulnerability.
 
+With yt-dlp 2026.11.23 and the web embed client, Chrome played both YouTube MP4s
+with audio and sought to 0:39 in Sintel and 1:00 in the TED talk. The test saw
+Chrome request the media directly from `googlevideo.com`. Both also passed
+when Chrome opened the lab over HTTPS through Tailscale on the resolver host.
+
 ## Risks
 
 WebKit emulation does not cover the physical iPhone player. The fullscreen
 fallback hands the video over to the system player, so custom controls and the
 outro need a device check. Startup timings on a local MP4 and a remote YouTube
 embed compare those delivery paths and cannot isolate player overhead.
+The direct route depends on undocumented YouTube responses. Initial tests
+with yt-dlp's default client selection saw intermittent HTTP 403 from the
+media server after successful URL discovery. The browser checks use the
+resolver host's network and do not establish playback for a different client
+network. The direct MP4 experiment covers one quality per clip.
 
 [Blender source](https://download.blender.org/durian/trailer/) ·
 [Blender attribution requirements](https://durian.blender.org/sharing/) ·

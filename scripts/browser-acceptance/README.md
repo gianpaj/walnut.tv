@@ -62,3 +62,22 @@ text in the browser. The live checks use Blender's Sintel trailer and TED's
 The Power of Vulnerability. They require network access to YouTube.
 
 `pnpm test` checks the late dialogue and music cues in the bundled WebVTT file.
+
+## Direct YouTube playback
+
+`/lab/player/direct` resolves an MP4 for either of the two lab videos. Set
+`PLAYER_LAB_YT_DLP` to the absolute path of a recent yt-dlp executable with the
+[YouTube JavaScript solvers](https://github.com/yt-dlp/yt-dlp/wiki/EJS) on the
+Next.js host and restart the server to enable it. The resolver returns a fresh
+URL in JSON. Chrome makes the media requests directly to YouTube.
+
+Run the live check after `pnpm build`.
+
+```sh
+PLAYER_LAB_YT_DLP="$(command -v yt-dlp)" python3 -B scripts/browser-acceptance/player_direct.py
+```
+
+The check requires Chrome and network access to YouTube. It verifies decoded
+audio and video, seeking, and a browser request to `googlevideo.com` for both
+clips. YouTube can reject a URL after resolution. The test reports failed
+attempts and tries a fresh URL.

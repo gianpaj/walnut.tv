@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import NativePlayer from "./NativePlayer";
 
@@ -24,6 +25,12 @@ export default function PlayerLab() {
               Walnut
             </h2>
             <NativePlayer />
+            <Link
+              className="mt-3 inline-block text-sm text-muted-foreground underline-offset-4 hover:underline"
+              href="/lab/player/direct"
+            >
+              Test direct YouTube playback
+            </Link>
           </section>
 
           <section aria-labelledby="youtube-heading" className="min-w-0">
