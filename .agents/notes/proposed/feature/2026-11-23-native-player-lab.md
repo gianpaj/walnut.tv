@@ -30,6 +30,13 @@ mode. The helper accepts the configured Walnut origin and the lab's two video
 IDs. The container runs as an unprivileged user with a read-only root filesystem
 and no host mounts. URL resolution and playback use the viewer's internet connection.
 
+The direct lab alternates the two clips across two HTML video elements. It
+starts preloading the next clip once the playing clip has five seconds ahead
+or is buffered to the end. The lab reports the contiguous buffer from the
+next clip's start. **Next** and natural completion pause the outgoing clip and
+keep its last frame in view until the incoming player presents a frame. When
+the next clip is cold, the same handoff waits for its media URL and playback.
+
 Save only the main clip's timestamp in browser storage. A finished clip clears
 its resume point. The intro and outro are stills in the player area and have no
 playback time of their own. The first playback event reads duration from the
@@ -50,6 +57,10 @@ element because metadata can arrive before React hydrates.
 - Run the local resolver in a guest OS. A Docker container gives the resolver
   process and filesystem isolation with the same loopback interface and a
   smaller setup.
+- Swap the source on a single video element. That discards the element's buffer
+  when it switches clips. Two elements use the browser's existing MP4 loading
+  and decoding. Media Source Extensions would give the app tighter control
+  over the bytes loaded, with more work to fetch and append media segments.
 
 ## Acceptance criteria
 
@@ -79,6 +90,13 @@ the URL only from the loopback helper and requested the media from YouTube.
 The helper rejected requests with a missing or foreign origin, a foreign host,
 an unsupported method, or a video outside the lab list.
 
+In desktop Chrome, twelve warmed **Next** handoffs through the hosted
+resolver presented the first frame in 73–101 ms, with a 97 ms median.
+Automatic advance took 109 ms in that run. The hosted resolver also passed a
+skip before the next clip's URL was requested. The local resolver through
+Tailscale HTTPS passed both warmed handoff checks at a 390 × 844 desktop
+Chrome viewport.
+
 ## Risks
 
 WebKit emulation does not cover the physical iPhone player. The fullscreen
@@ -91,6 +109,11 @@ media server after successful URL discovery. The checks run on one network.
 Local mode requires Docker on each viewing device and Chrome's loopback
 permission from a remote HTTPS page. The direct MP4 experiment covers one
 quality per clip.
+
+Five seconds is a readiness threshold. The browser may preload more and
+compete for bandwidth with the playing clip. A fast second skip can still
+land on a cold clip, and autoplay rules can require another play gesture.
+Frame timing does not measure the gap in audio.
 
 [Blender source](https://download.blender.org/durian/trailer/) ·
 [Blender attribution requirements](https://durian.blender.org/sharing/) ·

@@ -71,6 +71,11 @@ The Power of Vulnerability. They require network access to YouTube.
 Next.js host and restart the server to enable it. The resolver returns a fresh
 URL in JSON. Chrome makes the media requests directly to YouTube.
 
+Choose a starting clip, click **Resolve video**, then play it. **Up next**
+shows how much of the next clip's opening is buffered. At **5+s buffered**,
+click **Next** or let the clip finish. The lab displays the time to the first
+frame and the buffer at the time of the switch.
+
 Run the live check after `pnpm build`.
 
 ```sh
@@ -79,8 +84,10 @@ PLAYER_LAB_YT_DLP="$(command -v yt-dlp)" python3 -B scripts/browser-acceptance/p
 
 The check requires Chrome and network access to YouTube. It verifies decoded
 audio and video, seeking, and a browser request to `googlevideo.com` for both
-clips. YouTube can reject a URL after resolution. The test reports failed
-attempts and tries a fresh URL.
+clips. It checks that **Next** and automatic advance play the exact element
+that already buffered five seconds. It also skips before playback to exercise
+a cold start. YouTube can reject a URL after resolution. The test reports
+failed attempts and tries a fresh URL.
 
 ### On-device resolver
 
