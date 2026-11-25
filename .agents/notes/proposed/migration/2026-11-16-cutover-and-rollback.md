@@ -31,8 +31,8 @@ Freeze the legacy site, make Vercel build `master`, then move DNS.
    `package.json`.
 4. **Merge PR #325.** Vercel builds production. Verify real feeds, deep links
    and `?p=` links on the Vercel production URL before any DNS change. If the
-   build fails to resolve the `next/font/google` module, redeploy without the
-   build cache; the `dev` build of `b12bdd8` failed that way
+   build fails to resolve the `next/font/google` module, redeploy; the `dev`
+   build of `b12bdd8` failed that way and the next one passed
    ([recheck note](../../implemented/migration/2026-11-18-hosted-parity-recheck/README.md)).
 5. **Add the domains.** Add `walnut.tv` and `www.walnut.tv` to the Vercel
    project, with `www` redirecting to the apex, as it does today.
@@ -78,8 +78,11 @@ does not need reverting.
   `videosWatched` key but stores new history under `video-storage`, which the
   legacy app does not read. History from before the cutover is unaffected.
 - The Vercel `YOUTUBE_API_KEY` was replaced on 2026-11-17 after the earlier
-  key was denied, and feeds load since. If the new key shares a Google Cloud
-  project with the public legacy key, abuse of the legacy key can exhaust the
-  quota the new app relies on until step 8 deletes it.
+  key was denied. On 2026-11-25 both apps ran out of YouTube quota at once:
+  walnut.tv showed its "come back tomorrow" message and the `dev` deployment
+  its quota notice over cached videos. The two keys most likely share a Google
+  Cloud project, so legacy traffic, or abuse of its public key, uses up the
+  quota the new app needs until step 8 deletes that key. A server key in its
+  own project removes the coupling.
 - These steps rely on DNS, response headers and deployment data. Netlify and
   Cloudflare dashboard settings have not been inspected.

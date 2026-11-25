@@ -19,9 +19,11 @@ Tested on 2026-11-18.
   - Preview deployment `dpl_4kCJdRWYaf5RrxHSs3kWhQvFT6cY`, built from `3d1b376`.
   - `3d1b376` and `b12bdd8` differ only in docs and screenshots.
   - The Production build of `b12bdd8` failed on Vercel: Turbopack could not
-    resolve the Open Sans `next/font/google` module. That build had restored
-    the previous deployment's cache; the cause is not confirmed. It builds
-    locally, both from a clean clone and on top of `82022fb`'s build output.
+    resolve the Open Sans `next/font/google` module. The next `dev` build,
+    `ceb562f`, restored the same cache and succeeded, so the cache was not the
+    cause. A failed font download from Google during the build fits the
+    error. It builds locally, both from a clean clone and on top of
+    `82022fb`'s build output.
 - **Legacy:** <https://walnut.tv>. Analytics requests (Tag Manager, Google
   Analytics, Firebase Analytics) were aborted in the browser.
 - **Browser:** agent-browser 0.38.1, HeadlessChrome 154 on Linux, resized with
@@ -44,6 +46,12 @@ The selected states watch `KTgRt6VQN9g` and then select `iA2gdwTWJ_E` on both
 sites. The rects of the player, title, arrows, logo, menu and footer were
 compared on the same video.
 
+The menu-open pair was retaken on 2026-11-25 against the `dev` Production
+deployment of `ceb562f`. Both sites had run out of YouTube quota that day:
+legacy shows no video, and the new app shows its quota notice above the
+cached videos. The toggle (178, 8, 69×39) and the three menu links (y 63, 103
+and 143, 40px tall) are at the same positions on both.
+
 These match legacy within 2px:
 
 - 390×844, both states.
@@ -55,7 +63,9 @@ The differences:
 
 - **Desktop footer links: 6px higher** (y 915 against 921). Legacy's
   `padding-bottom: 1rem` is 10px under Bootstrap 3's 10px root font size;
-  the new app used 16px. Fixed in `VideoDisplay.tsx`.
+  the new app used 16px. Fixed in `VideoDisplay.tsx`. On `ceb562f` the
+  links end 10px above the bottom of the right column's content, as on
+  legacy.
 - **Desktop scrolling:** legacy scrolls the whole page 50px to reach the
   footer, sidebar included. The new app scrolls only the right column, so the
   sidebar stays 850px tall and in place. This keeps U2's independent list
@@ -129,17 +139,18 @@ padding fix), on Node 24.22.1 with pnpm 10.27.0, pass:
 
 ## Alternatives considered
 
-- **Capture on the `dev` Production alias.** It still serves `82022fb`, the
-  layout before the parity change, because the `b12bdd8` build failed. The PR
-  Preview runs the same app code.
+- **Capture on the `dev` Production alias.** On 2026-11-18 it still served
+  `82022fb`, the layout before the parity change, because the `b12bdd8` build
+  failed. The PR Preview runs the same app code.
 - **Device emulation instead of viewport resizing.** Kept to resizing, as in
   the first run and the fixture suite, so the results compare.
 
 ## Consequences
 
 - B0 and B5 are closed for the legacy look.
-- **The next Vercel production build may fail the same way.** Redeploy
-  without the build cache if it does; the cutover note's merge step says so.
+- **A production build can fail if the Google font download fails.**
+  Redeploying is enough; the cutover note's merge step says so. Serving
+  Open Sans with `next/font/local` would remove the download.
 - **Untested:**
   - real wheel and touch scrolling (agent-browser's wheel did not scroll
     headless; the checks used element scrolling)

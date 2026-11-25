@@ -42,8 +42,8 @@ the source of truth for fonts, sizes, colours and spacing.
 
 ## Consequences
 
-- Hosted pairs at 1440×900, 390×844 and 390×568 match legacy within 2px
-  once the desktop footer padding is 10px, as legacy's `1rem` resolves under
+- Hosted pairs at 1440×900, 390×844 and 390×568 match legacy within 2px.
+  The desktop footer padding is 10px, as legacy's `1rem` resolves under
   Bootstrap 3. See the [hosted parity recheck](./2026-11-18-hosted-parity-recheck/README.md).
 - At 844×390 legacy's column wraps and its player shrinks to a 17px sliver.
   The new app keeps a full-width player with the title one scroll below.
