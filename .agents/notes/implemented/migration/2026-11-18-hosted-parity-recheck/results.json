@@ -1,0 +1,3320 @@
+{
+  "date": "2026-11-18",
+  "newApp": {
+    "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app",
+    "vercelDeployment": "dpl_4kCJdRWYaf5RrxHSs3kWhQvFT6cY (confirmed from script[data-deployment-id] on the page)",
+    "commit": "3d1b376 (app code identical to dev b12bdd8; docs differ)"
+  },
+  "legacy": {
+    "url": "https://walnut.tv/",
+    "site": "Vue 1 production"
+  },
+  "browser": "agent-browser 0.38.1, HeadlessChrome/154.0.0.0 (X11; Linux x86_64), session b0-recheck, viewport via `set viewport W H` (no device emulation, desktop UA)",
+  "analyticsBlocking": {
+    "method": "agent-browser network route <pattern> --abort, registered on session b0-recheck before the first navigation, so they applied to both sites",
+    "patterns": [
+      "**googletagmanager.com/**",
+      "**google-analytics.com/**",
+      "**/firebasejs/*/firebase-analytics.js",
+      "**firebaseinstallations.googleapis.com/**",
+      "**firebase.googleapis.com/**",
+      "**firebaselogging*.googleapis.com/**",
+      "**analytics.google.com/**"
+    ],
+    "evidence": "legacy resource entries: googletagmanager.com/gtag/js status 0, firebase-analytics.js status 0, firebase-app.js 200 (SDK core only); no google-analytics.com or firebase collection requests appeared. The new preview made no analytics requests.",
+    "legacyRequestLog": [
+      "[3020920.102] GET https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js (Script) 200",
+      "[3020920.103] GET https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js (Script)",
+      "[3020920.5] GET https://www.googletagmanager.com/gtag/js?id=G-LJ7B0PVNZL (Script)",
+      "[3020920.72] GET https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js (Script) 200",
+      "[3020920.73] GET https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js (Script)",
+      "[3020920.79] GET https://www.googletagmanager.com/gtag/js?id=G-LJ7B0PVNZL (Script)"
+    ]
+  },
+  "feeds": {
+    "hustle": {
+      "legacyCount": 64,
+      "newCount": 69,
+      "shared": 64,
+      "legacyOnly": [],
+      "newOnly": ["vKobP6DkC1E", "TGFIA0j9gbI", "LPKLhoS4kN8", "6DT8Cy2rnd0", "1cWZ7Ekff6E"],
+      "legacyFirst10": [
+        "KTgRt6VQN9g",
+        "iA2gdwTWJ_E",
+        "mkuEH8VTM7Y",
+        "arlcN30ykPY",
+        "7hl7fTCKE5s",
+        "25N-ovdDDnw",
+        "kBJe4H_WobA",
+        "0Hvs6-XODgU",
+        "EAZq8Ly98Ls",
+        "wkZzDWkT1T8"
+      ],
+      "newFirst10": [
+        "vKobP6DkC1E",
+        "KTgRt6VQN9g",
+        "iA2gdwTWJ_E",
+        "mkuEH8VTM7Y",
+        "arlcN30ykPY",
+        "7hl7fTCKE5s",
+        "25N-ovdDDnw",
+        "kBJe4H_WobA",
+        "0Hvs6-XODgU",
+        "TGFIA0j9gbI"
+      ],
+      "note": "New row 1 vKobP6DkC1E is not in legacy; legacy rows 1-8 are new rows 2-9. New row 10 TGFIA0j9gbI is also new-only."
+    }
+  },
+  "B0": {
+    "videoA": "KTgRt6VQN9g (legacy row 1, new row 2)",
+    "videoB": "iA2gdwTWJ_E (legacy row 2, new row 3)",
+    "method": {
+      "fresh": "each state starts with localStorage.clear() and a reload on that origin",
+      "legacyLoaded": "open https://walnut.tv/ (URL stays /, row 1 = A active and watched)",
+      "newLoaded": "open /hustle (rewrites to /hustle/vKobP6DkC1E, a new-only video)",
+      "loadedSameVideo": "extra rects only (no screenshot): new at /hustle/KTgRt6VQN9g so both sides show A; files rects/*-loaded-samevideo.json",
+      "desktopSelectedWatched": "legacy: click #toolbox row 1 (A) then row 2 (B). new: open /hustle/KTgRt6VQN9g (A selected+watched), click row 2 (A) then row 3 (B). Both: watched = [A, B], B active",
+      "phoneSelectedWatched": "legacy: load (A active), click .next-video. new: open /hustle/KTgRt6VQN9g, click 'Next video'. Both: watched = [A, B], B active",
+      "menuOpen": "legacy: load, click button.navbar-toggle (collapse 'in'). new: /hustle/KTgRt6VQN9g, click button[aria-controls=category-menu]. Both show A."
+    },
+    "screenshots": [
+      "b0-legacy-1440x900-loaded.png",
+      "b0-legacy-1440x900-selected-watched.png",
+      "b0-legacy-390x568-loaded.png",
+      "b0-legacy-390x844-menu-open.png",
+      "b0-legacy-390x844-selected-watched.png",
+      "b0-legacy-844x390-loaded.png",
+      "b0-new-1440x900-loaded.png",
+      "b0-new-1440x900-selected-watched.png",
+      "b0-new-390x568-loaded.png",
+      "b0-new-390x844-menu-open.png",
+      "b0-new-390x844-selected-watched.png",
+      "b0-new-844x390-loaded.png"
+    ],
+    "rectDiffsOver2px": {
+      "1440x900-loaded": {
+        "legacyTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "newTitle": "Build a 1 Person Media Machine With Grok Bot",
+        "legacyUrl": "https://walnut.tv/",
+        "newUrl": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/vKobP6DkC1E",
+        "scroll": {
+          "legacy": [1440, 950],
+          "new": [1440, 900]
+        },
+        "diffs": [
+          {
+            "el": "title",
+            "legacy": {
+              "x": 430,
+              "y": 697.1,
+              "w": 980,
+              "h": 52.8
+            },
+            "new": {
+              "x": 430,
+              "y": 695.1,
+              "w": 980,
+              "h": 26.4
+            },
+            "delta": {
+              "h": -26.4
+            }
+          },
+          {
+            "el": "footer",
+            "legacy": {
+              "x": 430,
+              "y": 808.5,
+              "w": 980,
+              "h": 141.5
+            },
+            "new": {
+              "x": 430,
+              "y": 804.5,
+              "w": 980,
+              "h": 145.5
+            },
+            "delta": {
+              "y": -4.0,
+              "h": 4.0
+            }
+          },
+          {
+            "el": "footerTerms",
+            "legacy": {
+              "x": 430,
+              "y": 921.4,
+              "w": 100,
+              "h": 18.6
+            },
+            "new": {
+              "x": 430,
+              "y": 915.4,
+              "w": 100,
+              "h": 18.6
+            },
+            "delta": {
+              "y": -6.0
+            }
+          },
+          {
+            "el": "footerContact",
+            "legacy": {
+              "x": 631.5,
+              "y": 921.4,
+              "w": 65.8,
+              "h": 18.6
+            },
+            "new": {
+              "x": 631.2,
+              "y": 915.4,
+              "w": 65.8,
+              "h": 18.6
+            },
+            "delta": {
+              "y": -6.0
+            }
+          },
+          {
+            "el": "list",
+            "legacy": {
+              "x": 0,
+              "y": 50,
+              "w": 400,
+              "h": 900
+            },
+            "new": {
+              "x": 0,
+              "y": 50,
+              "w": 400,
+              "h": 850
+            },
+            "delta": {
+              "h": -50
+            }
+          }
+        ]
+      },
+      "1440x900-selected-watched": {
+        "legacyTitle": "Anthropic\u2019s $72M Average Employee, SpaceX Catches Starship, and One Hack Hits 178 Sites | LIVE",
+        "newTitle": "Anthropic\u2019s $72M Average Employee, SpaceX Catches Starship, and One Hack Hits 178 Sites | LIVE",
+        "legacyUrl": "https://walnut.tv/",
+        "newUrl": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/iA2gdwTWJ_E",
+        "scroll": {
+          "legacy": [1440, 950],
+          "new": [1440, 900]
+        },
+        "diffs": [
+          {
+            "el": "footer",
+            "legacy": {
+              "x": 430,
+              "y": 808.5,
+              "w": 980,
+              "h": 141.5
+            },
+            "new": {
+              "x": 430,
+              "y": 804.5,
+              "w": 980,
+              "h": 145.5
+            },
+            "delta": {
+              "y": -4.0,
+              "h": 4.0
+            }
+          },
+          {
+            "el": "footerTerms",
+            "legacy": {
+              "x": 430,
+              "y": 921.4,
+              "w": 100,
+              "h": 18.6
+            },
+            "new": {
+              "x": 430,
+              "y": 915.4,
+              "w": 100,
+              "h": 18.6
+            },
+            "delta": {
+              "y": -6.0
+            }
+          },
+          {
+            "el": "footerContact",
+            "legacy": {
+              "x": 631.5,
+              "y": 921.4,
+              "w": 65.8,
+              "h": 18.6
+            },
+            "new": {
+              "x": 631.2,
+              "y": 915.4,
+              "w": 65.8,
+              "h": 18.6
+            },
+            "delta": {
+              "y": -6.0
+            }
+          },
+          {
+            "el": "list",
+            "legacy": {
+              "x": 0,
+              "y": 50,
+              "w": 400,
+              "h": 900
+            },
+            "new": {
+              "x": 0,
+              "y": 50,
+              "w": 400,
+              "h": 850
+            },
+            "delta": {
+              "h": -50
+            }
+          },
+          {
+            "el": "activeRow",
+            "legacy": {
+              "x": 0,
+              "y": 144.3,
+              "w": 400,
+              "h": 94.3
+            },
+            "new": {
+              "x": 0,
+              "y": 238.6,
+              "w": 400,
+              "h": 94.3
+            },
+            "delta": {
+              "y": 94.3
+            }
+          }
+        ]
+      },
+      "390x844-selected-watched": {
+        "legacyTitle": "Anthropic\u2019s $72M Average Employee, SpaceX Catches Starship, and One Hack Hits 178 Sites | LIVE",
+        "newTitle": "Anthropic\u2019s $72M Average Employee, SpaceX Catches Starship, and One Hack Hits 178 Sites | LIVE",
+        "legacyUrl": "https://walnut.tv/",
+        "newUrl": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/iA2gdwTWJ_E",
+        "scroll": {
+          "legacy": [390, 844],
+          "new": [390, 7316]
+        },
+        "diffs": [
+          {
+            "el": "list",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 822.6,
+              "w": 390,
+              "h": 6493.2,
+              "visible": true
+            }
+          },
+          {
+            "el": "activeRow",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 1011.2,
+              "w": 390,
+              "h": 94.3,
+              "visible": true
+            }
+          }
+        ]
+      },
+      "390x844-menu-open": {
+        "legacyTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "newTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "legacyUrl": "https://walnut.tv/",
+        "newUrl": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/KTgRt6VQN9g",
+        "scroll": {
+          "legacy": [390, 959],
+          "new": [390, 7449]
+        },
+        "diffs": [
+          {
+            "el": "list",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 958.6,
+              "w": 390,
+              "h": 6490.4,
+              "visible": true
+            }
+          },
+          {
+            "el": "activeRow",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 1052.9,
+              "w": 390,
+              "h": 94.3,
+              "visible": true
+            }
+          }
+        ]
+      },
+      "844x390-loaded": {
+        "legacyTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "newTitle": "Build a 1 Person Media Machine With Grok Bot",
+        "legacyUrl": "https://walnut.tv/",
+        "newUrl": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/vKobP6DkC1E",
+        "scroll": {
+          "legacy": [844, 405],
+          "new": [844, 6895]
+        },
+        "diffs": [
+          {
+            "el": "iframe",
+            "legacy": {
+              "x": 10,
+              "y": 55,
+              "w": 17.6,
+              "h": 387.3
+            },
+            "new": {
+              "x": 10,
+              "y": 55,
+              "w": 824,
+              "h": 387.3
+            },
+            "delta": {
+              "w": 806.4
+            }
+          },
+          {
+            "el": "title",
+            "legacy": {
+              "x": 37.6,
+              "y": 75,
+              "w": 786.4,
+              "h": 19.8
+            },
+            "new": {
+              "x": 20,
+              "y": 462.3,
+              "w": 804,
+              "h": 19.8
+            },
+            "delta": {
+              "x": -17.6,
+              "y": 387.3,
+              "w": 17.6
+            }
+          },
+          {
+            "el": "prevArrow",
+            "legacy": {
+              "x": 27.6,
+              "y": 187.4,
+              "w": 30,
+              "h": 45
+            },
+            "new": {
+              "x": 10,
+              "y": 512.1,
+              "w": 30,
+              "h": 45
+            },
+            "delta": {
+              "x": -17.6,
+              "y": 324.7
+            }
+          },
+          {
+            "el": "nextArrow",
+            "legacy": {
+              "x": 804,
+              "y": 187.4,
+              "w": 30,
+              "h": 45
+            },
+            "new": {
+              "x": 804,
+              "y": 512.1,
+              "w": 30,
+              "h": 45
+            },
+            "delta": {
+              "y": 324.7
+            }
+          },
+          {
+            "el": "footer",
+            "legacy": {
+              "x": 27.6,
+              "y": 272.4,
+              "w": 806.4,
+              "h": 132.5
+            },
+            "new": {
+              "x": 10,
+              "y": 597.1,
+              "w": 824,
+              "h": 38.6
+            },
+            "delta": {
+              "x": -17.6,
+              "y": 324.7,
+              "w": 17.6,
+              "h": -93.9
+            }
+          },
+          {
+            "el": "footerTerms",
+            "legacy": {
+              "x": 27.6,
+              "y": 386.3,
+              "w": 100,
+              "h": 18.6
+            },
+            "new": {
+              "x": 10,
+              "y": 617.1,
+              "w": 100,
+              "h": 18.6
+            },
+            "delta": {
+              "x": -17.6,
+              "y": 230.8
+            }
+          },
+          {
+            "el": "footerContact",
+            "legacy": {
+              "x": 229,
+              "y": 386.3,
+              "w": 65.8,
+              "h": 18.6
+            },
+            "new": {
+              "x": 211.2,
+              "y": 617.1,
+              "w": 65.8,
+              "h": 18.6
+            },
+            "delta": {
+              "x": -17.8,
+              "y": 230.8
+            }
+          },
+          {
+            "el": "list",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 404.9,
+              "w": 844,
+              "h": 6490.4,
+              "visible": true
+            }
+          },
+          {
+            "el": "activeRow",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 404.9,
+              "w": 844,
+              "h": 94.3,
+              "visible": true
+            }
+          }
+        ]
+      },
+      "390x568-loaded": {
+        "legacyTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "newTitle": "Build a 1 Person Media Machine With Grok Bot",
+        "legacyUrl": "https://walnut.tv/",
+        "newUrl": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/vKobP6DkC1E",
+        "scroll": {
+          "legacy": [390, 571],
+          "new": [390, 7062]
+        },
+        "diffs": [
+          {
+            "el": "iframe",
+            "legacy": {
+              "x": 10,
+              "y": 59.6,
+              "w": 370,
+              "h": 235.7
+            },
+            "new": {
+              "x": 10,
+              "y": 59.6,
+              "w": 370,
+              "h": 244.9
+            },
+            "delta": {
+              "h": 9.2
+            }
+          },
+          {
+            "el": "title",
+            "legacy": {
+              "x": 20,
+              "y": 315.3,
+              "w": 350,
+              "h": 59.4
+            },
+            "new": {
+              "x": 20,
+              "y": 324.4,
+              "w": 350,
+              "h": 39.6
+            },
+            "delta": {
+              "y": 9.1,
+              "h": -19.8
+            }
+          },
+          {
+            "el": "prevArrow",
+            "legacy": {
+              "x": 10,
+              "y": 404.6,
+              "w": 30,
+              "h": 45
+            },
+            "new": {
+              "x": 10,
+              "y": 395.4,
+              "w": 30,
+              "h": 45
+            },
+            "delta": {
+              "y": -9.2
+            }
+          },
+          {
+            "el": "nextArrow",
+            "legacy": {
+              "x": 350,
+              "y": 404.6,
+              "w": 30,
+              "h": 45
+            },
+            "new": {
+              "x": 350,
+              "y": 395.4,
+              "w": 30,
+              "h": 45
+            },
+            "delta": {
+              "y": -9.2
+            }
+          },
+          {
+            "el": "footer",
+            "legacy": {
+              "x": 10,
+              "y": 489.6,
+              "w": 370,
+              "h": 81.8
+            },
+            "new": {
+              "x": 10,
+              "y": 480.4,
+              "w": 370,
+              "h": 91
+            },
+            "delta": {
+              "y": -9.2,
+              "h": 9.2
+            }
+          },
+          {
+            "el": "list",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 571.4,
+              "w": 390,
+              "h": 6490.4,
+              "visible": true
+            }
+          },
+          {
+            "el": "activeRow",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 571.4,
+              "w": 390,
+              "h": 94.3,
+              "visible": true
+            }
+          }
+        ]
+      },
+      "1440x900-loaded-samevideo": {
+        "legacyTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "newTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "legacyUrl": "https://walnut.tv/",
+        "newUrl": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/KTgRt6VQN9g",
+        "scroll": {
+          "legacy": [1440, 950],
+          "new": [1440, 900]
+        },
+        "diffs": [
+          {
+            "el": "footer",
+            "legacy": {
+              "x": 430,
+              "y": 808.5,
+              "w": 980,
+              "h": 141.5
+            },
+            "new": {
+              "x": 430,
+              "y": 804.5,
+              "w": 980,
+              "h": 145.5
+            },
+            "delta": {
+              "y": -4.0,
+              "h": 4.0
+            }
+          },
+          {
+            "el": "footerTerms",
+            "legacy": {
+              "x": 430,
+              "y": 921.4,
+              "w": 100,
+              "h": 18.6
+            },
+            "new": {
+              "x": 430,
+              "y": 915.4,
+              "w": 100,
+              "h": 18.6
+            },
+            "delta": {
+              "y": -6.0
+            }
+          },
+          {
+            "el": "footerContact",
+            "legacy": {
+              "x": 631.5,
+              "y": 921.4,
+              "w": 65.8,
+              "h": 18.6
+            },
+            "new": {
+              "x": 631.2,
+              "y": 915.4,
+              "w": 65.8,
+              "h": 18.6
+            },
+            "delta": {
+              "y": -6.0
+            }
+          },
+          {
+            "el": "list",
+            "legacy": {
+              "x": 0,
+              "y": 50,
+              "w": 400,
+              "h": 900
+            },
+            "new": {
+              "x": 0,
+              "y": 50,
+              "w": 400,
+              "h": 850
+            },
+            "delta": {
+              "h": -50
+            }
+          },
+          {
+            "el": "activeRow",
+            "legacy": {
+              "x": 0,
+              "y": 50,
+              "w": 400,
+              "h": 94.3
+            },
+            "new": {
+              "x": 0,
+              "y": 144.3,
+              "w": 400,
+              "h": 94.3
+            },
+            "delta": {
+              "y": 94.3
+            }
+          }
+        ]
+      },
+      "844x390-loaded-samevideo": {
+        "legacyTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "newTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "legacyUrl": "https://walnut.tv/",
+        "newUrl": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/KTgRt6VQN9g",
+        "scroll": {
+          "legacy": [844, 405],
+          "new": [844, 6898]
+        },
+        "diffs": [
+          {
+            "el": "iframe",
+            "legacy": {
+              "x": 10,
+              "y": 55,
+              "w": 17.6,
+              "h": 387.3
+            },
+            "new": {
+              "x": 10,
+              "y": 55,
+              "w": 824,
+              "h": 387.3
+            },
+            "delta": {
+              "w": 806.4
+            }
+          },
+          {
+            "el": "title",
+            "legacy": {
+              "x": 37.6,
+              "y": 75,
+              "w": 786.4,
+              "h": 19.8
+            },
+            "new": {
+              "x": 20,
+              "y": 462.3,
+              "w": 804,
+              "h": 19.8
+            },
+            "delta": {
+              "x": -17.6,
+              "y": 387.3,
+              "w": 17.6
+            }
+          },
+          {
+            "el": "prevArrow",
+            "legacy": {
+              "x": 27.6,
+              "y": 187.4,
+              "w": 30,
+              "h": 45
+            },
+            "new": {
+              "x": 10,
+              "y": 512.1,
+              "w": 30,
+              "h": 45
+            },
+            "delta": {
+              "x": -17.6,
+              "y": 324.7
+            }
+          },
+          {
+            "el": "nextArrow",
+            "legacy": {
+              "x": 804,
+              "y": 187.4,
+              "w": 30,
+              "h": 45
+            },
+            "new": {
+              "x": 804,
+              "y": 512.1,
+              "w": 30,
+              "h": 45
+            },
+            "delta": {
+              "y": 324.7
+            }
+          },
+          {
+            "el": "footer",
+            "legacy": {
+              "x": 27.6,
+              "y": 272.4,
+              "w": 806.4,
+              "h": 132.5
+            },
+            "new": {
+              "x": 10,
+              "y": 597.1,
+              "w": 824,
+              "h": 38.6
+            },
+            "delta": {
+              "x": -17.6,
+              "y": 324.7,
+              "w": 17.6,
+              "h": -93.9
+            }
+          },
+          {
+            "el": "footerTerms",
+            "legacy": {
+              "x": 27.6,
+              "y": 386.3,
+              "w": 100,
+              "h": 18.6
+            },
+            "new": {
+              "x": 10,
+              "y": 617.1,
+              "w": 100,
+              "h": 18.6
+            },
+            "delta": {
+              "x": -17.6,
+              "y": 230.8
+            }
+          },
+          {
+            "el": "footerContact",
+            "legacy": {
+              "x": 229,
+              "y": 386.3,
+              "w": 65.8,
+              "h": 18.6
+            },
+            "new": {
+              "x": 211.2,
+              "y": 617.1,
+              "w": 65.8,
+              "h": 18.6
+            },
+            "delta": {
+              "x": -17.8,
+              "y": 230.8
+            }
+          },
+          {
+            "el": "list",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 404.9,
+              "w": 844,
+              "h": 6493.2,
+              "visible": true
+            }
+          },
+          {
+            "el": "activeRow",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 499.2,
+              "w": 844,
+              "h": 94.3,
+              "visible": true
+            }
+          }
+        ]
+      },
+      "390x568-loaded-samevideo": {
+        "legacyTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "newTitle": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "legacyUrl": "https://walnut.tv/",
+        "newUrl": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/KTgRt6VQN9g",
+        "scroll": {
+          "legacy": [390, 571],
+          "new": [390, 7065]
+        },
+        "diffs": [
+          {
+            "el": "list",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 571.4,
+              "w": 390,
+              "h": 6493.2,
+              "visible": true
+            }
+          },
+          {
+            "el": "activeRow",
+            "legacy": "hidden",
+            "new": {
+              "x": 0,
+              "y": 665.8,
+              "w": 390,
+              "h": 94.3,
+              "visible": true
+            }
+          }
+        ]
+      }
+    },
+    "rects": {
+      "legacy-1440x900-loaded-samevideo": {
+        "url": "https://walnut.tv/",
+        "innerWidth": 1440,
+        "innerHeight": 900,
+        "scrollY": 0,
+        "scrollWidth": 1440,
+        "scrollHeight": 950,
+        "rects": {
+          "iframe": {
+            "x": 430,
+            "y": 65,
+            "w": 980,
+            "h": 592.1,
+            "visible": true
+          },
+          "title": {
+            "x": 430,
+            "y": 697.1,
+            "w": 980,
+            "h": 52.8,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "nextArrow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "menuButton": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 640.2,
+            "y": 0,
+            "w": 194.6,
+            "h": 50,
+            "visible": true
+          },
+          "logo": {
+            "x": 605.2,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 430,
+            "y": 808.5,
+            "w": 980,
+            "h": 141.5,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 430,
+            "y": 921.4,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 631.5,
+            "y": 921.4,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 50,
+            "w": 400,
+            "h": 900,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 50,
+            "w": 400,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "500 24px / 26.4px \"Open Sans\", sans-serif"
+      },
+      "legacy-1440x900-loaded": {
+        "url": "https://walnut.tv/",
+        "innerWidth": 1440,
+        "innerHeight": 900,
+        "scrollY": 0,
+        "scrollWidth": 1440,
+        "scrollHeight": 950,
+        "rects": {
+          "iframe": {
+            "x": 430,
+            "y": 65,
+            "w": 980,
+            "h": 592.1,
+            "visible": true
+          },
+          "title": {
+            "x": 430,
+            "y": 697.1,
+            "w": 980,
+            "h": 52.8,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "nextArrow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "menuButton": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 640.2,
+            "y": 0,
+            "w": 194.6,
+            "h": 50,
+            "visible": true
+          },
+          "logo": {
+            "x": 605.2,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 430,
+            "y": 808.5,
+            "w": 980,
+            "h": 141.5,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 430,
+            "y": 921.4,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 631.5,
+            "y": 921.4,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 50,
+            "w": 400,
+            "h": 900,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 50,
+            "w": 400,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "500 24px / 26.4px \"Open Sans\", sans-serif"
+      },
+      "legacy-1440x900-selected-watched": {
+        "url": "https://walnut.tv/",
+        "innerWidth": 1440,
+        "innerHeight": 900,
+        "scrollY": 0,
+        "scrollWidth": 1440,
+        "scrollHeight": 950,
+        "rects": {
+          "iframe": {
+            "x": 430,
+            "y": 65,
+            "w": 980,
+            "h": 592.1,
+            "visible": true
+          },
+          "title": {
+            "x": 430,
+            "y": 697.1,
+            "w": 980,
+            "h": 52.8,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "nextArrow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "menuButton": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 640.2,
+            "y": 0,
+            "w": 194.6,
+            "h": 50,
+            "visible": true
+          },
+          "logo": {
+            "x": 605.2,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 430,
+            "y": 808.5,
+            "w": 980,
+            "h": 141.5,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 430,
+            "y": 921.4,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 631.5,
+            "y": 921.4,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 50,
+            "w": 400,
+            "h": 900,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 144.3,
+            "w": 400,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "Anthropic\u2019s $72M Average Employee, SpaceX Catches Starship, and One Hack Hits 178 Sites | LIVE",
+        "titleFont": "500 24px / 26.4px \"Open Sans\", sans-serif"
+      },
+      "legacy-390x568-loaded-samevideo": {
+        "url": "https://walnut.tv/",
+        "innerWidth": 390,
+        "innerHeight": 568,
+        "scrollY": 0,
+        "scrollWidth": 390,
+        "scrollHeight": 571,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 59.6,
+            "w": 370,
+            "h": 235.7,
+            "visible": true
+          },
+          "title": {
+            "x": 20,
+            "y": 315.3,
+            "w": 350,
+            "h": 59.4,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 10,
+            "y": 404.6,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 350,
+            "y": 404.6,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 177.8,
+            "y": 8,
+            "w": 69.4,
+            "h": 38.6,
+            "visible": true
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "logo": {
+            "x": 134.5,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 10,
+            "y": 489.6,
+            "w": 370,
+            "h": 81.8,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 10,
+            "y": 552.9,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 211.5,
+            "y": 552.9,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "500 18px / 19.8px \"Open Sans\", sans-serif"
+      },
+      "legacy-390x568-loaded": {
+        "url": "https://walnut.tv/",
+        "innerWidth": 390,
+        "innerHeight": 568,
+        "scrollY": 0,
+        "scrollWidth": 390,
+        "scrollHeight": 571,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 59.6,
+            "w": 370,
+            "h": 235.7,
+            "visible": true
+          },
+          "title": {
+            "x": 20,
+            "y": 315.3,
+            "w": 350,
+            "h": 59.4,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 10,
+            "y": 404.6,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 350,
+            "y": 404.6,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 177.8,
+            "y": 8,
+            "w": 69.4,
+            "h": 38.6,
+            "visible": true
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "logo": {
+            "x": 134.5,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 10,
+            "y": 489.6,
+            "w": 370,
+            "h": 81.8,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 10,
+            "y": 552.9,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 211.5,
+            "y": 552.9,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "500 18px / 19.8px \"Open Sans\", sans-serif"
+      },
+      "legacy-390x844-menu-open": {
+        "url": "https://walnut.tv/",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollY": 0,
+        "scrollWidth": 390,
+        "scrollHeight": 959,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 195.6,
+            "w": 370,
+            "h": 328.6,
+            "visible": true
+          },
+          "title": {
+            "x": 20,
+            "y": 544.2,
+            "w": 350,
+            "h": 59.4,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 10,
+            "y": 698.9,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 350,
+            "y": 698.9,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 177.8,
+            "y": 8,
+            "w": 69.4,
+            "h": 38.6,
+            "visible": true
+          },
+          "openMenu": {
+            "x": 183.5,
+            "y": 54.6,
+            "w": 58,
+            "h": 136,
+            "visible": true
+          },
+          "navLinks": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "logo": {
+            "x": 134.5,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 10,
+            "y": 783.9,
+            "w": 370,
+            "h": 174.7,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 10,
+            "y": 940,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 211.5,
+            "y": 940,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "500 18px / 19.8px \"Open Sans\", sans-serif"
+      },
+      "legacy-390x844-selected-watched": {
+        "url": "https://walnut.tv/",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollY": 0,
+        "scrollWidth": 390,
+        "scrollHeight": 844,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 59.6,
+            "w": 370,
+            "h": 328.6,
+            "visible": true
+          },
+          "title": {
+            "x": 20,
+            "y": 408.2,
+            "w": 350,
+            "h": 59.4,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 10,
+            "y": 562.9,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 350,
+            "y": 562.9,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 177.8,
+            "y": 8,
+            "w": 69.4,
+            "h": 38.6,
+            "visible": true
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "logo": {
+            "x": 134.5,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 10,
+            "y": 647.9,
+            "w": 370,
+            "h": 174.7,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 10,
+            "y": 804,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 211.5,
+            "y": 804,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          }
+        },
+        "titleText": "Anthropic\u2019s $72M Average Employee, SpaceX Catches Starship, and One Hack Hits 178 Sites | LIVE",
+        "titleFont": "500 18px / 19.8px \"Open Sans\", sans-serif"
+      },
+      "legacy-844x390-loaded-samevideo": {
+        "url": "https://walnut.tv/",
+        "innerWidth": 844,
+        "innerHeight": 390,
+        "scrollY": 0,
+        "scrollWidth": 844,
+        "scrollHeight": 405,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 55,
+            "w": 17.6,
+            "h": 387.3,
+            "visible": true
+          },
+          "title": {
+            "x": 37.6,
+            "y": 75,
+            "w": 786.4,
+            "h": 19.8,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 27.6,
+            "y": 187.4,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 804,
+            "y": 187.4,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 370.4,
+            "y": 5,
+            "w": 138.1,
+            "h": 40,
+            "visible": true
+          },
+          "logo": {
+            "x": 335.4,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 27.6,
+            "y": 272.4,
+            "w": 806.4,
+            "h": 132.5,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 27.6,
+            "y": 386.3,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 229,
+            "y": 386.3,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "500 18px / 19.8px \"Open Sans\", sans-serif"
+      },
+      "legacy-844x390-loaded": {
+        "url": "https://walnut.tv/",
+        "innerWidth": 844,
+        "innerHeight": 390,
+        "scrollY": 0,
+        "scrollWidth": 844,
+        "scrollHeight": 405,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 55,
+            "w": 17.6,
+            "h": 387.3,
+            "visible": true
+          },
+          "title": {
+            "x": 37.6,
+            "y": 75,
+            "w": 786.4,
+            "h": 19.8,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 27.6,
+            "y": 187.4,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 804,
+            "y": 187.4,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 370.4,
+            "y": 5,
+            "w": 138.1,
+            "h": 40,
+            "visible": true
+          },
+          "logo": {
+            "x": 335.4,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 27.6,
+            "y": 272.4,
+            "w": 806.4,
+            "h": 132.5,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 27.6,
+            "y": 386.3,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 229,
+            "y": 386.3,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "500 18px / 19.8px \"Open Sans\", sans-serif"
+      },
+      "new-1440x900-loaded-samevideo": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/KTgRt6VQN9g",
+        "innerWidth": 1440,
+        "innerHeight": 900,
+        "scrollY": 0,
+        "scrollWidth": 1440,
+        "scrollHeight": 900,
+        "rects": {
+          "iframe": {
+            "x": 430,
+            "y": 65,
+            "w": 980,
+            "h": 590.1,
+            "visible": true
+          },
+          "title": {
+            "x": 430,
+            "y": 695.1,
+            "w": 980,
+            "h": 52.8,
+            "visible": true
+          },
+          "prevArrow": null,
+          "nextArrow": null,
+          "menuButton": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 640.2,
+            "y": 0,
+            "w": 194.6,
+            "h": 50,
+            "visible": true
+          },
+          "logo": {
+            "x": 605.2,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 430,
+            "y": 804.5,
+            "w": 980,
+            "h": 145.5,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 430,
+            "y": 915.4,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 631.2,
+            "y": 915.4,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 50,
+            "w": 400,
+            "h": 850,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 144.3,
+            "w": 400,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "24px / 26.4px \"Open Sans\", \"Open Sans Fallback\""
+      },
+      "new-1440x900-loaded": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/vKobP6DkC1E",
+        "innerWidth": 1440,
+        "innerHeight": 900,
+        "scrollY": 0,
+        "scrollWidth": 1440,
+        "scrollHeight": 900,
+        "rects": {
+          "iframe": {
+            "x": 430,
+            "y": 65,
+            "w": 980,
+            "h": 590.1,
+            "visible": true
+          },
+          "title": {
+            "x": 430,
+            "y": 695.1,
+            "w": 980,
+            "h": 26.4,
+            "visible": true
+          },
+          "prevArrow": null,
+          "nextArrow": null,
+          "menuButton": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 640.2,
+            "y": 0,
+            "w": 194.6,
+            "h": 50,
+            "visible": true
+          },
+          "logo": {
+            "x": 605.2,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 430,
+            "y": 804.5,
+            "w": 980,
+            "h": 145.5,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 430,
+            "y": 915.4,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 631.2,
+            "y": 915.4,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 50,
+            "w": 400,
+            "h": 850,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 50,
+            "w": 400,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "Build a 1 Person Media Machine With Grok Bot",
+        "titleFont": "24px / 26.4px \"Open Sans\", \"Open Sans Fallback\""
+      },
+      "new-1440x900-selected-watched": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/iA2gdwTWJ_E",
+        "innerWidth": 1440,
+        "innerHeight": 900,
+        "scrollY": 0,
+        "scrollWidth": 1440,
+        "scrollHeight": 900,
+        "rects": {
+          "iframe": {
+            "x": 430,
+            "y": 65,
+            "w": 980,
+            "h": 590.1,
+            "visible": true
+          },
+          "title": {
+            "x": 430,
+            "y": 695.1,
+            "w": 980,
+            "h": 52.8,
+            "visible": true
+          },
+          "prevArrow": null,
+          "nextArrow": null,
+          "menuButton": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 640.2,
+            "y": 0,
+            "w": 194.6,
+            "h": 50,
+            "visible": true
+          },
+          "logo": {
+            "x": 605.2,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 430,
+            "y": 804.5,
+            "w": 980,
+            "h": 145.5,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 430,
+            "y": 915.4,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 631.2,
+            "y": 915.4,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 50,
+            "w": 400,
+            "h": 850,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 238.6,
+            "w": 400,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "Anthropic\u2019s $72M Average Employee, SpaceX Catches Starship, and One Hack Hits 178 Sites | LIVE",
+        "titleFont": "24px / 26.4px \"Open Sans\", \"Open Sans Fallback\""
+      },
+      "new-390x568-loaded-samevideo": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/KTgRt6VQN9g",
+        "innerWidth": 390,
+        "innerHeight": 568,
+        "scrollY": 0,
+        "scrollWidth": 390,
+        "scrollHeight": 7065,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 59.6,
+            "w": 370,
+            "h": 235.7,
+            "visible": true
+          },
+          "title": {
+            "x": 20,
+            "y": 315.3,
+            "w": 350,
+            "h": 59.4,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 10,
+            "y": 404.6,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 350,
+            "y": 404.6,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 177.8,
+            "y": 8,
+            "w": 69.4,
+            "h": 38.6,
+            "visible": true
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "logo": {
+            "x": 134.5,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 10,
+            "y": 489.6,
+            "w": 370,
+            "h": 81.8,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 10,
+            "y": 552.9,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 211.2,
+            "y": 552.9,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 571.4,
+            "w": 390,
+            "h": 6493.2,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 665.8,
+            "w": 390,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "18px / 19.8px \"Open Sans\", \"Open Sans Fallback\""
+      },
+      "new-390x568-loaded": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/vKobP6DkC1E",
+        "innerWidth": 390,
+        "innerHeight": 568,
+        "scrollY": 0,
+        "scrollWidth": 390,
+        "scrollHeight": 7062,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 59.6,
+            "w": 370,
+            "h": 244.9,
+            "visible": true
+          },
+          "title": {
+            "x": 20,
+            "y": 324.4,
+            "w": 350,
+            "h": 39.6,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 10,
+            "y": 395.4,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 350,
+            "y": 395.4,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 177.8,
+            "y": 8,
+            "w": 69.4,
+            "h": 38.6,
+            "visible": true
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "logo": {
+            "x": 134.5,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 10,
+            "y": 480.4,
+            "w": 370,
+            "h": 91,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 10,
+            "y": 552.9,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 211.2,
+            "y": 552.9,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 571.4,
+            "w": 390,
+            "h": 6490.4,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 571.4,
+            "w": 390,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "Build a 1 Person Media Machine With Grok Bot",
+        "titleFont": "18px / 19.8px \"Open Sans\", \"Open Sans Fallback\""
+      },
+      "new-390x844-menu-open": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/KTgRt6VQN9g",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollY": 0,
+        "scrollWidth": 390,
+        "scrollHeight": 7449,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 195.6,
+            "w": 370,
+            "h": 328.6,
+            "visible": true
+          },
+          "title": {
+            "x": 20,
+            "y": 544.2,
+            "w": 350,
+            "h": 59.4,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 10,
+            "y": 698.9,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 350,
+            "y": 698.9,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 177.8,
+            "y": 8,
+            "w": 69.4,
+            "h": 38.6,
+            "visible": true
+          },
+          "openMenu": {
+            "x": 183.5,
+            "y": 54.6,
+            "w": 58,
+            "h": 136,
+            "visible": true
+          },
+          "navLinks": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "logo": {
+            "x": 134.5,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 10,
+            "y": 783.9,
+            "w": 370,
+            "h": 174.7,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 10,
+            "y": 940,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 211.2,
+            "y": 940,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 958.6,
+            "w": 390,
+            "h": 6490.4,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 1052.9,
+            "w": 390,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "18px / 19.8px \"Open Sans\", \"Open Sans Fallback\""
+      },
+      "new-390x844-selected-watched": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/iA2gdwTWJ_E",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollY": 0,
+        "scrollWidth": 390,
+        "scrollHeight": 7316,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 59.6,
+            "w": 370,
+            "h": 328.6,
+            "visible": true
+          },
+          "title": {
+            "x": 20,
+            "y": 408.2,
+            "w": 350,
+            "h": 59.4,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 10,
+            "y": 562.9,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 350,
+            "y": 562.9,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 177.8,
+            "y": 8,
+            "w": 69.4,
+            "h": 38.6,
+            "visible": true
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "logo": {
+            "x": 134.5,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 10,
+            "y": 647.9,
+            "w": 370,
+            "h": 174.7,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 10,
+            "y": 804,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 211.2,
+            "y": 804,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 822.6,
+            "w": 390,
+            "h": 6493.2,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 1011.2,
+            "w": 390,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "Anthropic\u2019s $72M Average Employee, SpaceX Catches Starship, and One Hack Hits 178 Sites | LIVE",
+        "titleFont": "18px / 19.8px \"Open Sans\", \"Open Sans Fallback\""
+      },
+      "new-844x390-loaded-samevideo": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/KTgRt6VQN9g",
+        "innerWidth": 844,
+        "innerHeight": 390,
+        "scrollY": 0,
+        "scrollWidth": 844,
+        "scrollHeight": 6898,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 55,
+            "w": 824,
+            "h": 387.3,
+            "visible": true
+          },
+          "title": {
+            "x": 20,
+            "y": 462.3,
+            "w": 804,
+            "h": 19.8,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 10,
+            "y": 512.1,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 804,
+            "y": 512.1,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 370.4,
+            "y": 5,
+            "w": 138.1,
+            "h": 40,
+            "visible": true
+          },
+          "logo": {
+            "x": 335.4,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 10,
+            "y": 597.1,
+            "w": 824,
+            "h": 38.6,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 10,
+            "y": 617.1,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 211.2,
+            "y": 617.1,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 404.9,
+            "w": 844,
+            "h": 6493.2,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 499.2,
+            "w": 844,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "From near-collapse to $9 billion: Replit\u2019s Amjad Masad on riding the AI boom | Summit 2026",
+        "titleFont": "18px / 19.8px \"Open Sans\", \"Open Sans Fallback\""
+      },
+      "new-844x390-loaded": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/vKobP6DkC1E",
+        "innerWidth": 844,
+        "innerHeight": 390,
+        "scrollY": 0,
+        "scrollWidth": 844,
+        "scrollHeight": 6895,
+        "rects": {
+          "iframe": {
+            "x": 10,
+            "y": 55,
+            "w": 824,
+            "h": 387.3,
+            "visible": true
+          },
+          "title": {
+            "x": 20,
+            "y": 462.3,
+            "w": 804,
+            "h": 19.8,
+            "visible": true
+          },
+          "prevArrow": {
+            "x": 10,
+            "y": 512.1,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "nextArrow": {
+            "x": 804,
+            "y": 512.1,
+            "w": 30,
+            "h": 45,
+            "visible": true
+          },
+          "menuButton": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "openMenu": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "visible": false
+          },
+          "navLinks": {
+            "x": 370.4,
+            "y": 5,
+            "w": 138.1,
+            "h": 40,
+            "visible": true
+          },
+          "logo": {
+            "x": 335.4,
+            "y": 0,
+            "w": 15,
+            "h": 50,
+            "visible": true
+          },
+          "footer": {
+            "x": 10,
+            "y": 597.1,
+            "w": 824,
+            "h": 38.6,
+            "visible": true
+          },
+          "footerTerms": {
+            "x": 10,
+            "y": 617.1,
+            "w": 100,
+            "h": 18.6,
+            "visible": true
+          },
+          "footerContact": {
+            "x": 211.2,
+            "y": 617.1,
+            "w": 65.8,
+            "h": 18.6,
+            "visible": true
+          },
+          "list": {
+            "x": 0,
+            "y": 404.9,
+            "w": 844,
+            "h": 6490.4,
+            "visible": true
+          },
+          "activeRow": {
+            "x": 0,
+            "y": 404.9,
+            "w": 844,
+            "h": 94.3,
+            "visible": true
+          }
+        },
+        "titleText": "Build a 1 Person Media Machine With Grok Bot",
+        "titleFont": "18px / 19.8px \"Open Sans\", \"Open Sans Fallback\""
+      }
+    },
+    "liveFeedDifferences": [
+      "Loaded states: new opens on vKobP6DkC1E ('Build a 1 Person Media Machine With Grok Bot'), legacy on KTgRt6VQN9g. The 1-line vs 3-line title moves the 390x568 player/title/arrows/footer by 9 px and changes title height at 1440x900; with the same video (samevideo rects) 390x568 and 1440x900 player/title/arrows match within 2 px.",
+      "Desktop active row is 94.3 px lower on new (one extra row above it: vKobP6DkC1E)."
+    ],
+    "uiDifferences": [
+      "844x390 landscape: legacy's flex column wraps because the 47% player (387 px) is taller than the 91vh box (355 px): the iframe is squeezed to 17.6 px wide at the left edge, and the title, arrows and footer sit in a second column beside it. New shows a full-width 824x387 player with title, arrows and footer below it (title at y 462, arrows 512, footer links 617).",
+      "Desktop footer links sit 6 px higher on new (bottom padding 16 px vs legacy's 1rem = 10 px under Bootstrap's 10 px root).",
+      "Desktop scrolling: legacy scrolls the whole page 50 px (document 950 px tall; sidebar list 900 px tall extends below the fold). New keeps the page at 900 px; the sidebar list is 850 px and only the right column scrolls 50 px.",
+      "Phones: new shows the video list below the footer (expected). It peeks into the bottom of the 390x844 first screen at y 822.6 under the footer links."
+    ]
+  },
+  "B5": {
+    "setup": "fresh storage; open /hustle (row 1 vKobP6DkC1E selected+watched); click row 2 (KTgRt6VQN9g); open deep link /hustle/iA2gdwTWJ_E (row 3). At 390x568 the first row-2 click did not register while the row sat at the bottom edge of the viewport; it was scrolled to the centre and clicked again.",
+    "matrix": {
+      "1440x900": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/iA2gdwTWJ_E",
+        "innerWidth": 1440,
+        "innerHeight": 900,
+        "scrollY": 0,
+        "scrollWidth": 1440,
+        "noHorizontalOverflow": true,
+        "iframeCount": 1,
+        "activeCount": 1,
+        "rows": [
+          {
+            "index": 1,
+            "id": "vKobP6DkC1E",
+            "active": false,
+            "watchedLabel": true,
+            "titleColor": "rgb(90, 90, 90)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          },
+          {
+            "index": 2,
+            "id": "KTgRt6VQN9g",
+            "active": false,
+            "watchedLabel": true,
+            "titleColor": "rgb(90, 90, 90)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          },
+          {
+            "index": 3,
+            "id": "iA2gdwTWJ_E",
+            "active": true,
+            "watchedLabel": false,
+            "titleColor": "rgb(255, 255, 255)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgb(255, 236, 0)"
+          },
+          {
+            "index": 4,
+            "id": "mkuEH8VTM7Y",
+            "active": false,
+            "watchedLabel": false,
+            "titleColor": "rgb(255, 255, 255)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          }
+        ],
+        "player": {
+          "top": 65,
+          "bottom": 655.1,
+          "left": 430,
+          "right": 1410,
+          "inFirstScreen": true
+        },
+        "title": {
+          "top": 695.1,
+          "bottom": 747.8,
+          "left": 430,
+          "right": 1410,
+          "inFirstScreen": true
+        },
+        "prevArrow": null,
+        "nextArrow": null,
+        "activeRow": {
+          "top": 238.6,
+          "bottom": 332.9,
+          "left": 0,
+          "right": 400,
+          "inFirstScreen": true
+        },
+        "htmlClass": "dark",
+        "bodyBg": "rgb(0, 0, 0)",
+        "themeStorage": null
+      },
+      "390x568": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/iA2gdwTWJ_E",
+        "innerWidth": 390,
+        "innerHeight": 568,
+        "scrollY": 0,
+        "scrollWidth": 390,
+        "noHorizontalOverflow": true,
+        "iframeCount": 1,
+        "activeCount": 1,
+        "rows": [
+          {
+            "index": 1,
+            "id": "vKobP6DkC1E",
+            "active": false,
+            "watchedLabel": true,
+            "titleColor": "rgb(90, 90, 90)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          },
+          {
+            "index": 2,
+            "id": "KTgRt6VQN9g",
+            "active": false,
+            "watchedLabel": true,
+            "titleColor": "rgb(90, 90, 90)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          },
+          {
+            "index": 3,
+            "id": "iA2gdwTWJ_E",
+            "active": true,
+            "watchedLabel": false,
+            "titleColor": "rgb(255, 255, 255)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgb(255, 236, 0)"
+          },
+          {
+            "index": 4,
+            "id": "mkuEH8VTM7Y",
+            "active": false,
+            "watchedLabel": false,
+            "titleColor": "rgb(255, 255, 255)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          }
+        ],
+        "player": {
+          "top": 59.6,
+          "bottom": 295.3,
+          "left": 10,
+          "right": 380,
+          "inFirstScreen": true
+        },
+        "title": {
+          "top": 315.3,
+          "bottom": 374.6,
+          "left": 20,
+          "right": 370,
+          "inFirstScreen": true
+        },
+        "prevArrow": {
+          "top": 404.6,
+          "bottom": 449.6,
+          "left": 10,
+          "right": 40,
+          "inFirstScreen": true
+        },
+        "nextArrow": {
+          "top": 404.6,
+          "bottom": 449.6,
+          "left": 350,
+          "right": 380,
+          "inFirstScreen": true
+        },
+        "activeRow": {
+          "top": 760.1,
+          "bottom": 854.4,
+          "left": 0,
+          "right": 390,
+          "inFirstScreen": false
+        },
+        "htmlClass": "dark",
+        "bodyBg": "rgb(0, 0, 0)",
+        "themeStorage": null
+      },
+      "390x844": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/iA2gdwTWJ_E",
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "scrollY": 0,
+        "scrollWidth": 390,
+        "noHorizontalOverflow": true,
+        "iframeCount": 1,
+        "activeCount": 1,
+        "rows": [
+          {
+            "index": 1,
+            "id": "vKobP6DkC1E",
+            "active": false,
+            "watchedLabel": true,
+            "titleColor": "rgb(90, 90, 90)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          },
+          {
+            "index": 2,
+            "id": "KTgRt6VQN9g",
+            "active": false,
+            "watchedLabel": true,
+            "titleColor": "rgb(90, 90, 90)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          },
+          {
+            "index": 3,
+            "id": "iA2gdwTWJ_E",
+            "active": true,
+            "watchedLabel": false,
+            "titleColor": "rgb(255, 255, 255)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgb(255, 236, 0)"
+          },
+          {
+            "index": 4,
+            "id": "mkuEH8VTM7Y",
+            "active": false,
+            "watchedLabel": false,
+            "titleColor": "rgb(255, 255, 255)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          }
+        ],
+        "player": {
+          "top": 59.6,
+          "bottom": 388.2,
+          "left": 10,
+          "right": 380,
+          "inFirstScreen": true
+        },
+        "title": {
+          "top": 408.2,
+          "bottom": 467.5,
+          "left": 20,
+          "right": 370,
+          "inFirstScreen": true
+        },
+        "prevArrow": {
+          "top": 562.9,
+          "bottom": 607.9,
+          "left": 10,
+          "right": 40,
+          "inFirstScreen": true
+        },
+        "nextArrow": {
+          "top": 562.9,
+          "bottom": 607.9,
+          "left": 350,
+          "right": 380,
+          "inFirstScreen": true
+        },
+        "activeRow": {
+          "top": 1011.2,
+          "bottom": 1105.5,
+          "left": 0,
+          "right": 390,
+          "inFirstScreen": false
+        },
+        "htmlClass": "dark",
+        "bodyBg": "rgb(0, 0, 0)",
+        "themeStorage": null
+      },
+      "844x390": {
+        "url": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/iA2gdwTWJ_E",
+        "innerWidth": 844,
+        "innerHeight": 390,
+        "scrollY": 0,
+        "scrollWidth": 844,
+        "noHorizontalOverflow": true,
+        "iframeCount": 1,
+        "activeCount": 1,
+        "rows": [
+          {
+            "index": 1,
+            "id": "vKobP6DkC1E",
+            "active": false,
+            "watchedLabel": true,
+            "titleColor": "rgb(90, 90, 90)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          },
+          {
+            "index": 2,
+            "id": "KTgRt6VQN9g",
+            "active": false,
+            "watchedLabel": true,
+            "titleColor": "rgb(90, 90, 90)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          },
+          {
+            "index": 3,
+            "id": "iA2gdwTWJ_E",
+            "active": true,
+            "watchedLabel": false,
+            "titleColor": "rgb(255, 255, 255)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgb(255, 236, 0)"
+          },
+          {
+            "index": 4,
+            "id": "mkuEH8VTM7Y",
+            "active": false,
+            "watchedLabel": false,
+            "titleColor": "rgb(255, 255, 255)",
+            "rowOpacity": "1",
+            "imgOpacity": "1",
+            "borderLeft": "4px solid rgba(0, 0, 0, 0)"
+          }
+        ],
+        "player": {
+          "top": 55,
+          "bottom": 442.3,
+          "left": 10,
+          "right": 834,
+          "inFirstScreen": false
+        },
+        "title": {
+          "top": 462.3,
+          "bottom": 501.9,
+          "left": 20,
+          "right": 824,
+          "inFirstScreen": false
+        },
+        "prevArrow": {
+          "top": 531.9,
+          "bottom": 576.9,
+          "left": 10,
+          "right": 40,
+          "inFirstScreen": false
+        },
+        "nextArrow": {
+          "top": 531.9,
+          "bottom": 576.9,
+          "left": 804,
+          "right": 834,
+          "inFirstScreen": false
+        },
+        "activeRow": {
+          "top": 593.5,
+          "bottom": 687.8,
+          "left": 0,
+          "right": 844,
+          "inFirstScreen": false
+        },
+        "htmlClass": "dark",
+        "bodyBg": "rgb(0, 0, 0)",
+        "themeStorage": null
+      }
+    },
+    "desktopListScroll": {
+      "pass": true,
+      "steps": [
+        {
+          "step": "initial /hustle/iA2gdwTWJ_E",
+          "activeIndex": 3,
+          "listScrollTop": 0,
+          "windowScrollY": 0
+        },
+        {
+          "step": "list scrollTop set to 2000",
+          "activeTop": -1761,
+          "activeVisibleInList": false
+        },
+        {
+          "step": "ArrowRight",
+          "path": "/hustle/mkuEH8VTM7Y",
+          "activeIndex": 4,
+          "listScrollTop": 283,
+          "activeTop": 50,
+          "windowScrollY": 0,
+          "rightColumnScrollTop": 0
+        },
+        {
+          "step": "list scrollTop set to 2500",
+          "activeTop": -2167,
+          "activeVisibleInList": false
+        },
+        {
+          "step": "ArrowLeft",
+          "path": "/hustle/iA2gdwTWJ_E",
+          "activeIndex": 3,
+          "listScrollTop": 189,
+          "activeTop": 50,
+          "windowScrollY": 0,
+          "rightColumnScrollTop": 0
+        }
+      ],
+      "screenshot": "b5-new-1440x900-list-after-arrowright.png"
+    },
+    "desktopFooterReachable": {
+      "pass": true,
+      "rightColumnMaxScroll": 50,
+      "before": "links at y 915.4-934 (below 900 viewport)",
+      "after": "agent-browser scroll down 300 -s 'div.min-w-0.overflow-y-auto': column scrollTop 50, window.scrollY 0, Terms/Privacy/Contact at y 865.4-884, elementFromPoint hits each link",
+      "hrefs": [
+        "https://telegra.ph/Terms-of-Use-10-20-2",
+        "https://telegra.ph/Privacy-Policy-10-31-7",
+        "mailto:hi@walnut.tv"
+      ],
+      "note": "agent-browser `mouse wheel` scrolled neither the list nor the right column in this headless run, so the scroll was driven with `scroll -s`.",
+      "screenshot": "b5-new-1440x900-footer-scrolled.png"
+    },
+    "forcedDark": {
+      "pass": true,
+      "localStorageTheme": "light",
+      "htmlClass": "dark",
+      "colorScheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "bodyColor": "rgb(250, 250, 249)",
+      "headerBg": "rgb(14, 14, 14)",
+      "prefersColorSchemeLight": true,
+      "alsoWithSetMediaLight": {
+        "htmlClass": "dark",
+        "bodyBg": "rgb(0, 0, 0)"
+      },
+      "screenshot": "b5-new-1440x900-theme-light-stored.png"
+    },
+    "vQueryDropped": {
+      "pass": true,
+      "opened": "/hustle?v=FmvRhxq2oHE",
+      "finalUrl": "https://walnut-ntrl6f6po-gianpaj.vercel.app/hustle/FmvRhxq2oHE",
+      "activeIndex": 14,
+      "activeId": "FmvRhxq2oHE"
+    },
+    "portraitMenu": {
+      "pass": true,
+      "viewport": "390x844",
+      "ariaControls": "category-menu",
+      "menuElementExists": true,
+      "steps": [
+        ["initial", "expanded false, #category-menu hidden"],
+        ["click toggle", "expanded true, visible 58x136, links hustle/ai/crypto"],
+        ["click toggle", "expanded false, hidden, focus on toggle"],
+        ["click toggle", "open"],
+        ["Escape with focus on a menu link", "closed, focus returned to toggle"],
+        ["open, Escape with focus on toggle", "closed, focus on toggle"]
+      ],
+      "landscape844x390": "toggle hidden (width 0); plain links hustle@370,5 ai@427,5 crypto@451,5"
+    }
+  },
+  "playback": {
+    "pass": true,
+    "video": "KTgRt6VQN9g at /hustle/KTgRt6VQN9g",
+    "method": "tag iframe data-l1-tag=orig and keep a window reference; YT.get(iframe.id).mute(); playVideo(); 3 s between resizes",
+    "steps": [
+      {
+        "vw": 1440,
+        "vh": 900,
+        "iframeCount": 1,
+        "sameElement": true,
+        "tag": "orig",
+        "isConnected": true,
+        "state": 1,
+        "currentTime": 3.21,
+        "muted": true,
+        "videoId": "KTgRt6VQN9g",
+        "rect": [430, 65, 980, 590],
+        "url": "/hustle/KTgRt6VQN9g"
+      },
+      {
+        "vw": 992,
+        "vh": 844,
+        "iframeCount": 1,
+        "sameElement": true,
+        "tag": "orig",
+        "isConnected": true,
+        "state": 1,
+        "currentTime": 6.23,
+        "muted": true,
+        "videoId": "KTgRt6VQN9g",
+        "rect": [10, 55, 972, 517],
+        "url": "/hustle/KTgRt6VQN9g"
+      },
+      {
+        "vw": 390,
+        "vh": 844,
+        "iframeCount": 1,
+        "sameElement": true,
+        "tag": "orig",
+        "isConnected": true,
+        "state": 1,
+        "currentTime": 9.24,
+        "muted": true,
+        "videoId": "KTgRt6VQN9g",
+        "rect": [10, 60, 370, 329],
+        "url": "/hustle/KTgRt6VQN9g"
+      },
+      {
+        "vw": 844,
+        "vh": 390,
+        "iframeCount": 1,
+        "sameElement": true,
+        "tag": "orig",
+        "isConnected": true,
+        "state": 1,
+        "currentTime": 12.26,
+        "muted": true,
+        "videoId": "KTgRt6VQN9g",
+        "rect": [10, 55, 824, 387],
+        "url": "/hustle/KTgRt6VQN9g"
+      },
+      {
+        "vw": 1440,
+        "vh": 900,
+        "iframeCount": 1,
+        "sameElement": true,
+        "tag": "orig",
+        "isConnected": true,
+        "state": 1,
+        "currentTime": 15.28,
+        "muted": true,
+        "videoId": "KTgRt6VQN9g",
+        "rect": [430, 65, 980, 590],
+        "url": "/hustle/KTgRt6VQN9g"
+      }
+    ]
+  }
+}

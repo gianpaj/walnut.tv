@@ -80,6 +80,10 @@ See [u3-menu-open-390.png](./u3-menu-open-390.png) and
 
 ### B5 presentation: pass
 
+This tested the layout before the legacy visual parity change. The
+[hosted parity recheck](../2026-11-18-hosted-parity-recheck/README.md) covers
+the current layout.
+
 Deep link `/hustle/wOib5fHqOZQ` (row 3) after selecting rows 1 and 2, dark and
 light theme, at four viewports (`b5-new-{theme}-{viewport}.png`). Every case
 has one iframe, a 5 px yellow marker on the active row, watched rows at 50 %
@@ -98,6 +102,10 @@ commented out, and with `prefers-color-scheme: light` the app still renders
 dark (`defaultTheme="dark"`). The legacy site is dark only.
 
 ### B0 paired screenshots: captured, differences below
+
+This tested the layout before the legacy visual parity change. The
+[hosted parity recheck](../2026-11-18-hosted-parity-recheck/README.md) covers
+the current layout.
 
 | State                       | Legacy                                                                       | New                                                                                |
 | --------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |

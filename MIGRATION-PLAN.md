@@ -22,16 +22,14 @@ confirmation and cutover gates remain open.
 **Completed:** homepage/retired-route policy (R1), legacy links (R2), pending
 navigation (U1), feed error handling (D1), duration parsing (D2), watched-history
 fixtures (B4), local metadata/assets acceptance (L4), hosted playback (L1),
-upstream access (L2), cache/quota evidence (L3), and hosted browser checks for
-U2, U3, B1, B2 and B3.
-Vercel configuration and a protected Preview deployment are complete. Frozen install, channel checks,
-typecheck, lint, 137 tests and production builds passed for `4a33f66`.
+upstream access (L2), cache/quota evidence (L3), hosted browser checks for
+U2, U3, B0, B1, B2, B3 and B5, and release-revision validation (L6) on
+`b12bdd8`.
 
-| Remaining work     | Checklist | What is needed                                                                                                |
-| ------------------ | --------- | ------------------------------------------------------------------------------------------------------------- |
-| Browser acceptance | B0/B5     | Land the legacy visual parity change, then capture B0 pairs and B5 again; B6/B7 Reddit cases stay paused      |
-| Analytics          | L5        | Verify initial loads and navigation events in GA4 realtime after cutover                                      |
-| Release            | L6/L7     | Complete final-revision validation, review Git deployment policy, update the PR and document cutover/rollback |
+| Remaining work | Checklist | What is needed                                                           |
+| -------------- | --------- | ------------------------------------------------------------------------ |
+| Release        | L7        | The cutover and rollback in the cutover note                             |
+| Analytics      | L5        | Verify initial loads and navigation events in GA4 realtime after cutover |
 
 **Paused, not failed:** Reddit vote/filter/feed parity (P2 and Reddit portions of
 B6/B7) and live OAuth checks require approved API access. Keep Reddit disabled.
@@ -161,7 +159,7 @@ a functioning Next.js preview with real API access on desktop and mobile.
 Use controlled fixtures for failures and boundary cases; record the tested
 revision, browser and result. Unit coverage does not establish browser parity.
 
-- [ ] **B0: Screenshot-based UI parity.** Compare the Next.js app with
+- [x] **B0: Screenshot-based UI parity.** Compare the Next.js app with
       `http://walnut.tv` (follow any HTTPS redirect) or a running checkout of
       `master`, this repository's main branch. Use `agent-browser` to capture
       paired screenshots at matching desktop and mobile viewport sizes, routes
@@ -174,15 +172,11 @@ revision, browser and result. Unit coverage does not establish browser parity.
       note. Note blocked comparisons rather than treating them as passes.
       Pixel-identical styling is not required; explain intentional differences.
       Screenshots complement the interaction checks below; they do not replace them.
-      Hosted pairs against walnut.tv at 1440×900 and 390×844 (loaded,
-      selected/watched, mobile menu) are in the
-      [hosted browser acceptance note](./.agents/notes/implemented/migration/2026-11-17-hosted-browser-acceptance/README.md). Open differences needing a decision:
-      the mobile menu spreads its three links over the full screen height; light
-      theme is reachable only through `localStorage` (no toggle); `?v=` stays in
-      the URL after selection. Owner decisions (2026-11-17): stay dark only, drop
-      the redundant `?v=` while still updating the URL for sharing, and match
-      legacy visually, keeping the mobile list and removing the desktop
-      Prev/Next, counter and footer. Capture the pairs again after that change.
+      Hosted pairs of the legacy look against walnut.tv at 1440×900, 390×844,
+      844×390 and 390×568 match within 2px apart from the mobile list and the
+      desktop footer padding, fixed after the capture. In landscape legacy's
+      layout breaks (a 17px player); the new app keeps a full-width player.
+      See the [hosted parity recheck](./.agents/notes/implemented/migration/2026-11-18-hosted-parity-recheck/README.md).
 
 - [x] **B1: Routing.** Every configured category, both deep-link route shapes,
       `?v=`, reload, navbar changes, Back/Forward, the logo and unknown-route
@@ -209,14 +203,12 @@ revision, browser and result. Unit coverage does not establish browser parity.
       intact. Marking a video watched on selection, not playback/completion,
       matches legacy. The active row stays distinct from watched rows. Use seeded
       data on preview: localStorage does not cross origins.
-- [ ] **B5: Mobile and desktop presentation.** At 1440×900, 390×844, 844×390
-      and 390×568 in both themes: one player, active highlight, watched badge and
-      dimming, independent desktop list scrolling and no horizontal scroll. At
-      844×390 the title and controls sit one scroll below the player, and at
-      390×568 the active row is below the fold. Run again after the legacy visual
-      parity change, which replaces this layout, and compare landscape with
-      legacy. See the
-      [hosted browser acceptance note](./.agents/notes/implemented/migration/2026-11-17-hosted-browser-acceptance/README.md).
+- [x] **B5: Mobile and desktop presentation.** At 1440×900, 390×844, 844×390
+      and 390×568: one player, active highlight, watched label and grey title,
+      independent desktop list scrolling and no horizontal scroll. At 844×390
+      the title and arrows sit one scroll below the player, and at 390×844 and
+      390×568 the active row is below the fold. The theme is forced dark. See
+      the [hosted parity recheck](./.agents/notes/implemented/migration/2026-11-18-hosted-parity-recheck/README.md).
 - [ ] **B6: Feed fixtures.** All configured YouTube sources considered,
       newest-first sorting, duration boundary, missing thumbnail variants,
       Reddit hot/vote filters, multiple subreddits, mixed Reddit/YouTube results
@@ -285,18 +277,20 @@ revision, browser and result. Unit coverage does not establish browser parity.
       after cutover. After cutover, verify initial loads and history-based
       navigation in GA4 realtime, and check in DebugView that `page_title` on a
       navbar navigation names the new channel, not the previous one.
-- [ ] **L6: Reproducible validation.** Frozen-lockfile install, channel check,
+- [x] **L6: Reproducible validation.** Frozen-lockfile install, channel check,
       typecheck, lint, tests and production build pass on the release revision.
       Add focused regression tests for the fixes above; helper tests alone do not
-      prove route, player, storage or fetcher behavior. It stays open until the
-      release revision, including the legacy visual parity change, passes.
+      prove route, player, storage or fetcher behavior.
   - [x] Pass frozen install, channel validation, typecheck, lint, 137 tests and
         production build for deployed source `4a33f66`; Vercel build also passes.
   - [x] Pass a clean frozen install, channel validation, typecheck, lint,
         format check, 140 tests, production build and the fixture suite (66 of
         66, headless, agent-browser 0.38.1) for `631a2f4`, `dev` with `master`
         merged in.
-  - [ ] Rerun this validation on the release revision, and finish B0 and B5.
+  - [x] Pass the same validation, fixture suite 66 of 66 included, on
+        `b12bdd8` and on `23e8bae`, which adds the desktop footer padding fix.
+        B0 and B5 pass on the hosted Preview of the same layout. See the
+        [hosted parity recheck](./.agents/notes/implemented/migration/2026-11-18-hosted-parity-recheck/README.md).
         The Reddit parts of B6/B7 stay paused with Reddit.
 - [ ] **L7: Cutover and rollback.** Review current `master` channel changes,
       finish or explicitly accept the open parity items, update the PR summary,
@@ -308,10 +302,8 @@ revision, browser and result. Unit coverage does not establish browser parity.
 
 ## Suggested restart order
 
-1. Land the legacy visual parity change, then finish B0 and B5; keep P2 paused
-   while Reddit is disabled.
-2. Rerun L6 on the release revision.
-3. Complete the cutover (L7), then check analytics (L5).
+1. Complete the cutover (L7), then check analytics (L5). Keep P2 paused while
+   Reddit is disabled.
 
 Auth, custom channels, native Reddit playback and sharing UI are not required
 to replace the working legacy feature set. Do not build adapters, databases or
