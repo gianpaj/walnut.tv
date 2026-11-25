@@ -1,0 +1,19 @@
+name: walnut-player-resolver
+
+services:
+  resolver:
+    build:
+      context: ../..
+      dockerfile: scripts/player-resolver/Dockerfile
+    environment:
+      WALNUT_LAB_ORIGIN: ${WALNUT_LAB_ORIGIN:?Set WALNUT_LAB_ORIGIN to the lab page origin}
+    ports:
+      - "127.0.0.1:3219:3219"
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true

@@ -24,6 +24,12 @@ embed client because both clips allow embedding and its URLs passed the
 byte-range checks. The browser's video element requests the MP4 and handles
 seeking. The route requires `PLAYER_LAB_YT_DLP` on the Next.js host.
 
+The direct lab also runs that same resolver in a Docker container on the
+viewing device. Chrome calls the loopback endpoint after the viewer selects local
+mode. The helper accepts the configured Walnut origin and the lab's two video
+IDs. The container runs as an unprivileged user with a read-only root filesystem
+and no host mounts. URL resolution and playback use the viewer's internet connection.
+
 Save only the main clip's timestamp in browser storage. A finished clip clears
 its resume point. The intro and outro are stills in the player area and have no
 playback time of their own. The first playback event reads duration from the
@@ -38,6 +44,12 @@ element because metadata can arrive before React hydrates.
 - Relay video through the Walnut server. Returning only the URL tests whether
   YouTube accepts media requests from the browser and keeps media traffic off
   the Walnut server.
+- Run the resolver in a browser worker or a browser-hosted VM. Both use the
+  browser's networking APIs and inherit its cross-origin fetch restrictions.
+  Docker gives the resolver its own process and outbound network access.
+- Run the local resolver in a guest OS. A Docker container gives the resolver
+  process and filesystem isolation with the same loopback interface and a
+  smaller setup.
 
 ## Acceptance criteria
 
@@ -61,17 +73,24 @@ with audio and sought to 0:39 in Sintel and 1:00 in the TED talk. The test saw
 Chrome request the media directly from `googlevideo.com`. Both also passed
 when Chrome opened the lab over HTTPS through Tailscale on the resolver host.
 
+The Docker resolver passed the same playback checks on loopback and from the
+Tailscale HTTPS page with Chrome's **Apps on device** permission. Chrome fetched
+the URL only from the loopback helper and requested the media from YouTube.
+The helper rejected requests with a missing or foreign origin, a foreign host,
+an unsupported method, or a video outside the lab list.
+
 ## Risks
 
 WebKit emulation does not cover the physical iPhone player. The fullscreen
 fallback hands the video over to the system player, so custom controls and the
 outro need a device check. Startup timings on a local MP4 and a remote YouTube
 embed compare those delivery paths and cannot isolate player overhead.
-The direct route depends on undocumented YouTube responses. Initial tests
+Both direct modes depend on undocumented YouTube responses. Initial tests
 with yt-dlp's default client selection saw intermittent HTTP 403 from the
-media server after successful URL discovery. The browser checks use the
-resolver host's network and do not establish playback for a different client
-network. The direct MP4 experiment covers one quality per clip.
+media server after successful URL discovery. The checks run on one network.
+Local mode requires Docker on each viewing device and Chrome's loopback
+permission from a remote HTTPS page. The direct MP4 experiment covers one
+quality per clip.
 
 [Blender source](https://download.blender.org/durian/trailer/) ·
 [Blender attribution requirements](https://durian.blender.org/sharing/) ·

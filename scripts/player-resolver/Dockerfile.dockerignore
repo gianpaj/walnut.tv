@@ -1,0 +1,6 @@
+**
+!scripts/player-resolver/server.mjs
+!src/app/lab/player/direct/local-resolver.ts
+!src/app/lab/player/direct/mp4-url.ts
+!src/app/lab/player/direct/resolver.ts
+!src/app/lab/player/direct/videos.ts

@@ -81,3 +81,28 @@ The check requires Chrome and network access to YouTube. It verifies decoded
 audio and video, seeking, and a browser request to `googlevideo.com` for both
 clips. YouTube can reject a URL after resolution. The test reports failed
 attempts and tries a fresh URL.
+
+### On-device resolver
+
+Run Docker Compose on the device running Chrome. Set `WALNUT_LAB_ORIGIN` to
+the scheme, host, and port of the lab page.
+
+```sh
+export WALNUT_LAB_ORIGIN=https://lab.example.com
+docker compose -f scripts/player-resolver/compose.yaml up --build -d
+```
+
+Open `/lab/player/direct` over HTTPS, check **Use local resolver**, and click
+**Resolve video**. Allow **Apps on device** when Chrome asks. The container
+publishes its resolver at `127.0.0.1:3219` and accepts requests from the
+configured origin. Run the same Compose command with `down` in place of
+`up --build -d` to stop it.
+
+To test local mode against the build on the same machine, run these commands.
+The test checks that the browser calls the loopback resolver and requests
+the media from YouTube.
+
+```sh
+WALNUT_LAB_ORIGIN=http://127.0.0.1:3100 docker compose -f scripts/player-resolver/compose.yaml up --build -d
+python3 -B scripts/browser-acceptance/player_direct.py --local
+```
