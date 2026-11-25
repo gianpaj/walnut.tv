@@ -4,7 +4,8 @@ This is the canonical checklist for replacing the Vue/jQuery app on `master`
 with the Next.js app on `dev`. Optional product work belongs in [TODO.md](./TODO.md).
 Runtime conventions and environment variables belong in [AGENTS.md](./AGENTS.md).
 
-**Status:** migration implemented and verified; ready for cutover. Code inspection
+**Status:** migration implemented and verified; ready for cutover once the owner
+settles the two decisions in L7. Code inspection
 is not browser verification. Check off an open item only after its acceptance
 criteria pass, or record an explicit decision to accept the difference.
 
@@ -16,8 +17,8 @@ mobile-menu evidence. The [hosted checks note](./.agents/notes/implemented/migra
 deployment loading real feeds in every category, playing a hustle video
 through resizes and rotation, and its secret scan and timings. The
 [hosted parity recheck](./.agents/notes/implemented/migration/2026-11-18-hosted-parity-recheck/README.md) records the legacy look against walnut.tv and the
-release-revision validation. Only the cutover and the analytics check after it
-remain; Reddit work is paused.
+release-revision validation. Two owner decisions, the cutover and the analytics
+check after it remain; Reddit work is paused.
 
 ## Remaining work at a glance
 
@@ -303,7 +304,17 @@ revision, browser and result. Unit coverage does not establish browser parity.
       and quota usage in production. The proposed order of Netlify, Vercel and
       DNS changes, and the rollback, are in the [cutover note](./.agents/notes/proposed/migration/2026-11-16-cutover-and-rollback.md).
       Any app-code change that lands on `dev` before the cutover merge, such
-      as `master` channel changes, reopens L6 for that revision.
+      as `master` channel changes, reopens L6 for that revision, and B0 and B5
+      when it changes what users see.
+  - [ ] Owner decision: accept the states the
+        [hosted parity recheck](./.agents/notes/implemented/migration/2026-11-18-hosted-parity-recheck/README.md)
+        could not test (real wheel and touch scrolling, physical phones, a
+        blocked video in a live feed, loading and empty pairs against legacy),
+        or ask for them to be tested.
+  - [ ] Owner decision: give the server's YouTube key its own Google Cloud
+        project, or accept that legacy traffic can use up its quota until the
+        legacy key is deleted. Both keys ran out together on 2026-11-25; see
+        the cutover note's risks.
 
 ## Suggested restart order
 

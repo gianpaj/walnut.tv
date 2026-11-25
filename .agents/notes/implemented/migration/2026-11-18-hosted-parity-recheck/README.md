@@ -47,10 +47,19 @@ sites. The rects of the player, title, arrows, logo, menu and footer were
 compared on the same video.
 
 The menu-open pair was retaken on 2026-11-25 against the `dev` Production
-deployment of `ceb562f`. Both sites had run out of YouTube quota that day:
-legacy shows no video, and the new app shows its quota notice above the
-cached videos. The toggle (178, 8, 69×39) and the three menu links (y 63, 103
-and 143, 40px tall) are at the same positions on both.
+deployment of `ceb562f`
+([deployment](https://vercel.com/gianpaj/walnut-tv/B1riGpg1ziasQCh43SrRxvdi7irR)).
+This was a read-only capture; nothing was promoted. The toggle (178, 8, 69×39)
+and the three menu links (y 63, 103 and 143, 40px tall) are at the same
+positions on both. `menuOpenRetake` in `results.json` records it; the
+`390x844-menu-open` rects under `B0` belong to the replaced 2026-11-18 pair.
+
+Both sites had run out of YouTube quota that day, so the pair is also the
+error-state comparison. Legacy replaces the page with "Come back tomorrow,
+today's YouTube quota was used for /hustle" and shows no video. The new app
+shows a one-line quota notice above its 22 cached videos and loads the first
+in the player. Serving cached videos is the intended behaviour; copying
+legacy's empty page was not considered.
 
 These match legacy within 2px:
 
@@ -156,4 +165,5 @@ padding fix), on Node 24.22.1 with pnpm 10.27.0, pass:
     headless; the checks used element scrolling)
   - physical phones
   - a real blocked video in a live feed
-  - loading, empty and error pairs against legacy
+  - loading and empty pairs against legacy (the 2026-11-25 menu pair covers
+    the quota error)

@@ -3316,5 +3316,36 @@
         "url": "/hustle/KTgRt6VQN9g"
       }
     ]
+  },
+  "menuOpenRetake": {
+    "date": "2026-11-25",
+    "replaces": "b0-legacy-390x844-menu-open.png and b0-new-390x844-menu-open.png from 2026-11-18 (the same image saved twice). B0.rects and B0.rectDiffsOver2px for 390x844-menu-open describe the replaced pair.",
+    "newApp": {
+      "url": "https://walnut-tv-git-dev-gianpaj.vercel.app/hustle",
+      "commit": "ceb562f",
+      "vercelDeployment": "https://vercel.com/gianpaj/walnut-tv/B1riGpg1ziasQCh43SrRxvdi7irR (dev Production, read-only capture)"
+    },
+    "legacy": {
+      "url": "https://walnut.tv/"
+    },
+    "viewport": "390x844",
+    "state": {
+      "legacy": "YouTube quota exhausted: \"Come back tomorrow, today's YouTube quota was used for /hustle\", no video",
+      "new": "YouTube quota exhausted: quota notice above 22 cached videos, the first one loaded in the player"
+    },
+    "rects": {
+      "menuToggle": {
+        "x": 178,
+        "y": 8,
+        "width": 69,
+        "height": 39,
+        "sameOnBoth": true
+      },
+      "menuLinks": {
+        "y": [63, 103, 143],
+        "height": 40,
+        "sameOnBoth": true
+      }
+    }
   }
 }
