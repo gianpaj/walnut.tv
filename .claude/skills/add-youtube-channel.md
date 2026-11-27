@@ -73,6 +73,7 @@ node scripts/add-youtube-channel.js "Lex Fridman" --justSearch
 ```
 
 **--justSearch flag**: Use this optional flag to search for a channel and display results without adding it to `channels.js`. This is useful when you want to:
+
 - Preview search results before committing to add a channel
 - Verify you found the correct channel
 - Get the channel ID for manual reference
@@ -91,7 +92,7 @@ The script will:
 Run the validation script to ensure the channel ID is properly formatted:
 
 ```bash
-npm run prebuild
+pnpm check-channels
 ```
 
 This runs `scripts/check-channels.js` which validates that all YouTube channel IDs are exactly 24 characters long.
@@ -129,6 +130,11 @@ Use the Read tool to display the relevant section of `channels.js` to the user.
 5. **Validation Failed**
    - Error: "channels.js has error(s)"
    - Solution: Check that the channel ID is exactly 24 characters and properly formatted
+
+6. **Channel Has No Videos**
+   - Warning: "this channel has no public videos" or "no longer exists"; the app will show nothing from it
+   - The script still adds the channel. Tell the user and ask whether to keep it; if not, remove the ID from `channels.js`
+   - "could not check the channel's videos" means the check itself failed; mention it and continue
 
 ## YouTube Channel ID Format
 
@@ -181,12 +187,12 @@ Example response:
 2. Runs: `node scripts/add-youtube-channel.js "Lex Fridman" "ai"`
 3. Shows search results (Lex Fridman Podcast - UCbfYPyITQ-7l4upoX8nvctg)
 4. Confirms the channel ID was added
-5. Runs: `npm run prebuild` to validate
+5. Runs: `pnpm check-channels` to validate
 6. Shows the updated `channels.js` entry
 
 ## Best Practices
 
-1. **Always validate** after adding a channel by running `npm run prebuild`
+1. **Always validate** after adding a channel by running `pnpm check-channels`
 2. **Show the user** what was added by reading the relevant section of `channels.js`
 3. **Handle multiple results** by showing all matches and explaining which one was selected
 4. **Verify the category** exists before attempting to add the channel

@@ -1,0 +1,140 @@
+{
+  "date": "2026-11-17",
+  "target": "https://walnut-tv-git-dev-gianpaj.vercel.app",
+  "targetDeploymentIdInAssets": "dpl_DeysBqtRK8Y9Mb7XCieupuTKG7AF",
+  "targetCommit": "d0ff4b7 (app code identical to 631a2f4: git diff only removes .github/workflows/pullfrog.yml)",
+  "baseline": "https://walnut.tv (legacy Vue 1 production), analytics requests aborted",
+  "browser": "agent-browser 0.38.1, HeadlessChrome 154.0.0.0, Linux",
+  "checks": {
+    "B1 HTTP status": {
+      "pass": true,
+      "evidence": {
+        "/": "307 -> /hustle",
+        "/hustle": 200,
+        "/ai": 200,
+        "/crypto": 200,
+        "/r/videos": 200,
+        "/does-not-exist": 404,
+        "/nope/abc": 404
+      }
+    },
+    "B1 categories load": {
+      "pass": true,
+      "evidence": {
+        "/hustle": "68 videos, first FmvRhxq2oHE",
+        "/ai": "104 videos, first 8fNfcx25q24",
+        "/crypto": "83 videos, first ZpI1PYulNdk"
+      }
+    },
+    "B1 deep link in feed": {
+      "pass": true,
+      "evidence": {
+        "/hustle/G7ZGjRebxUU": "active 15/68, player G7ZGjRebxUU",
+        "/hustle?v=G7ZGjRebxUU": "active 15/68, URL rewritten to /hustle/G7ZGjRebxUU?v=G7ZGjRebxUU"
+      }
+    },
+    "B1 deep link not in feed falls back to first": {
+      "pass": true,
+      "evidence": {
+        "/hustle/AAAAAAAAAAA": "-> /hustle/FmvRhxq2oHE, 1/68",
+        "/hustle?v=AAAAAAAAAAA": "-> /hustle/FmvRhxq2oHE?v=FmvRhxq2oHE, 1/68"
+      }
+    },
+    "B1 reload keeps selection": {
+      "pass": true,
+      "evidence": "3x Next -> /hustle/ng7zKKp60Q4 4/68; after reload 4/68, player ng7zKKp60Q4"
+    },
+    "B1 navbar change": {
+      "pass": true,
+      "evidence": "HUSTLE (7/68) -> AI link -> /ai/8fNfcx25q24 1/104"
+    },
+    "B1 Back/Forward": {
+      "pass": true,
+      "evidence": "AI row 3 selected; Back -> /hustle/CSsovO4ljSc 7/68 player CSsovO4ljSc; Forward -> /ai/ptARPC3Mzio 3/104 player ptARPC3Mzio"
+    },
+    "B1 logo click": {
+      "pass": true,
+      "evidence": "from /ai/ptARPC3Mzio -> /hustle/FmvRhxq2oHE 1/68, client-side navigation, no full page load"
+    },
+    "B3 play/pause via API": {
+      "pass": true,
+      "evidence": "playVideo: state 1, t 13.71 -> 16.72; pauseVideo: state 2, t stays 16.72"
+    },
+    "B3 play/pause via visible controls": {
+      "pass": true,
+      "evidence": "YouTube 'Play video' button: state 1, t 3.82 after 5 s; click on video surface toggles 2 -> 1 -> 2. YouTube 'Pause video' button needs a hover first (covered by control overlay)"
+    },
+    "B3 fullscreen": {
+      "pass": true,
+      "evidence": "hover, then YouTube 'Enter full screen': document.fullscreenElement = IFRAME, width 1440; Escape exits, width back to 1006"
+    },
+    "B3 prev/next boundaries": {
+      "pass": true,
+      "evidence": "1/68: Prev disabled, ArrowLeft no-op; 68/68 (/hustle/Z5X0n6EIn7Q): Next disabled, click and ArrowRight no-op; Prev -> 67/68"
+    },
+    "B3 arrow keys outside inputs": {
+      "pass": true,
+      "evidence": "ArrowRight 1->2->3, ArrowLeft 3->2; ArrowRight inside an injected <input> leaves 2/68"
+    },
+    "B3 source link": {
+      "pass": true,
+      "evidence": "title href https://www.youtube.com/watch?v=<id> for every selection checked; target=_blank"
+    },
+    "B3 end of video does not advance": {
+      "pass": true,
+      "evidence": "/hustle/LPKLhoS4kN8 muted, playing, seekTo(duration-2): state 0 at t 1799.12/1799.12; URL and 2/68 unchanged after 5 more seconds"
+    },
+    "B3 player error skips to next": {
+      "pass": true,
+      "evidence": "loadVideoById('aaaaaaaaaaa') on the real player at 1/68 -> onError -> 2/68, LPKLhoS4kN8 cued (state 5). Synthetic trigger; no real blocked video was in the feed"
+    },
+    "U2 desktop Previous past the fold": {
+      "pass": true,
+      "evidence": "1440x900 /hustle/G3i2k6DdI0o (33/68); list scrolled +900 so active row at top -83..-1 (viewport 49..899); Previous -> 32/68, list scrollTop 3304 -> 3073, active row 49..132, window.scrollY 0, no other element scrolled"
+    },
+    "U2 mobile no document auto-scroll": {
+      "pass": true,
+      "evidence": "390x844 deep link 33/68 (row at y 3551): scrollY 0; Next, Prev x2, ArrowRight x3: scrollY 0; ArrowLeft from scrollY 1500: scrollY 1500; no radix scroll viewport on mobile"
+    },
+    "U3 keyboard open": {
+      "pass": true,
+      "evidence": "390x844 /hustle: Tab 1 focuses 'Open navigation menu'; Enter opens dialog (data-state open, x 0, width 293, opacity 1); focus on Close"
+    },
+    "U3 keyboard category choice": {
+      "pass": true,
+      "evidence": "Tab Tab to AI, Enter: dialog removed by 300 ms, URL /ai/8fNfcx25q24 by 1000 ms, focus on 'Open navigation menu'; screenshot shows menu closed"
+    },
+    "U3 Escape": {
+      "pass": true,
+      "evidence": "Enter or Space opens; Escape closes and focus returns to 'Open navigation menu'"
+    },
+    "B5 matrix": {
+      "pass": true,
+      "evidence": {
+        "dark 1440x900": "1 iframe; player, title, Prev/Next in view; active row 3 in view with 5x83 yellow marker; 2 watched rows, image opacity 0.5, badge; active not dimmed; no horizontal overflow",
+        "dark 390x844": "same; stacked layout; active row in view",
+        "dark 844x390": "1 iframe; player in view (310 px tall); title at y 389 and Prev/Next at y 470 below the fold (page scrolls); stacked layout",
+        "dark 390x568": "player, title, Prev/Next in view; active row below the fold",
+        "light (all four)": "same geometry as dark; body background white"
+      },
+      "notes": "Light theme is reachable only by setting localStorage.theme: the theme toggle is commented out and prefers-color-scheme: light still renders dark"
+    },
+    "B0 paired screenshots": {
+      "pass": null,
+      "evidence": "1440x900 and 390x844 pairs for loaded, selected + watched and mobile menu; legacy is dark only, so light has no pair",
+      "feedDifferences": "hustle: legacy 62 videos, new 68, 61 shared; legacy-only h_aA1-R70E8 (newest a16z upload, legacy row 1); new-only LPKLhoS4kN8, wOib5fHqOZQ, _Vk4e_d5mBQ, X3HpSbVw9lw, 6DT8Cy2rnd0, 1cWZ7Ekff6E, G3i2k6DdI0o; dev drops three channels master lists: UCfRtwc6K_VU9N4OjNnU2P7g (hustle) and UCxRU9z5Jm-r11oQpYFtNQ8g (ai) have no public videos, UCdzMx7Zhy5va5End1-XJFbA (crypto) no longer exists",
+      "uiDifferences": [
+        "desktop: logo 32x48 vs legacy 15x50",
+        "desktop: category links are filled pills vs plain text",
+        "desktop: bold title, Prev/Next + counter, footer under player; legacy has none of the controls",
+        "watched: image at 50% + yellow badge vs legacy small grey label and dimmed title",
+        "mobile: list with thumbnails below player; legacy shows no list, only pixel prev/next arrows",
+        "mobile menu: left sheet with three items spread over the full height vs legacy dropdown under the header",
+        "URL: new writes /{category}/{id} on selection; legacy stays at /",
+        "URL: /hustle?v=X becomes /hustle/X?v=X (redundant ?v=)",
+        "theme: light is reachable only through localStorage.theme; legacy is dark only"
+      ],
+      "status": "captured, decision pending"
+    }
+  }
+}

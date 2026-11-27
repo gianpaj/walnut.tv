@@ -1,7 +1,7 @@
 // this script checks if the Channels Ids are in a correct format
-const { object, string, array } = require('yup');
+const { object, string, array } = require("yup");
 
-const { channels } = require('../channels');
+const { channels } = require("../channels");
 
 const validateYoutubeChannelIds = (channelIds) => {
   const schema = object().shape({
@@ -38,7 +38,7 @@ const errors = channels
   .filter((c) => c instanceof Error);
 
 if (errors.length > 0) {
-  throw new Error('channels.js has error(s) ⛔️');
+  throw new Error("channels.js has error(s) ⛔️");
 }
 
-console.log('finished checking Channel Ids without errors ✅');
+console.log("finished checking Channel Ids without errors ✅");
