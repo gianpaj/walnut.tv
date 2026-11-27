@@ -4,7 +4,8 @@ This is the canonical checklist for replacing the Vue/jQuery app on `master`
 with the Next.js app on `dev`. Optional product work belongs in [TODO.md](./TODO.md).
 Runtime conventions and environment variables belong in [AGENTS.md](./AGENTS.md).
 
-**Status:** core migration implemented; not ready for cutover. Code inspection
+**Status:** migration implemented and verified; ready for cutover once the owner
+settles the two decisions in L7. Code inspection
 is not browser verification. Check off an open item only after its acceptance
 criteria pass, or record an explicit decision to accept the difference.
 
@@ -14,8 +15,10 @@ The [Vercel preview note](./.agents/notes/implemented/migration/2026-09-28-verce
 records a protected deployment of `4a33f66`, deployed legacy-link checks and
 mobile-menu evidence. The [hosted checks note](./.agents/notes/implemented/migration/2026-11-17-hosted-checks.md) records the `d599ab2`
 deployment loading real feeds in every category, playing a hustle video
-through resizes and rotation, and its secret scan and timings; full browser
-confirmation and cutover gates remain open.
+through resizes and rotation, and its secret scan and timings. The
+[hosted parity recheck](./.agents/notes/implemented/migration/2026-11-18-hosted-parity-recheck/README.md) records the legacy look against walnut.tv and the
+release-revision validation. Two owner decisions, the cutover and the analytics
+check after it remain; Reddit work is paused.
 
 ## Remaining work at a glance
 
@@ -172,10 +175,12 @@ revision, browser and result. Unit coverage does not establish browser parity.
       note. Note blocked comparisons rather than treating them as passes.
       Pixel-identical styling is not required; explain intentional differences.
       Screenshots complement the interaction checks below; they do not replace them.
-      Hosted pairs of the legacy look against walnut.tv at 1440×900, 390×844,
-      844×390 and 390×568 match within 2px apart from the mobile list and the
-      desktop footer padding, fixed after the capture. In landscape legacy's
-      layout breaks (a 17px player); the new app keeps a full-width player.
+      Hosted pairs of the legacy look against walnut.tv at 1440×900, 390×844
+      and 390×568 match within 2px apart from the mobile list and the desktop
+      footer padding, fixed after the capture. Intentional differences: on
+      desktop the new app scrolls only the right column where legacy scrolls
+      the whole page 50px, and at 844×390 legacy's layout breaks (a 17px
+      player) while the new app keeps a full-width player.
       See the [hosted parity recheck](./.agents/notes/implemented/migration/2026-11-18-hosted-parity-recheck/README.md).
 
 - [x] **B1: Routing.** Every configured category, both deep-link route shapes,
@@ -291,7 +296,6 @@ revision, browser and result. Unit coverage does not establish browser parity.
         `b12bdd8` and on `23e8bae`, which adds the desktop footer padding fix.
         B0 and B5 pass on the hosted Preview of the same layout. See the
         [hosted parity recheck](./.agents/notes/implemented/migration/2026-11-18-hosted-parity-recheck/README.md).
-        The Reddit parts of B6/B7 stay paused with Reddit.
 - [ ] **L7: Cutover and rollback.** Review current `master` channel changes,
       finish or explicitly accept the open parity items, update the PR summary,
       and record the deployment target, redirect policy and rollback procedure.
@@ -299,6 +303,18 @@ revision, browser and result. Unit coverage does not establish browser parity.
       check home/deep links, enabled APIs, Reddit's unavailable state, analytics
       and quota usage in production. The proposed order of Netlify, Vercel and
       DNS changes, and the rollback, are in the [cutover note](./.agents/notes/proposed/migration/2026-11-16-cutover-and-rollback.md).
+      Any app-code change that lands on `dev` before the cutover merge, such
+      as `master` channel changes, reopens L6 for that revision, and B0 and B5
+      when it changes what users see.
+  - [ ] Owner decision: accept the states the
+        [hosted parity recheck](./.agents/notes/implemented/migration/2026-11-18-hosted-parity-recheck/README.md)
+        could not test (real wheel and touch scrolling, physical phones, a
+        blocked video in a live feed, loading and empty pairs against legacy),
+        or ask for them to be tested.
+  - [ ] Owner decision: give the server's YouTube key its own Google Cloud
+        project, or accept that legacy traffic can use up its quota until the
+        legacy key is deleted. Both keys ran out together on 2026-11-25; see
+        the cutover note's risks.
 
 ## Suggested restart order
 

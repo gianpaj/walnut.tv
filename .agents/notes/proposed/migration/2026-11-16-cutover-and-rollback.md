@@ -7,8 +7,8 @@ Status: proposed — release gates L1–L6 are closed; the steps await the owner
 `walnut.tv` and `www.walnut.tv` resolve through Cloudflare, which proxies
 them to the Netlify site `walnut`. Netlify publishes `master` as static files
 with no build step, and `www` redirects to the apex. The Vercel project
-`walnut-tv` is linked to the repository but builds nothing: its production
-branch is `dev` and its Ignored Build Step cancels every Git deployment.
+`walnut-tv` builds every push; its production branch is `dev`, and no public
+domain points at it.
 
 Merging `dev` into `master` while this is in place breaks the site. Netlify
 would publish the Next.js source tree, which has no `index.html`; the deploy
@@ -23,17 +23,23 @@ Freeze the legacy site, make Vercel build `master`, then move DNS.
    must serve real feeds; set `YOUTUBE_API_KEY` for Vercel Production as well.
    Confirm the legacy key embedded in `js/all.js` is restricted to the YouTube
    Data API and `walnut.tv` referrers, since the rollback target still uses it.
+   In Google Cloud Console, under APIs & Services → Credentials, check which
+   project each YouTube key belongs to. If they share one, create a server key
+   in its own project and set it as `YOUTUBE_API_KEY` for Vercel Production,
+   or record the shared quota as accepted in L7.
 2. **Freeze Netlify.** Use "Lock to stop auto publishing" on the current
    production deploy. walnut.tv keeps serving the legacy app, and that locked
    deploy is the rollback target.
-3. **Configure Vercel.** Set the production branch to `master`, remove the
-   Ignored Build Step, and set the project Node version to 24.x to match
-   `package.json`.
+3. **Configure Vercel.** Set the production branch to `master` and the
+   project Node version to 24.x, to match `package.json`; it is 26.x.
 4. **Merge PR #325.** Vercel builds production. Verify real feeds, deep links
    and `?p=` links on the Vercel production URL before any DNS change. If the
-   build fails to resolve the `next/font/google` module, redeploy without the
-   build cache; the `dev` build of `b12bdd8` failed that way
+   build fails to resolve the `next/font/google` module, redeploy; the `dev`
+   build of `b12bdd8` failed that way and the next one passed
    ([recheck note](../../implemented/migration/2026-11-18-hosted-parity-recheck/README.md)).
+   If the keys still share a project, a quota notice here can come from legacy
+   usage; check the project's quota graph before treating it as a new-app
+   failure.
 5. **Add the domains.** Add `walnut.tv` and `www.walnut.tv` to the Vercel
    project, with `www` redirecting to the apex, as it does today.
 6. **Move DNS.** In Cloudflare, first record the current type, target and
@@ -78,8 +84,14 @@ does not need reverting.
   `videosWatched` key but stores new history under `video-storage`, which the
   legacy app does not read. History from before the cutover is unaffected.
 - The Vercel `YOUTUBE_API_KEY` was replaced on 2026-11-17 after the earlier
-  key was denied, and feeds load since. If the new key shares a Google Cloud
-  project with the public legacy key, abuse of the legacy key can exhaust the
-  quota the new app relies on until step 8 deletes it.
+  key was denied. On 2026-11-25 both apps ran out of YouTube quota at once:
+  walnut.tv showed its "come back tomorrow" message and the `dev` deployment
+  its quota notice over cached videos. The two keys most likely share a Google
+  Cloud project. Legacy has no cache: each category load calls
+  `channels.list`, `playlistItems.list` and `videos.list` for each of its
+  27–36 channels, 81–108 units, so 10,000 units cover roughly 90–120 legacy
+  page loads. Legacy traffic shares the quota until step 6 moves DNS; after
+  that, only a rollback or abuse of the public key does, until step 8 deletes
+  it. A server key in its own project removes the coupling.
 - These steps rely on DNS, response headers and deployment data. Netlify and
   Cloudflare dashboard settings have not been inspected.
